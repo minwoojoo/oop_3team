@@ -2,60 +2,51 @@ package gui.auth;
 
 import javax.swing.*;
 import java.awt.*;
+import common.network.Client;
 
 public class SignupScreen extends JFrame {
-    public SignupScreen() {
+    private Client client;
+    private boolean isIdChecked = false;
+
+    public SignupScreen(Client client) {
+        this.client = client;
         setTitle("회원가입");
-        setSize(400, 400);
+        setSize(400, 250);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // 이름 입력
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        // 이름
+        gbc.gridx = 0; gbc.gridy = 0;
         panel.add(new JLabel("이름:"), gbc);
-
         gbc.gridx = 1;
-        gbc.gridy = 0;
         JTextField nameField = new JTextField(15);
         panel.add(nameField, gbc);
 
-        // 아이디 입력
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        // 아이디
+        gbc.gridx = 0; gbc.gridy = 1;
         panel.add(new JLabel("아이디:"), gbc);
-
         gbc.gridx = 1;
-        gbc.gridy = 1;
         JTextField idField = new JTextField(15);
         panel.add(idField, gbc);
-
         gbc.gridx = 2;
-        gbc.gridy = 1;
-        JButton checkIdButton = new JButton("중복확인");
-        panel.add(checkIdButton, gbc);
+        JButton checkIdBtn = new JButton("중복확인");
+        panel.add(checkIdBtn, gbc);
 
-        // 비밀번호 입력
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        // 비밀번호
+        gbc.gridx = 0; gbc.gridy = 2;
         panel.add(new JLabel("비밀번호:"), gbc);
-
         gbc.gridx = 1;
-        gbc.gridy = 2;
         JPasswordField passwordField = new JPasswordField(15);
         panel.add(passwordField, gbc);
 
         // 비밀번호 확인
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 3;
         panel.add(new JLabel("비밀번호 확인:"), gbc);
-
         gbc.gridx = 1;
-        gbc.gridy = 3;
         JPasswordField confirmPasswordField = new JPasswordField(15);
         panel.add(confirmPasswordField, gbc);
 
@@ -63,30 +54,72 @@ public class SignupScreen extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton signupButton = new JButton("가입하기");
         JButton cancelButton = new JButton("취소");
-
         buttonPanel.add(signupButton);
         buttonPanel.add(cancelButton);
 
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 3;
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 3;
         panel.add(buttonPanel, gbc);
 
-        // 버튼 이벤트 처리
-        signupButton.addActionListener(e -> {
-            // 회원가입 처리 후 로그인 화면으로 이동
-            LoginScreen loginScreen = new LoginScreen();
-            loginScreen.setVisible(true);
-            dispose();
-        });
-
-        cancelButton.addActionListener(e -> {
-            // 로그인 화면으로 돌아가기
-            LoginScreen loginScreen = new LoginScreen();
-            loginScreen.setVisible(true);
-            dispose();
-        });
-
         add(panel);
+
+        // 중복확인 버튼
+        checkIdBtn.addActionListener(e -> {
+            String id = idField.getText();
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "아이디를 입력하세요.");
+                return;
+            }
+            if (!client.connect("localhost", 12345)) {
+                JOptionPane.showMessageDialog(this, "서버 연결 실패!");
+                return;
+            }
+            try {
+                if (client.isIdDuplicate(id)) {
+                    JOptionPane.showMessageDialog(this, "이미 사용 중인 아이디입니다.");
+                    isIdChecked = false;
+                } else {
+                    JOptionPane.showMessageDialog(this, "사용 가능한 아이디입니다.");
+                    isIdChecked = true;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "서버 연결 오류!");
+            }
+        });
+
+        // 가입하기 버튼
+        signupButton.addActionListener(e -> {
+            String name = nameField.getText();
+            String id = idField.getText();
+            String pass = new String(passwordField.getPassword());
+            String confirmPass = new String(confirmPasswordField.getPassword());
+
+            if (!isIdChecked) {
+                JOptionPane.showMessageDialog(this, "아이디 중복확인을 해주세요.");
+                return;
+            }
+            if (!pass.equals(confirmPass)) {
+                JOptionPane.showMessageDialog(this, "비밀번호가 일치하지 않습니다.");
+                return;
+            }
+            try {
+                if (client.signup(id, name, pass)) {
+                    JOptionPane.showMessageDialog(this, "회원가입 성공! 로그인 해주세요.");
+                    new LoginScreen(client).setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "회원가입 실패!");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "서버 연결 오류!");
+            }
+        });
+
+        // 취소 버튼
+        cancelButton.addActionListener(e -> {
+            new LoginScreen(client).setVisible(true);
+            dispose();
+        });
     }
-} 
+}

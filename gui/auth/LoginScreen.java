@@ -1,80 +1,89 @@
 package gui.auth;
 
-import gui.common.MainScreen;
-
 import javax.swing.*;
 import java.awt.*;
 
+import gui.common.MainScreen;
+import common.network.Client;
+
 public class LoginScreen extends JFrame {
-    public LoginScreen() {
+    private Client client;
+
+    public LoginScreen(Client client) {
+        this.client = client;
         setTitle("로그인");
-        setSize(400, 300);
+        setSize(350, 220);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        
-        // 상단 앱명 표시
-        JLabel appTitle = new JLabel("일톡스", SwingConstants.CENTER);
-        appTitle.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        appTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
-        mainPanel.add(appTitle, BorderLayout.NORTH);
 
-        JPanel panel = new JPanel(new GridBagLayout());
+        // 상단 타이틀
+        JLabel titleLabel = new JLabel("일톡스", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // 입력 폼
+        JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
 
-        // 아이디 입력
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(new JLabel("아이디:"), gbc);
-
+        // 아이디
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("아이디:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 0;
         JTextField idField = new JTextField(15);
-        panel.add(idField, gbc);
+        formPanel.add(idField, gbc);
 
-        // 비밀번호 입력
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel.add(new JLabel("비밀번호:"), gbc);
-
+        // 비밀번호
+        gbc.gridx = 0; gbc.gridy = 1;
+        formPanel.add(new JLabel("비밀번호:"), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 1;
-        JPasswordField passwordField = new JPasswordField(15);
-        panel.add(passwordField, gbc);
+        JPasswordField passField = new JPasswordField(15);
+        formPanel.add(passField, gbc);
 
-        // 버튼 패널
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        
-        JButton loginButton = new JButton("로그인");
-        JButton signupButton = new JButton("회원가입");
+        mainPanel.add(formPanel, BorderLayout.CENTER);
 
-        buttonPanel.add(loginButton);
-        buttonPanel.add(signupButton);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        panel.add(buttonPanel, gbc);
-
-        mainPanel.add(panel, BorderLayout.CENTER);
-
-        // 버튼 이벤트 처리
-        loginButton.addActionListener(e -> {
-            // 로그인 처리 후 메인 화면으로 이동
-            MainScreen mainScreen = new MainScreen();
-            mainScreen.setVisible(true);
-            dispose();
-        });
-
-        signupButton.addActionListener(e -> {
-            // 회원가입 화면으로 이동
-            SignupScreen signupScreen = new SignupScreen();
-            signupScreen.setVisible(true);
-            dispose();
-        });
+        // 버튼 패널 (가로 배치)
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        JButton loginBtn = new JButton("로그인");
+        JButton signupBtn = new JButton("회원가입");
+        buttonPanel.add(loginBtn);
+        buttonPanel.add(signupBtn);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+
+        // 로그인 버튼
+        loginBtn.addActionListener(e -> {
+            if (!client.connect("localhost", 12345)) {
+                JOptionPane.showMessageDialog(this, "서버 연결 실패!");
+                return;
+            }
+            String userId = idField.getText();
+            String pass = new String(passField.getPassword());
+            try {
+                if (client.login(userId, pass)) {
+                    JOptionPane.showMessageDialog(this, "로그인 성공!");
+                    // 세션 생성 요청
+                    client.send("CREATESESSION|" + userId);
+                    new MainScreen(userId, client).setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "로그인 실패!");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "서버 연결 오류!");
+            }
+        });
+
+        // 회원가입 버튼
+        signupBtn.addActionListener(e -> {
+            new SignupScreen(client).setVisible(true);
+            dispose();
+        });
     }
 } 

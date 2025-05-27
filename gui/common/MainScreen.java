@@ -8,9 +8,12 @@ import gui.friend.FriendProfileScreen;
 import gui.setting.BlockListScreen;
 import gui.setting.MemoListScreen;
 import gui.setting.ProfileScreen;
+import common.network.Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,8 +24,13 @@ public class MainScreen extends JFrame {
     private List<String> chatRoomNames;
     private List<String> lastMessages;
     private List<String> lastMessageTimes;
+    private String userId;
+    private Timer sessionTimer;
+    private Client client;
 
-    public MainScreen() {
+    public MainScreen(String userId, Client client) {
+        this.userId = userId;
+        this.client = client;
         setTitle("메인 화면");
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -193,8 +201,15 @@ public class MainScreen extends JFrame {
                 JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
+                try {
+                    client.send("LOGOUT|" + userId);
+                    client.close(); // 소켓 연결 종료
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (sessionTimer != null) sessionTimer.stop();
                 dispose();
-                new LoginScreen().setVisible(true);
+                new LoginScreen(client).setVisible(true);
             }
         });
 
@@ -225,6 +240,27 @@ public class MainScreen extends JFrame {
         });
 
         add(mainPanel);
+
+        // 세션 만료 체크 타이머 (1분마다 체크)
+        sessionTimer = new Timer(60 * 1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    client.send("SESSIONCHECK|" + userId);
+                    String response = client.receive();
+                    if ("EXPIRED".equals(response)) {
+                        JOptionPane.showMessageDialog(MainScreen.this, "세션이 만료되어 로그아웃됩니다.");
+                        client.send("LOGOUT|" + userId);
+                        client.close();
+                        sessionTimer.stop();
+                        dispose();
+                        new LoginScreen(client).setVisible(true);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        sessionTimer.start();
     }
 
     private static List<String> generateRandomFriendNames() {
