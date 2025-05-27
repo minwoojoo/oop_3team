@@ -1,4 +1,4 @@
 out/**/*
 
 env/client.local.env
-env/
+env/server.local.env
