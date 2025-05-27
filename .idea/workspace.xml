@@ -4,42 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/config/AppConfig.java" afterDir="false" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="rebase: 패키지 명 추가, 소스 코드 이동">
+      <change afterPath="$PROJECT_DIR$/env/client.example.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/controller/SignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SignupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/model/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/enums/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/env/client.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/enums/StatusType.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/enums/CommandType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/PacketRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/enums/StatusType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/PacketRouter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/DBConfig.example.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/config/DBConfig.example.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/attendance/AddScheduleScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AddScheduleScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/attendance/AttendanceEditScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AttendanceEditScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/attendance/AttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AttendanceScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/auth/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/auth/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/auth/SignupScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/auth/SignupScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/chatroom/CreateGroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/chatroom/GroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/common/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/common/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/friend/AddFriendScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/AddFriendScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/friend/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/ChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/friend/FriendProfileScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/FriendProfileScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/keyword/KeywordSettingsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/keyword/KeywordSettingsScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/memo/ChatMemoPopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/memo/ChatMemoPopup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/schedule/ScheduleScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/schedule/ScheduleScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/setting/BlockListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/BlockListScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/setting/MemoListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/MemoListScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/setting/ProfileScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/ProfileScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/enums/CommandType.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +36,9 @@
     "accountId": "3833d2b0-39da-49ad-8b07-bc94f2c8372f"
   }
 }]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -107,8 +80,8 @@
       <recent name="gui.schedule" />
     </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="애플리케이션.Client">
+    <configuration name="Client" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
       <module name="team3_messageProgram" />
       <method v="2">
@@ -128,9 +101,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="애플리케이션.Client" />
+      <item itemvalue="애플리케이션.Server" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="애플리케이션.Main" />
+        <item itemvalue="애플리케이션.Client" />
         <item itemvalue="애플리케이션.Server" />
       </list>
     </recent_temporary>
@@ -173,6 +150,15 @@
       <workItem from="1748281736031" duration="8419000" />
       <workItem from="1748323073470" duration="191000" />
     </task>
+    <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
+      <option name="closed" value="true" />
+      <created>1748388566152</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1748388566152</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,6 +166,10 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="rebase: 패키지 명 추가, 소스 코드 이동" />
+    <option name="LAST_COMMIT_MESSAGE" value="rebase: 패키지 명 추가, 소스 코드 이동" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
