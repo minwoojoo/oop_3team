@@ -1,1 +1,4 @@
-config/DBConfig.java
+out/**/*
+
+env/client.local.env
+env/
