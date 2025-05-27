@@ -5,27 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/config/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/DBConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/config/DBConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/auth/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/auth/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/auth/SignupScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/auth/SignupScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/common/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/common/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/DB/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/auth/LoginScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/auth/LoginScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/auth/SignupScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/auth/SignupScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/team3_messageProgram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/team3_messageProgram.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/team3_messageProgram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/team3_messageProgram.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SessionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/controller/SignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SignupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/model/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/enums/CommandType.java" beforeDir="false" afterPath="$PROJECT_DIR$/env/client.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/enums/StatusType.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/enums/CommandType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/PacketRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/enums/StatusType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/common/network/PacketRouter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/DBConfig.example.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/config/DBConfig.example.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/attendance/AddScheduleScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AddScheduleScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/attendance/AttendanceEditScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AttendanceEditScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/attendance/AttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/attendance/AttendanceScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/auth/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/auth/LoginScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/auth/SignupScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/auth/SignupScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/chatroom/CreateGroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/chatroom/GroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/common/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/common/MainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/friend/AddFriendScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/AddFriendScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/friend/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/ChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/friend/FriendProfileScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/friend/FriendProfileScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/keyword/KeywordSettingsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/keyword/KeywordSettingsScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/memo/ChatMemoPopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/memo/ChatMemoPopup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/schedule/ScheduleScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/schedule/ScheduleScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/setting/BlockListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/BlockListScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/setting/MemoListScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/MemoListScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/setting/ProfileScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/gui/setting/ProfileScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,37 +47,57 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "LeeHyKu"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/minwoojoo/oop_3team.git",
+    "accountId": "3833d2b0-39da-49ad-8b07-bc94f2c8372f"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2wP918CzbbXcwCxHhwSG3ylg5lU" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
-    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
-    &quot;애플리케이션.Server.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "rebase-suggestion",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "라이브러리",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true",
+    "애플리케이션.Main (1).executor": "Run",
+    "애플리케이션.Main.executor": "Run",
+    "애플리케이션.Server.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="gui.attendance" />
@@ -75,18 +109,18 @@
   </component>
   <component name="RunManager" selected="애플리케이션.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
       <module name="team3_messageProgram" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="common.network.Server" />
+      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.common.network.Server" />
       <module name="team3_messageProgram" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="common.network.*" />
+          <option name="PATTERN" value="kr.ac.catholic.cls032690125.oop3team.common.network.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -104,8 +138,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -143,6 +177,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
