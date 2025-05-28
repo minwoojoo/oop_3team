@@ -3,6 +3,7 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 
@@ -19,12 +20,14 @@ public class Server {
     private final List<ServerClientHandler> onlineClients = new ArrayList<>();
     private final List<ServerRequestListener> listeners = new ArrayList<>();
 
+    private final SFriendController friendController = new SFriendController(this);
+
     public Server(ProgramProperties control) throws ServerIgnitionFailureException {
         try{
             this.properties = control;
             this.database = new Database(this);
 
-            listeners.add(new ServerAuthController(this));
+            listeners.add(friendController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }

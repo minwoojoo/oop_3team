@@ -3,6 +3,7 @@ package kr.ac.catholic.cls032690125.oop3team.client;
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientResponseListener;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
@@ -23,6 +24,10 @@ public class Client implements Runnable {
 
     private final ProgramProperties properties;
 
+
+    private CFriendController friendController = new CFriendController(this);
+
+
     public Client(ProgramProperties properties) {
         this.properties = properties;
         listeners.add(interactor);
@@ -42,9 +47,13 @@ public class Client implements Runnable {
         }
     }
 
-    public void request(ClientOrderBasePacket packet, ClientInteractResponse callback) throws IOException {
-        interactor.register(packet.getRequestId(), callback);
-        send(packet);
+    public void request(ClientOrderBasePacket packet, ClientInteractResponse callback) {
+        try{
+            interactor.register(packet.getRequestId(), callback);
+            send(packet);
+        } catch (IOException e) {
+            callback.run(null);
+        }
     }
 
     public void send(ClientOrderBasePacket packet) throws IOException {

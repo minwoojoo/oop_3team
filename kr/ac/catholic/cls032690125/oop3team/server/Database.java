@@ -12,7 +12,7 @@ public class Database {
 
     public Database(Server server) throws ClassNotFoundException {
         this.server = server;
-        //Class.forName(server.getProperties().getServerDBDriver());
+        Class.forName(server.getProperties().getServerDBDriver());
     }
 
     public Connection getConnection() {
