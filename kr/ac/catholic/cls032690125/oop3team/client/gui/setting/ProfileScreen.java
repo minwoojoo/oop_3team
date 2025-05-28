@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.setting;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.setting;
 
 import javax.swing.*;
 import java.awt.*;

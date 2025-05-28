@@ -1,14 +1,14 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.common;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.common;
 
-import kr.ac.catholic.cls032690125.oop3team.gui.auth.LoginScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.chatroom.CreateGroupChatScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.chatroom.GroupChatScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.friend.AddFriendScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.friend.FriendProfileScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.setting.BlockListScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.setting.MemoListScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.setting.ProfileScreen;
-import kr.ac.catholic.cls032690125.oop3team.common.network.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.auth.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.chatroom.CreateGroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.chatroom.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.friend.AddFriendScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.friend.FriendProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.setting.BlockListScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.setting.MemoListScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.setting.ProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 
 import javax.swing.*;
 import java.awt.*;

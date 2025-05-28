@@ -1,10 +1,10 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.auth;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.auth;
 
 import javax.swing.*;
 import java.awt.*;
 
-import kr.ac.catholic.cls032690125.oop3team.gui.common.MainScreen;
-import kr.ac.catholic.cls032690125.oop3team.common.network.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.common.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 
 public class LoginScreen extends JFrame {
     private Client client;

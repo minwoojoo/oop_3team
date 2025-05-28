@@ -1,6 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.chatroom;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.chatroom;
 
-import kr.ac.catholic.cls032690125.oop3team.gui.common.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.common.MainScreen;
 
 import javax.swing.*;
 import java.awt.*;

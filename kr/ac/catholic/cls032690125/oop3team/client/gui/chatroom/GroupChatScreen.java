@@ -1,11 +1,11 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.chatroom;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.chatroom;
 
-import kr.ac.catholic.cls032690125.oop3team.gui.attendance.AddScheduleScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.attendance.AttendanceScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.common.MainScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.keyword.KeywordSettingsScreen;
-import kr.ac.catholic.cls032690125.oop3team.gui.memo.ChatMemoPopup;
-import kr.ac.catholic.cls032690125.oop3team.gui.schedule.ScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.attendance.AddScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.attendance.AttendanceScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.common.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.keyword.KeywordSettingsScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.memo.ChatMemoPopup;
+import kr.ac.catholic.cls032690125.oop3team.client.gui.schedule.ScheduleScreen;
 
 import javax.swing.*;
 import java.awt.*;

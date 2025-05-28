@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.gui.attendance;
+package kr.ac.catholic.cls032690125.oop3team.client.gui.attendance;
 
 import javax.swing.*;
 import java.awt.*;
