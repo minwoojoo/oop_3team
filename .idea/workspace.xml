@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="rebase 등">
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="add user">
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/CFriendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/FriendDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/SFriendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendInviteReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendListReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendReplyReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/SFriendListRes.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Friend.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/responses/FriendProfile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientInteractResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientInteractResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +92,7 @@
     "project.structure.last.edited": "라이브러리",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.editor",
+    "settings.editor.selected.configurable": "database.data.views.appearance",
     "vue.rearranger.settings.migration": "true",
     "애플리케이션.Client.executor": "Run",
     "애플리케이션.Main (1).executor": "Run",
@@ -305,7 +314,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748412551898</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="add user">
+      <option name="closed" value="true" />
+      <created>1748413223780</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1748413223780</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -341,7 +358,8 @@
     <MESSAGE value="initiate" />
     <MESSAGE value="packet available" />
     <MESSAGE value="rebase 등" />
-    <option name="LAST_COMMIT_MESSAGE" value="rebase 등" />
+    <MESSAGE value="add user" />
+    <option name="LAST_COMMIT_MESSAGE" value="add user" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
