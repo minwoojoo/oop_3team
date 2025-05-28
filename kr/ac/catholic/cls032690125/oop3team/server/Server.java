@@ -8,9 +8,15 @@ import java.net.Socket;
 
 public class Server {
     private final ProgramProperties properties;
+    private final Database database;
 
     public Server(ProgramProperties control) {
-        this.properties = control;
+        try{
+            this.properties = control;
+            this.database = new Database(this);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Not found database driver");
+        }
     }
 
     public void start() {
