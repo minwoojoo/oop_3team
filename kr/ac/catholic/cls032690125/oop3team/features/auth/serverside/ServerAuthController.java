@@ -20,7 +20,7 @@ public class ServerAuthController extends ServerRequestListener {
         ServerResponsePacketSimplefied<Boolean> res =
                 new ServerResponsePacketSimplefied<>(
                         req.getRequestId(),
-                        true //authDAO.checkLogin(req.getUsername(), req.getPassword())
+                        authDAO.checkLogin(req.getUsername(), req.getPassword())
                 );
         sch.send(res);
     }

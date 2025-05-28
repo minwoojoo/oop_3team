@@ -1,6 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.auth.controller;
+package kr.ac.catholic.cls032690125.oop3team.deprecated.auth.controller;
 
-import kr.ac.catholic.cls032690125.oop3team.auth.dao.AuthManager;
+import kr.ac.catholic.cls032690125.oop3team.deprecated.auth.dao.AuthManager;
 
 public class SignupController {
     private AuthManager authManager = new AuthManager();

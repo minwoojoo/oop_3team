@@ -37,7 +37,7 @@ PasswordUtil.java: 비밀번호 암호화/검증
 TimeUtil.java: 시간 관련 유틸리티
 
 
-4) kr.ac.catholic.cls032690125.oop3team.auth/
+4) kr.ac.catholic.cls032690125.oop3team.deprecated.auth/
 •	인증 관련 기능(로그인, 회원가입 등)
 controller/:
 UI 또는 소켓 명령 처리
@@ -89,7 +89,7 @@ ChatRoom, Message, Thread 등 데이터 구조
 attendance/:
 출퇴근 기능 관련 화면
 
-kr.ac.catholic.cls032690125.oop3team.auth/:
+kr.ac.catholic.cls032690125.oop3team.deprecated.auth/:
 로그인/회원가입 화면
 
 friend/:

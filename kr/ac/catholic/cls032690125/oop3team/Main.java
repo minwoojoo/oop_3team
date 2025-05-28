@@ -15,11 +15,6 @@ public class Main {
         switch(properties.getMode()) {
             case CLIENT:
                 Client client = new Client(properties);
-                //if (!client.connect("localhost", 12345)) {
-                //    JOptionPane.showMessageDialog(null, "서버 연결 실패!");
-                //    return;
-                //}
-                //new LoginScreen(client).setVisible(true);
                 try {
                     System.out.println("CONN:" + client.connect());
 

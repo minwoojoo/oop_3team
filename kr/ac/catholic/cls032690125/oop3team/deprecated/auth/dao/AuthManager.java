@@ -1,6 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.auth.dao;
+package kr.ac.catholic.cls032690125.oop3team.deprecated.auth.dao;
 
-import kr.ac.catholic.cls032690125.oop3team.auth.model.Session;
+import kr.ac.catholic.cls032690125.oop3team.deprecated.auth.model.Session;
 import java.sql.*;
 
 public class AuthManager {

@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.auth.model;
+package kr.ac.catholic.cls032690125.oop3team.deprecated.auth.model;
 
 import java.time.LocalDateTime;
 

@@ -1,10 +1,10 @@
-package kr.ac.catholic.cls032690125.oop3team.auth.controller;
+package kr.ac.catholic.cls032690125.oop3team.deprecated.auth.controller;
 
-import kr.ac.catholic.cls032690125.oop3team.auth.model.Session;
+import kr.ac.catholic.cls032690125.oop3team.deprecated.auth.model.Session;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import kr.ac.catholic.cls032690125.oop3team.auth.dao.AuthManager;
+import kr.ac.catholic.cls032690125.oop3team.deprecated.auth.dao.AuthManager;
 
 public class SessionController {
     private static Map<String, Session> sessionMap = new HashMap<>();
