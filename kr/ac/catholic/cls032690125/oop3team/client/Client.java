@@ -1,6 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.client;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
+import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,6 +28,10 @@ public class Client {
             return false;
         }
     }
+
+    public void send(ClientOrderBasePacket packet) {
+    }
+
 
     public void send(String message) {
         out.println(message);

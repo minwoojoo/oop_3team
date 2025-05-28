@@ -1,7 +1,5 @@
 package kr.ac.catholic.cls032690125.oop3team;
 
-import kr.ac.catholic.cls032690125.oop3team.enums.ProgramMode;
-
 import java.util.Map;
 
 public class ProgramProperties {

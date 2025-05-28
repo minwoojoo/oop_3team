@@ -5,10 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="update runner">
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Server.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/ClientInteractor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientInteractResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardControl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/exceptions/runtime/ServerIgnitionFailureException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/AuthDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/SessionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/ClientLoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Session.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/StandardDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ClientOrderBasePacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/Packet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponseBasePacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponsePacketSimplefied.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramProperties.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/CommandType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/ProgramMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/StatusType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/network/PacketRouter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +42,12 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Record" />
+        <option value="package-info" />
         <option value="Enum" />
+        <option value="Exception" />
+        <option value="AnnotationType" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -81,6 +110,7 @@
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.editor",
     "vue.rearranger.settings.migration": "true",
+    "애플리케이션.Client.executor": "Run",
     "애플리케이션.Main (1).executor": "Run",
     "애플리케이션.Main.executor": "Run",
     "애플리케이션.Server.executor": "Run"
@@ -98,7 +128,7 @@
       <recent name="gui.schedule" />
     </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.Server">
+  <component name="RunManager" selected="애플리케이션.Client">
     <list>
       <item itemvalue="애플리케이션.Client" />
       <item itemvalue="애플리케이션.Server" />
@@ -268,7 +298,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748396014190</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="update runner">
+      <option name="closed" value="true" />
+      <created>1748396163967</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748396163967</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.enums;
+package kr.ac.catholic.cls032690125.oop3team;
 
 public enum ProgramMode {
     CLIENT("CLIENT"),

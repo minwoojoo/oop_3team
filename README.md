@@ -1,15 +1,15 @@
-1) Main.java
+1) kr.ac.catholic.cls032690125.oop3team.Main.java
 •	진입점(Entry Point)
 프로그램 실행의 시작점이 되는 클래스입니다.(보통 public static void main(String[] args)가 있음)
 
 
-2) config/
+2) kr.ac.catholic.cls032690125.oop3team.config/
 •	설정 관련 패키지
 DBConfig.java: 데이터베이스 연결 설정을 담당(mySQL과 연결을 담당하는 코드입니다)
 AppConfig.java: 공통 설정(앱 전체에 적용되는 설정) 담당
 
 
-3) common/
+3) kr.ac.catholic.cls032690125.oop3team.common/
 공통 모듈(여러 곳에서 재사용되는 코드)
 
 •	network/:
@@ -37,7 +37,7 @@ PasswordUtil.java: 비밀번호 암호화/검증
 TimeUtil.java: 시간 관련 유틸리티
 
 
-4) auth/
+4) kr.ac.catholic.cls032690125.oop3team.auth/
 •	인증 관련 기능(로그인, 회원가입 등)
 controller/:
 UI 또는 소켓 명령 처리
@@ -83,13 +83,13 @@ model/:
 ChatRoom, Message, Thread 등 데이터 구조 
 
 
-7) gui/
+7) kr.ac.catholic.cls032690125.oop3team.client.gui/
 •	GUI(Swing 기반) 관련 코드
 
 attendance/:
 출퇴근 기능 관련 화면
 
-auth/:
+kr.ac.catholic.cls032690125.oop3team.auth/:
 로그인/회원가입 화면
 
 friend/:
@@ -98,7 +98,7 @@ friend/:
 chatroom/:
 채팅 화면(1:n대화방 생성, 그룹채팅방, 메뉴바 등)
 
-common/:
+kr.ac.catholic.cls032690125.oop3team.common/:
 메인 프레임(앱의 메인 윈도우) => 친구메인화면, 대화방메인화면, 설정메인화면
 
 keyword/:
@@ -120,6 +120,6 @@ setting/:
 데이터베이스 테이블 생성 스크립트 (일단 java에 파일 만들어놓긴 했는데 mySQL에서 정의해놓으면 여기서는 삭제해도 될 거 같습니다)
 
 ## DB 설정
-1. `config/DBConfig.example.java`를 `config/DBConfig.java`로 복사합니다.
+1. `kr.ac.catholic.cls032690125.oop3team.config/DBConfig.example.java`를 `kr.ac.catholic.cls032690125.oop3team.config/DBConfig.java`로 복사합니다.
 2. `DBConfig.java`에서 DB_URL, USER, PASSWORD를 실제 값으로 수정합니다.
 =>실제 DBConfig.java파일은 민감한 정보를 보호하기 위해 .gitignore파일에 넣었습니다.
