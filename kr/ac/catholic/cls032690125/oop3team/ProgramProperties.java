@@ -15,6 +15,7 @@ public class ProgramProperties {
 
     /* Serverside */
     private final int serverPort;
+    private final String serverDBDriver;
     private final String serverDBPath;
     private final String serverDBID;
     private final String serverDBPassword;
@@ -30,6 +31,7 @@ public class ProgramProperties {
                 clientTargetPort = Integer.parseInt(envs.get("CLS032690125oop3team_CLIENT_TARGET_PORT"));
 
                 serverPort = -1;
+                serverDBDriver = null;
                 serverDBPath = null;
                 serverDBID = null;
                 serverDBPassword = null;
@@ -40,6 +42,8 @@ public class ProgramProperties {
                 clientTargetPort = -1;
 
                 serverPort = Integer.parseInt(envs.get("CLS032690125oop3team_SERVER_PORT"));
+
+                serverDBDriver = envs.get("CLS032690125oop3team_SERVER_DB_DRIVER");
                 serverDBPath = envs.get("CLS032690125oop3team_SERVER_DB_PATH");
                 serverDBID = envs.get("CLS032690125oop3team_SERVER_DB_ID");
                 serverDBPassword = envs.get("CLS032690125oop3team_SERVER_DB_PASSWORD");
@@ -50,6 +54,7 @@ public class ProgramProperties {
                 clientTargetPort = -1;
 
                 serverPort = -1;
+                serverDBDriver = null;
                 serverDBPath = null;
                 serverDBID = null;
                 serverDBPassword = null;
@@ -71,6 +76,10 @@ public class ProgramProperties {
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    public String getServerDBDriver() {
+        return serverDBDriver;
     }
 
     public String getServerDBPath() {
