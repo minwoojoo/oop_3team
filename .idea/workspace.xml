@@ -6,22 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/common/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/common/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/CreateGroupChatScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/CreateGroupChatScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/common/network/ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/common/network/ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$ThreadInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$ThreadInfo.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,28 +33,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/spong/OneDrive/바탕 화면/tmp/4-1 객체지향페러다임/oop_3team&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;프로젝트&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
-    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Server.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature/server-network",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/spong/OneDrive/바탕 화면/tmp/4-1 객체지향페러다임/oop_3team",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "프로젝트",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true",
+    "애플리케이션.Main (1).executor": "Run",
+    "애플리케이션.Main.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="gui.attendance" />
@@ -139,7 +130,7 @@
       <workItem from="1748252363956" duration="873000" />
       <workItem from="1748253271099" duration="3333000" />
       <workItem from="1748330549892" duration="5139000" />
-      <workItem from="1748398815613" duration="2743000" />
+      <workItem from="1748398815613" duration="3611000" />
     </task>
     <servers />
   </component>
