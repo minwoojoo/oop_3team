@@ -1,5 +1,6 @@
 package gui.chatroom;
 
+import common.network.Client;
 import gui.attendance.AddScheduleScreen;
 import gui.attendance.AttendanceScreen;
 import gui.common.MainScreen;
@@ -11,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,8 +29,32 @@ public class GroupChatScreen extends JFrame {
     private List<ThreadInfo> threads = new ArrayList<>();
     private JPanel threadPanel;
     private JDialog threadListDialog;
+    private Client client;
 
-    public GroupChatScreen(String groupName, List<String> members) {
+    public GroupChatScreen(String groupName, List<String> members) throws IOException {
+
+
+        /**
+         * 임시로 스레드 생성 (로그인 구현 전까지)
+         * */
+        client = new Client("localhost", 12345);
+
+        new Thread(() -> {
+            try {
+                BufferedReader reader = client.getReceiver();
+                String msg;
+                while ((msg = reader.readLine()) != null) {
+                    String finalMsg = msg;
+                    SwingUtilities.invokeLater(() -> {
+                        chatArea.append(finalMsg + "\n");
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+
         this.groupName = groupName;
         this.members = members;
         
@@ -261,10 +288,14 @@ public class GroupChatScreen extends JFrame {
 
     private void sendMessage() {
         String message = inputField.getText().trim();
-        if (!message.isEmpty()) {
-            chatArea.append("나: " + message + "\n");
-            inputField.setText("");
-        }
+        if (message.isEmpty()) return;
+
+        // 1) 서버로 전송
+        client.send(message);           // ← 여기가 빠져 있었음!
+
+        // 2) 내 창에도 보여주기 (선택)
+        chatArea.append("나: " + message + "\n");
+        inputField.setText("");
     }
 
     private void addRandomMessages() {

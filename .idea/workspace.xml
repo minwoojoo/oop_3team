@@ -4,11 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/network/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/chatroom/CreateGroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/chatroom/GroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/common/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/gui/common/MainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/CreateGroupChatScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/CreateGroupChatScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$ThreadInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen$ThreadInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/chatroom/GroupChatScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/team3_messageProgram/gui/common/MainScreen.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -18,24 +42,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/주민우/team3_messageProgram",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "프로젝트",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Main (1).executor": "Run",
-    "애플리케이션.Main.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/spong/OneDrive/바탕 화면/tmp/4-1 객체지향페러다임/oop_3team&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;프로젝트&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="gui.attendance" />
@@ -45,25 +73,43 @@
       <recent name="gui.schedule" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="team3_messageProgram" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="common.network.Server" />
+      <module name="team3_messageProgram" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="common.network.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Server" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="애플리케이션.Main" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
+        <option value="jdk-17.0.9-corretto-17.0.9-4caba194b151-107bc6b7" />
+        <option value="jdk-21.0.2-corretto-21.0.2-4caba194b151-51586f01" />
       </set>
     </attachedChunks>
   </component>
@@ -92,6 +138,8 @@
       <workItem from="1748251845518" duration="485000" />
       <workItem from="1748252363956" duration="873000" />
       <workItem from="1748253271099" duration="3333000" />
+      <workItem from="1748330549892" duration="5139000" />
+      <workItem from="1748398815613" duration="2743000" />
     </task>
     <servers />
   </component>
