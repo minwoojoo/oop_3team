@@ -6,12 +6,6 @@
     </option>
     <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
     <module name="team3_messageProgram" />
-    <extension name="coverage">
-      <pattern>
-        <option name="PATTERN" value="kr.ac.catholic.cls032690125.oop3team.client.*" />
-        <option name="ENABLED" value="true" />
-      </pattern>
-    </extension>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

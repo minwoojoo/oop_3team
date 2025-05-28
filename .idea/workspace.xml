@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="remove lagacy database">
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="update runner">
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Server.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
     </list>
@@ -65,6 +67,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "rebase-suggestion",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
@@ -95,7 +98,7 @@
       <recent name="gui.schedule" />
     </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.Client">
+  <component name="RunManager" selected="애플리케이션.Server">
     <list>
       <item itemvalue="애플리케이션.Client" />
       <item itemvalue="애플리케이션.Server" />
@@ -257,7 +260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748395894857</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="update runner">
+      <option name="closed" value="true" />
+      <created>1748396014190</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1748396014190</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +289,8 @@
     <MESSAGE value="update env&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
     <MESSAGE value="update database" />
     <MESSAGE value="remove lagacy database" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove lagacy database" />
+    <MESSAGE value="update runner" />
+    <option name="LAST_COMMIT_MESSAGE" value="update runner" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
