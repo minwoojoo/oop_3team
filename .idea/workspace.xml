@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="update env&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="remove lagacy database">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,42 +96,14 @@
     </key>
   </component>
   <component name="RunManager" selected="애플리케이션.Client">
-    <configuration name="Client" type="Application" factoryName="Application" temporary="true">
-      <option name="envFilePaths">
-        <option value="$PROJECT_DIR$/env/client.env" />
-        <option value="$PROJECT_DIR$/env/client.local.env" />
-      </option>
-      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
-      <module name="team3_messageProgram" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="envFilePaths">
-        <option value="$PROJECT_DIR$/env/server.env" />
-        <option value="$PROJECT_DIR$/env/server.local.env" />
-      </option>
-      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
-      <module name="team3_messageProgram" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="kr.ac.catholic.cls032690125.oop3team.client.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="애플리케이션.Client" />
-      <item itemvalue="애플리케이션.Main" />
+      <item itemvalue="애플리케이션.Server" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="애플리케이션.Client" />
-        <item itemvalue="애플리케이션.Main" />
+        <item itemvalue="애플리케이션.Server" />
       </list>
     </recent_temporary>
   </component>
@@ -272,7 +241,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748393754086</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="update database">
+      <option name="closed" value="true" />
+      <created>1748395860711</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1748395860711</updated>
+    </task>
+    <task id="LOCAL-00014" summary="remove lagacy database">
+      <option name="closed" value="true" />
+      <created>1748395894857</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1748395894857</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,7 +276,9 @@
     <MESSAGE value="update workspace.xml" />
     <MESSAGE value="update env" />
     <MESSAGE value="update env&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="update env&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
+    <MESSAGE value="update database" />
+    <MESSAGE value="remove lagacy database" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove lagacy database" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
