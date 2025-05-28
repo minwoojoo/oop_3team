@@ -1,4 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.common.network;
+package kr.ac.catholic.cls032690125.oop3team.client;
+
+import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 
 import java.io.*;
 import java.net.Socket;
@@ -7,6 +9,12 @@ public class Client {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+
+    private final ProgramProperties properties;
+
+    public Client(ProgramProperties properties) {
+        this.properties = properties;
+    }
 
     public boolean connect(String host, int port) {
         try {
@@ -50,5 +58,9 @@ public class Client {
         send("IDCHECK|" + userId);
         String response = receive();
         return "DUPLICATE".equals(response);
+    }
+
+    public ProgramProperties getProperties() {
+        return properties;
     }
 }

@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.common.network;
+package kr.ac.catholic.cls032690125.oop3team.server;
 
 import java.io.*;
 import java.net.Socket;
