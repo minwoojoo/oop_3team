@@ -74,7 +74,7 @@ public class SignupScreen extends JFrame {
                 return;
             }
             try {
-                if (client.isIdDuplicate(id)) {
+                if (false){//client.isIdDuplicate(id)) {
                     JOptionPane.showMessageDialog(this, "이미 사용 중인 아이디입니다.");
                     isIdChecked = false;
                 } else {
@@ -103,7 +103,7 @@ public class SignupScreen extends JFrame {
                 return;
             }
             try {
-                if (client.signup(id, name, pass)) {
+                if (false){ //client.signup(id, name, pass)) {
                     JOptionPane.showMessageDialog(this, "회원가입 성공! 로그인 해주세요.");
                     new LoginScreen(client).setVisible(true);
                     dispose();

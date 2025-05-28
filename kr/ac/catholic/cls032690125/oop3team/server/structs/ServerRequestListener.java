@@ -1,6 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.server.structs;
 
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
+import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 
 import java.lang.reflect.Method;
@@ -13,7 +14,6 @@ public abstract class ServerRequestListener {
     private final Map<Class<? extends ClientOrderBasePacket>, List<Method>> handlerMap = new HashMap<>();
     protected final Server client;
 
-    //TODO: 정상 등록되는지 확인
     public ServerRequestListener(Server client) {
         this.client = client;
 
@@ -30,12 +30,12 @@ public abstract class ServerRequestListener {
         handlerMap.get(clazz).add(method);
     }
 
-    public void dispatch(ClientOrderBasePacket packet) {
+    public void dispatch(ServerClientHandler sch, ClientOrderBasePacket packet) {
         List<Method> methods = handlerMap.get(packet.getClass());
         if (methods != null) {
             for(Method method : methods) {
                 try {
-                    method.invoke(this, packet);
+                    method.invoke(this, sch, packet);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

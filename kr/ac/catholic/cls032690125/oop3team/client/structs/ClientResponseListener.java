@@ -11,16 +11,20 @@ import java.util.Map;
 
 public abstract class ClientResponseListener {
     private final Map<Class<? extends ServerResponseBasePacket>, List<Method>> handlerMap = new HashMap<>();
+    private Method master = null;
     protected final Client client;
 
-    //TODO: 정상 등록되는지 확인
     public ClientResponseListener(Client client) {
         this.client = client;
 
         for (Method method : this.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(ClientResponseHandler.class)) {
                 Class<? extends ServerResponseBasePacket> packetType = method.getAnnotation(ClientResponseHandler.class).value();
-                add(packetType, method);
+                if (packetType == ServerResponseBasePacket.class) {
+                    master = method;
+                }
+                else
+                    add(packetType, method);
             }
         }
     }
@@ -31,6 +35,13 @@ public abstract class ClientResponseListener {
     }
 
     public void dispatch(ServerResponseBasePacket packet) {
+        if(master != null) {
+            try{
+                master.invoke(this, packet);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
         List<Method> methods = handlerMap.get(packet.getClass());
         if (methods != null) {
             for(Method method : methods) {

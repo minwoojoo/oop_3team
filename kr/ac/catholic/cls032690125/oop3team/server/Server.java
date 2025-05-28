@@ -2,19 +2,29 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
+import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
+import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
     private final ProgramProperties properties;
     private final Database database;
 
+    private final List<ServerClientHandler> onlineClients = new ArrayList<>();
+    private final List<ServerRequestListener> listeners = new ArrayList<>();
+
     public Server(ProgramProperties control) throws ServerIgnitionFailureException {
         try{
             this.properties = control;
             this.database = new Database(this);
+
+            listeners.add(new ServerAuthController(this));
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }
@@ -26,10 +36,18 @@ public class Server {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("클라이언트 연결됨: " + clientSocket.getInetAddress());
-                new Thread(new ClientHandler(clientSocket)).start();
+                var handler = new ServerClientHandler(this, clientSocket);
+                handler.run();
+                onlineClients.add(handler);
             }
         } catch (IOException e) {
             throw new ServerIgnitionFailureException("Unknown IO Exception", e);
+        }
+    }
+
+    public void handle(ServerClientHandler handler, ClientOrderBasePacket order) {
+        for(ServerRequestListener listener : listeners) {
+            listener.dispatch(handler, order);
         }
     }
 

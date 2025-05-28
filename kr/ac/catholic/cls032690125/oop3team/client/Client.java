@@ -1,27 +1,40 @@
 package kr.ac.catholic.cls032690125.oop3team.client;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientResponseListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Client {
+public class Client implements Runnable {
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+
+    private Thread thread;
+
+    private List<ClientResponseListener> listeners = new ArrayList<ClientResponseListener>();
+    private final ClientInteractor interactor = new ClientInteractor(this);
 
     private final ProgramProperties properties;
 
     public Client(ProgramProperties properties) {
         this.properties = properties;
+        listeners.add(interactor);
     }
 
-    public boolean connect(String host, int port) {
+    public boolean connect() {
         try {
-            socket = new Socket(host, port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            socket = new Socket(properties.getClientTarget(), properties.getClientTargetPort());
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+            thread = new Thread(this);
+            thread.start();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -29,43 +42,50 @@ public class Client {
         }
     }
 
-    public void send(ClientOrderBasePacket packet) {
+    public void request(ClientOrderBasePacket packet, ClientInteractResponse callback) throws IOException {
+        interactor.register(packet.getRequestId(), callback);
+        send(packet);
     }
 
-
-    public void send(String message) {
-        out.println(message);
-    }
-
-    public String receive() throws IOException {
-        return in.readLine();
+    public void send(ClientOrderBasePacket packet) throws IOException {
+        out.writeObject(packet);
     }
 
     public void close() throws IOException {
         socket.close();
     }
 
-    // 로그인 요청
-    public boolean login(String userId, String password) throws IOException {
-        send("LOGIN|" + userId + "|" + password);
-        String response = receive();
-        return "SUCCESS".equals(response);
-    }
-
-    // 회원가입 요청
-    public boolean signup(String userId, String name, String password) throws IOException {
-        send("SIGNUP|" + userId + "|" + name + "|" + password);
-        String response = receive();
-        return "SUCCESS".equals(response);
-    }
-
-    public boolean isIdDuplicate(String userId) throws IOException {
-        send("IDCHECK|" + userId);
-        String response = receive();
-        return "DUPLICATE".equals(response);
-    }
-
     public ProgramProperties getProperties() {
         return properties;
     }
+
+    public void dispatch(ServerResponseBasePacket packet) {
+        for (ClientResponseListener listener : listeners) {
+            listener.dispatch(packet);
+        }
+    }
+
+    @Override
+    public void run() {
+        try{
+            while(in != null) {
+                Object obj = in.readObject();
+                this.dispatch((ServerResponseBasePacket)obj);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Deprecated
+    public boolean connect(String a, int b) { return true; }
+
+    @Deprecated
+    public void send(String message) {
+        //out.println(message);
+    }
+
+    @Deprecated
+    public String receive() { return ""; }
 }

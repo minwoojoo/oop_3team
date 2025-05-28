@@ -4,35 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="update runner">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/ClientInteractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientInteractResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/exceptions/runtime/ServerIgnitionFailureException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/AuthDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/SessionController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/ClientLoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Session.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/StandardDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ClientOrderBasePacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/Packet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponseBasePacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponsePacketSimplefied.java" afterDir="false" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="initiate">
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/CommandType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/ProgramMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/ProgramMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/enums/StatusType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/network/PacketRouter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/gui/auth/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/gui/auth/LoginScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/gui/auth/SignupScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/gui/auth/SignupScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/ClientResponseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/ClientAuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/ServerAuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/ClientLoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/ClientLoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/Packet.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748396163967</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="initiate">
+      <option name="closed" value="true" />
+      <created>1748404733301</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1748404733301</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -328,7 +322,8 @@
     <MESSAGE value="update database" />
     <MESSAGE value="remove lagacy database" />
     <MESSAGE value="update runner" />
-    <option name="LAST_COMMIT_MESSAGE" value="update runner" />
+    <MESSAGE value="initiate" />
+    <option name="LAST_COMMIT_MESSAGE" value="initiate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

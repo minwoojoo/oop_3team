@@ -58,7 +58,7 @@ public class LoginScreen extends JFrame {
 
         // 로그인 버튼
         loginBtn.addActionListener(e -> {
-            if (!client.connect("localhost", 12345)) {
+            /*if (!client.connect("localhost", 12345)) {
                 JOptionPane.showMessageDialog(this, "서버 연결 실패!");
                 return;
             }
@@ -77,7 +77,7 @@ public class LoginScreen extends JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "서버 연결 오류!");
-            }
+            }*/
         });
 
         // 회원가입 버튼
