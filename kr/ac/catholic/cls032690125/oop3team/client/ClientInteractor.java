@@ -24,7 +24,8 @@ public class ClientInteractor extends ClientResponseListener {
     public void onServerResponse(ServerResponseBasePacket response) {
         if(map.containsKey(response.getRequestId())) {
             try{
-                map.get(response.getRequestId()).run(response);
+                var callback = map.get(response.getRequestId());
+                if (callback != null) callback.run(response);
             } catch (Exception e) { }
             map.remove(response.getRequestId());
         }
