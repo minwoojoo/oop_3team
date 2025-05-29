@@ -4,20 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="packet available">
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="fix: use generic">
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/CFriendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/FriendDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/SFriendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendInviteReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendListReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendReplyReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendSearchReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Friend.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/responses/FriendProfile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/responses/FriendSearchIndividual.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/SessionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/controller/SignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/SignupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/dao/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/dao/AuthManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/model/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/auth/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/AuthDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/AuthDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/ServerAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/ServerAuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ClientHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardClientControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/ClientAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/ClientAuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +32,12 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Record" />
         <option value="package-info" />
         <option value="Enum" />
         <option value="Exception" />
         <option value="AnnotationType" />
         <option value="Interface" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -45,7 +50,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="rebase-suggestion" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -82,7 +87,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "rebase-suggestion",
+    "git-widget-placeholder": "rebase-feat/friend",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
     "node.js.detected.package.eslint": "true",
@@ -93,7 +98,7 @@
     "project.structure.last.edited": "라이브러리",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.editor",
+    "settings.editor.selected.configurable": "database.data.views.appearance",
     "vue.rearranger.settings.migration": "true",
     "애플리케이션.Client.executor": "Run",
     "애플리케이션.Main (1).executor": "Run",
@@ -307,7 +312,31 @@
       <option name="project" value="LOCAL" />
       <updated>1748410816946</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="rebase 등">
+      <option name="closed" value="true" />
+      <created>1748412551898</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1748412551898</updated>
+    </task>
+    <task id="LOCAL-00020" summary="add user">
+      <option name="closed" value="true" />
+      <created>1748413223780</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1748413223780</updated>
+    </task>
+    <task id="LOCAL-00021" summary="fix: use generic">
+      <option name="closed" value="true" />
+      <created>1748414424046</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1748414424046</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -342,7 +371,10 @@
     <MESSAGE value="update runner" />
     <MESSAGE value="initiate" />
     <MESSAGE value="packet available" />
-    <option name="LAST_COMMIT_MESSAGE" value="packet available" />
+    <MESSAGE value="rebase 등" />
+    <MESSAGE value="add user" />
+    <MESSAGE value="fix: use generic" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: use generic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -15,14 +15,7 @@ public class Main {
         switch(properties.getMode()) {
             case CLIENT:
                 Client client = new Client(properties);
-                try {
-                    System.out.println("CONN:" + client.connect());
-
-                    client.request(new ClientLoginRequest("hello", "hi"), (res) -> {
-                        System.out.println("HELLO");
-                        System.out.println(((ServerResponsePacketSimplefied<Boolean>) res).getData());
-                    });
-                } catch (Exception e) { e.printStackTrace(); }
+                client.connect();
                 break;
             case SERVER:
                 Server server = new Server(properties);
