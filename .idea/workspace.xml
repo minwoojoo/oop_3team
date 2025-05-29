@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="fix: use generic">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/CFriendController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/FriendDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/serverside/SFriendController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendInviteReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendListReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendReplyReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendSearchReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/Friend.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/responses/FriendProfile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/models/responses/FriendSearchIndividual.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/structs/StandardClientControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/ClientAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/ClientAuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,18 +39,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "LeeHyKu"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;LeeHyKu&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/minwoojoo/oop_3team.git",
-    "accountId": "3833d2b0-39da-49ad-8b07-bc94f2c8372f"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/minwoojoo/oop_3team.git&quot;,
+    &quot;accountId&quot;: &quot;3833d2b0-39da-49ad-8b07-bc94f2c8372f&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
@@ -87,7 +70,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "rebase-feat/friend",
+    "git-widget-placeholder": "rebase-suggestion",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
     "node.js.detected.package.eslint": "true",
