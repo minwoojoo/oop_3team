@@ -10,8 +10,6 @@ public class Session implements Serializable {
     private LocalDateTime expiredAt;
     private boolean isActive;
 
-    // 생성자, getter/setter 생략 (필요에 따라 추가)
-
     public String getSessionId() {
         return sessionId;
     }

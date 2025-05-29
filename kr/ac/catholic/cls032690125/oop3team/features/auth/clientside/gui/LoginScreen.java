@@ -4,13 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.shared.SLoginResponse;
 
 public class LoginScreen extends JFrame {
     private Client client;
+    private CAuthController authController;
 
     public LoginScreen(Client client) {
         this.client = client;
+        this.authController = new CAuthController(client);
         setTitle("로그인");
         setSize(350, 220);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -58,22 +62,20 @@ public class LoginScreen extends JFrame {
 
         // 로그인 버튼
         loginBtn.addActionListener(e -> {
-            /*String userId = idField.getText();
+            String userId = idField.getText();
             String pass = new String(passField.getPassword());
-            try {
-                if (authController.login(userId, pass)) {
-                    JOptionPane.showMessageDialog(this, "로그인 성공!");
-                    // 세션 생성 요청
-                    client.send("CREATESESSION|" + userId);
-                    new MainScreen(userId, client).setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "로그인 실패!");
+            authController.sendLogin(userId, pass, new ClientInteractResponseSwing<>(){
+                @Override
+                protected void execute(SLoginResponse data) {
+                    if(data.isSuccess()) {
+                        JOptionPane.showMessageDialog(LoginScreen.this, "로그인 성공!");
+                        client.startMainScreen();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(LoginScreen.this, "로그인 실패!");
+                    }
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "서버 연결 오류!");
-            }*/
+            });
         });
 
         // 회원가입 버튼

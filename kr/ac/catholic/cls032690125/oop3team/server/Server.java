@@ -2,6 +2,7 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
@@ -22,6 +23,8 @@ public class Server {
     private final List<ServerClientHandler> onlineClients = new ArrayList<>();
     private final List<ServerRequestListener> listeners = new ArrayList<>();
 
+    private ServerAuthController authController;
+
     /**
      * @param control 프로그램 실행 환경 변수
      * @throws ServerIgnitionFailureException 데이터베이스 드라이버가 유효하지 않을 때
@@ -31,6 +34,9 @@ public class Server {
         try{
             this.properties = control;
             this.database = new Database(this);
+
+            authController = new ServerAuthController(this);
+            listeners.add(authController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }
@@ -58,7 +64,7 @@ public class Server {
 
     /**
      * 클라이언트한테서 패킷을 받았을 때 리스너를 실행하도록 하는 함수
-     * 
+     *
      * @apiNote 기능 구현 시 실행하지 마십시오.
      * @param handler 패킷을 보낸 클라이언트
      * @param order 클라이언트 측에서 받은 패킷

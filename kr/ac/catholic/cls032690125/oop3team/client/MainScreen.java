@@ -1,5 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.client;
 
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
@@ -8,6 +10,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.Frien
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Session;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,13 +27,14 @@ public class MainScreen extends JFrame {
     private List<String> chatRoomNames;
     private List<String> lastMessages;
     private List<String> lastMessageTimes;
-    private String userId;
     private Timer sessionTimer;
     private Client client;
 
-    public MainScreen(String userId, Client client) {
-        this.userId = userId;
+    private CAuthController authController;
+
+    public MainScreen(Client client) {
         this.client = client;
+        authController = new CAuthController(client);
         setTitle("메인 화면");
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -200,15 +205,15 @@ public class MainScreen extends JFrame {
                 JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
-                try {
-                    client.send("LOGOUT|" + userId);
-                    client.close(); // 소켓 연결 종료
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                if (sessionTimer != null) sessionTimer.stop();
-                dispose();
-                new LoginScreen(client).setVisible(true);
+                authController.sendLogout(new ClientInteractResponseSwing<>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        if (sessionTimer != null) sessionTimer.stop();
+                        new LoginScreen(client).setVisible(true);
+                        dispose();
+                    }
+                });
+
             }
         });
 
@@ -243,20 +248,24 @@ public class MainScreen extends JFrame {
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
-                    client.send("SESSIONCHECK|" + userId);
-                    String response = client.receive();
-                    if ("EXPIRED".equals(response)) {
-                        JOptionPane.showMessageDialog(MainScreen.this, "세션이 만료되어 로그아웃됩니다.");
-                        client.send("LOGOUT|" + userId);
-                        client.close();
+                var request2 = new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
                         sessionTimer.stop();
                         dispose();
                         new LoginScreen(client).setVisible(true);
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                };
+                var request1 = new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Session>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Session> data) {
+                        if(data.getData() == null) {
+                            JOptionPane.showMessageDialog(MainScreen.this, "세션이 만료되어 로그아웃됩니다.");
+                            authController.sendLogout(request2);
+                        }
+                    }
+                };
+                authController.refreshSession(request1);
             }
         });
         sessionTimer.start();

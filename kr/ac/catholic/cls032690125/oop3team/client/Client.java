@@ -3,6 +3,8 @@ package kr.ac.catholic.cls032690125.oop3team.client;
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientResponseListener;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
@@ -26,6 +28,12 @@ public class Client {
     private Thread outThread;
 
     private List<ClientResponseListener> listeners = new ArrayList<ClientResponseListener>();
+    /**
+     * 서버한테서 패킷을 받아 처리할 리스너를 등록합니다.
+     * @param listener 등록할 리스너 클래스
+     */
+    public void registerListener(ClientResponseListener listener) { listeners.add(listener); }
+
 
     private final ClientInteractor interactor = new ClientInteractor(this);
 
@@ -33,17 +41,17 @@ public class Client {
 
     private final ProgramProperties properties;
 
+    private Session currentSession = null;
+    public Session getCurrentSession() { return currentSession; }
+    public void updateSession(Session currentSession) { this.currentSession = currentSession; }
+
+    private MainScreen mainScreen;
+
     public Client(ProgramProperties properties) {
         this.properties = properties;
         listeners.add(interactor);
     }
 
-    /**
-     * 서버한테서 패킷을 받아 처리할 리스너를 등록합니다.
-     *
-     * @param listener 등록할 리스너 클래스
-     */
-    public void registerListener(ClientResponseListener listener) { listeners.add(listener); }
 
     /**
      * 클라이언트를 시작합니다.
@@ -53,6 +61,7 @@ public class Client {
      */
     public Runnable start() {
         if(connect()) return () -> {
+            new LoginScreen(this).setVisible(true);
         };
         else return null;
     }
@@ -151,6 +160,13 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void startMainScreen() {
+        SwingUtilities.invokeLater(() -> {
+            mainScreen = new MainScreen(this);
+            mainScreen.setVisible(true);
+        });
     }
 
 
