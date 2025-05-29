@@ -11,8 +11,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 서버의 클라이언트 연결 클래스
- *
- * @TODO Session 넣기
  */
 public class ServerClientHandler {
     private final Server server;
