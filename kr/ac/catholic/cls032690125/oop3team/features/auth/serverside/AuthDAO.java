@@ -1,6 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.auth.serverside;
 
-import kr.ac.catholic.cls032690125.oop3team.features.models.Session;
+import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 

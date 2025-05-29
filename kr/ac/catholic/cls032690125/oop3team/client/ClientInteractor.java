@@ -8,6 +8,9 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 클라이언트 내부 사용을 위한 클래스. 서버와의 통신 후 콜백을 실행합니다.
+ */
 public class ClientInteractor extends ClientResponseListener {
     private Map<Long, ClientInteractResponse> map = new HashMap<>();
 

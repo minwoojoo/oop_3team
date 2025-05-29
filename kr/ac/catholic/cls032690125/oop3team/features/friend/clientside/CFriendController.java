@@ -7,8 +7,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendInvite
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendListReq;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendReplyReq;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendSearchReq;
-import kr.ac.catholic.cls032690125.oop3team.features.models.responses.FriendProfile;
-import kr.ac.catholic.cls032690125.oop3team.features.models.responses.FriendSearchIndividual;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.FriendProfile;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.FriendSearchIndividual;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 public class CFriendController extends StandardClientControl {

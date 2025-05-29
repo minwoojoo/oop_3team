@@ -10,6 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 서버한테서 받은 패킷을 처리하는 리스너 클래스입니다. 서버 측 컨트롤러의 기본 클래스로 사용합니다.
+ * 패킷을 받을 매서드 위에 ServerRequestHandler을 붙여 사용하십시오.
+ * 매서드 이름은 중요하지 않습니다.
+ *
+ * @see ServerRequestHandler
+ * @see Server
+ * @apiNote ServerRequestHandler 어노테이션을 붙인 매서드는 ServerClientHandler와 ClientOrderBasePacket을 상속한 클래스(어노테이션으로 지정한)를 인자로 받아야 합니다.
+ */
 public abstract class ServerRequestListener {
     private final Map<Class<? extends ClientOrderBasePacket>, List<Method>> handlerMap = new HashMap<>();
     protected final Server client;

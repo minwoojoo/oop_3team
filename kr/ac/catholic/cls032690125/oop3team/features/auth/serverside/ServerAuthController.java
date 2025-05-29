@@ -1,6 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.auth.serverside;
 
-import kr.ac.catholic.cls032690125.oop3team.features.auth.shared.ClientLoginRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.auth.shared.CLoginRequest;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestHandler;
@@ -15,8 +15,8 @@ public class ServerAuthController extends ServerRequestListener {
         authDAO = new AuthDAO(server);
     }
 
-    @ServerRequestHandler(ClientLoginRequest.class)
-    public void clientLogin(ServerClientHandler sch, ClientLoginRequest req) {
+    @ServerRequestHandler(CLoginRequest.class)
+    public void clientLogin(ServerClientHandler sch, CLoginRequest req) {
         ServerResponsePacketSimplefied<Boolean> res =
                 new ServerResponsePacketSimplefied<>(
                         req.getRequestId(),
