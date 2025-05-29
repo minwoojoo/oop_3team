@@ -33,10 +33,9 @@ public class ServerClientHandler {
         this.socket = socket;
     }
 
-    public Session getSession() {
-        //TODO ADD IT
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    private Session session = null;
+    public Session getSession() { return session; }
+    public void updateSession(Session session) { this.session = session; }
 
     /**
      * 클라이언트에게 패킷 보내기

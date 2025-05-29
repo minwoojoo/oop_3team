@@ -14,6 +14,7 @@ public class ServerResponsePacketSimplefied<T extends Serializable> extends Serv
      * @param data 보낼 데이터
      * @apiNote 잠시만요! 이건 브로드캐스팅용 패킷을 만들때 씁니다! 클라이언트의 요청을 처리할 떄는 ServerResponsePacketSimplefied(long, T)을 사용하세요!
      */
+    @Deprecated
     public ServerResponsePacketSimplefied(T data) {
         super();
         this.data = data;
