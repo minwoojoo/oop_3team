@@ -69,6 +69,8 @@ public class ServerClientHandler {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    running = false;
                 }
             });
 
@@ -81,6 +83,8 @@ public class ServerClientHandler {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    running = false;
                 }
             });
 
@@ -88,8 +92,6 @@ public class ServerClientHandler {
             this.outThread.start();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            running = false;
         }
     }
 }

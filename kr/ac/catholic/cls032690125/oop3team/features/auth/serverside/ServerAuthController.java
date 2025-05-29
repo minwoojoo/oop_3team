@@ -45,7 +45,8 @@ public class ServerAuthController extends ServerRequestListener {
         else
             sch.send(new ServerResponsePacketSimplefied<>(
                     req.getRequestId(),
-                    authDAO.insertUser(req.getUserid(), req.getUsername(), hashPassword(req.getPassword()))
+                    authDAO.insertUser(req.getUserid(), req.getUsername(), hashPassword(req.getPassword())) ?
+                            SignupResult.SUCCESS : SignupResult.FAILED
             ));
     }
 

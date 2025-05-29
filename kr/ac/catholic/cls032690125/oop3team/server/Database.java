@@ -33,7 +33,7 @@ public class Database {
         try {
             ProgramProperties prop = server.getProperties();
             return DriverManager.getConnection(
-                    prop.getServerDBPath() + ";databaseName=" + prop.getServerDBName(),
+                    prop.getServerDBPath() + "/" + prop.getServerDBName(),
                     prop.getServerDBID(),
                     prop.getServerDBPassword()
             );

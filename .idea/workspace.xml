@@ -5,25 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="rebase, comment added">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/CLogoutRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/CRefreshSessionRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/CSignupRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/SLoginResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/responses/SignupResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_j_9_3_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_j_8_0_33.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/LoginController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/SessionController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/deprecated/auth/controller/SignupController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/CAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/CAuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/gui/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/gui/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/gui/SignupScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/clientside/gui/SignupScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/ServerAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/serverside/ServerAuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/CLoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/auth/shared/CLoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponsePacketSimplefied.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/shared/ServerResponsePacketSimplefied.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/team3_messageProgram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/team3_messageProgram.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,35 +72,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "rebase-feat/auth",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "라이브러리",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "configurable.group.tools",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Client.executor": "Run",
-    "애플리케이션.Main (1).executor": "Run",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Server.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;rebase-feat/auth&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Client.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Server.executor&quot;: &quot;Run&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team" />
