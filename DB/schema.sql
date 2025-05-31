@@ -4,7 +4,7 @@ USE MessageProgram;
 
 -- USER 테이블 생성
 CREATE TABLE IF NOT EXISTS USER (
-    user_id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(20) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     password_hash VARCHAR(100) NOT NULL,
     is_online BOOLEAN DEFAULT FALSE,
@@ -21,4 +21,14 @@ CREATE TABLE IF NOT EXISTS SESSION (
     expired_at DATETIME NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE
+);
+
+-- MESSAGE 테이블 생성
+CREATE TABLE IF NOT EXISTS MESSAGE (
+    message_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    chatroom_id INT NOT NULL,
+    sender_id VARCHAR(20) NOT NULL,
+    sent DATETIME NOT NULL,
+    is_system TINYINT(1),
+    content TEXT
 );

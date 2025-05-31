@@ -7,7 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendInvite
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendListReq;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendReplyReq;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.CFriendSearchReq;
-import kr.ac.catholic.cls032690125.oop3team.models.responses.FriendProfile;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.FriendSearchIndividual;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
@@ -16,7 +16,7 @@ public class CFriendController extends StandardClientControl {
         super(client);
     }
 
-    public void getFriendList(ClientInteractResponse<ServerResponsePacketSimplefied<FriendProfile[]>> response) {
+    public void getFriendList(ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
         client.request(new CFriendListReq(), response);
     }
 
@@ -24,13 +24,13 @@ public class CFriendController extends StandardClientControl {
         client.request(new CFriendSearchReq(search), response);
     }
 
-    public void inviteFriend(int userid) {
+    public void inviteFriend(String userid) {
         try {
             client.send(new CFriendInviteReq(userid));
         } catch (Exception e) { e.printStackTrace();}
     }
 
-    public void replyInvite(int userid, boolean accepted) {
+    public void replyInvite(String userid, boolean accepted) {
         try {
             client.send(new CFriendReplyReq(userid, accepted));
         } catch (Exception e) { e.printStackTrace();}

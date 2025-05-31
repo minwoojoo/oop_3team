@@ -63,9 +63,9 @@ public class FriendProfileScreen extends JFrame {
         // 버튼 이벤트 처리
         chatButton.addActionListener(e -> {
             // 채팅 화면으로 이동
-            ChatScreen chatScreen = new ChatScreen(friendName);
-            chatScreen.setVisible(true);
-            dispose();
+            //PrivateChatScreen chatScreen = new PrivateChatScreen(friendName);
+            //chatScreen.setVisible(true);
+            //dispose();
         });
 
         deleteButton.addActionListener(e -> {

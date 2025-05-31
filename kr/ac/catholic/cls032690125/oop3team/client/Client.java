@@ -4,6 +4,8 @@ import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientResponseListener;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.clientside.CChatReceiver;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
@@ -34,8 +36,9 @@ public class Client {
      */
     public void registerListener(ClientResponseListener listener) { listeners.add(listener); }
 
-
     private final ClientInteractor interactor = new ClientInteractor(this);
+    private final CChatReceiver chatReceiver = new CChatReceiver(this);
+    public CChatReceiver getChatReceiver() { return chatReceiver; }
 
     private BlockingQueue<ClientOrderBasePacket> sendQueue = new LinkedBlockingQueue<>();
 
@@ -50,6 +53,7 @@ public class Client {
     public Client(ProgramProperties properties) {
         this.properties = properties;
         listeners.add(interactor);
+        listeners.add(chatReceiver);
     }
 
 
@@ -70,7 +74,7 @@ public class Client {
      * 환경 변수로 지정된 서버로 소켓을 연결합니다.
      *
      * @return 실행 성공 여부
-     * @ApiNote GUI 실행 시 start()를 사용하십시오.
+     * @apiNote GUI 실행 시 start()를 사용하십시오.
      */
     public boolean connect() {
         try {
@@ -177,7 +181,6 @@ public class Client {
     public void send(String message) {
         //out.println(message);
     }
-
     @Deprecated
     public String receive() { return ""; }
 }

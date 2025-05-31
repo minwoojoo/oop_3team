@@ -26,6 +26,10 @@ public class ServerClientHandler {
 
     private boolean running = true;
 
+    public boolean isRunning() {
+        return running;
+    }
+
     public ServerClientHandler(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
