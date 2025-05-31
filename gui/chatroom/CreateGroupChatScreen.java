@@ -4,6 +4,7 @@ import gui.common.MainScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +73,12 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
-                    GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends());
+                    GroupChatScreen groupChatScreen = null;
+                    try {
+                        groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     groupChatScreen.setVisible(true);
                     dispose();
                 }

@@ -11,6 +11,7 @@ import gui.setting.ProfileScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -141,10 +142,15 @@ public class MainScreen extends JFrame {
             // 클릭 이벤트 처리
             chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    GroupChatScreen chatScreen = new GroupChatScreen(
-                        chatRoomNames.get(index),
-                        new ArrayList<>(friendNames.subList(0, 3))
-                    );
+                    GroupChatScreen chatScreen = null;
+                    try {
+                        chatScreen = new GroupChatScreen(
+                            chatRoomNames.get(index),
+                            new ArrayList<>(friendNames.subList(0, 3))
+                        );
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     chatScreen.setVisible(true);
                 }
             });
