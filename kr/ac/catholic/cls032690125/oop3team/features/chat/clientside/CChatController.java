@@ -28,7 +28,7 @@ public final class CChatController extends StandardClientControl {
      * 이전 메시지를 로딩합니다.
      *
      * @param chatroomId 채팅방(스레드) id
-     * @param refPoint 기준점이 되는 메시지의 id (없으면 Null)
+     * @param refPoint 기준점이 되는 메시지의 id (없으면 0)
      * @param period 불러올 메시지의 양 (양수면 기준점의 아래(기준점 이후의 채팅), 음수면 기준점의 위(기준점 이전의 채팅))
      * @param callback 콜백 함수
      */

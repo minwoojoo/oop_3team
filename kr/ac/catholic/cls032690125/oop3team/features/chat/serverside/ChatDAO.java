@@ -39,7 +39,7 @@ public class ChatDAO extends StandardDAO {
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(period < 0 ? sqlup : sqldown)) {
             pstmt.setInt(1, chatroomId);
-            pstmt.setLong(2, refPoint);
+            pstmt.setLong(2, refPoint == 0 ? (period < 0 ? Long.MAX_VALUE-1 : 0) : refPoint);
             pstmt.setInt(3, period);
             ResultSet rs = pstmt.executeQuery();
             List<Message> messages = new ArrayList<>();

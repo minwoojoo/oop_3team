@@ -5,45 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="feat:chat">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/ChatDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/SChatController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/shared/CMessageLoadPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/shared/CMessageSendPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/shared/SMessageBroadcastPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/shared/SMessageLoadPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomIndividualController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomReceiver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/ChatScreenBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/ChatroomDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/SChatroomController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomCreatePacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomExitPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomListLoadPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomListPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Chatroom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/ChatroomMember.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/MessageBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_j_8_0_33.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/CFriendController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/CFriendController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/gui/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/gui/FriendProfileScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/clientside/gui/FriendProfileScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendInviteReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendInviteReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendReplyReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/friend/shared/CFriendReplyReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Friend.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Friend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/responses/FriendProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/responses/UserProfile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/ServerClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/structs/ServerRequestListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/ChatDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/ChatDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -386,7 +350,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748507160011</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="feat:chat">
+      <option name="closed" value="true" />
+      <created>1748679273322</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1748679273322</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
