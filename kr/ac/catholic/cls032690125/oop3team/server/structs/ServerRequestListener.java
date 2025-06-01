@@ -21,10 +21,10 @@ import java.util.Map;
  */
 public abstract class ServerRequestListener {
     private final Map<Class<? extends ClientOrderBasePacket>, List<Method>> handlerMap = new HashMap<>();
-    protected final Server client;
+    protected final Server server;
 
-    public ServerRequestListener(Server client) {
-        this.client = client;
+    public ServerRequestListener(Server server) {
+        this.server = server;
 
         for (Method method : this.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(ServerRequestHandler.class)) {

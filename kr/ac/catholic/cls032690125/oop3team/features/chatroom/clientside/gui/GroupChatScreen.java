@@ -6,6 +6,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Message;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ import java.util.Random;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class GroupChatScreen extends JFrame {
+public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField inputField;
     private boolean notificationsEnabled = true;
@@ -464,6 +465,12 @@ public class GroupChatScreen extends JFrame {
         
         threadPanel.revalidate();
         threadPanel.repaint();
+    }
+
+    @Override
+    public void onChatMessage(Message message) {
+        //TODO
+        // note: client.getChatReceiver.registerChatroom(this.controller)를 호출해야 메시지를 받을 수 있습니다
     }
 
     private static class ThreadInfo {

@@ -3,9 +3,13 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
+import kr.ac.catholic.cls032690125.oop3team.models.User;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -23,7 +27,14 @@ public class Server {
     private final List<ServerClientHandler> onlineClients = new ArrayList<>();
     private final List<ServerRequestListener> listeners = new ArrayList<>();
 
-    private ServerAuthController authController;
+
+    private final ServerAuthController authController = new ServerAuthController(this);
+    private final SChatController chatController = new SChatController(this);
+    private final SChatroomController chatroomController = new SChatroomController(this);
+    public ServerAuthController getAuthController() { return authController; }
+    public SChatController getChatController() { return chatController; }
+    public SChatroomController getChatroomController() { return chatroomController; }
+
 
     /**
      * @param control 프로그램 실행 환경 변수
@@ -35,8 +46,9 @@ public class Server {
             this.properties = control;
             this.database = new Database(this);
 
-            authController = new ServerAuthController(this);
             listeners.add(authController);
+            listeners.add(chatController);
+            listeners.add(chatroomController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }
@@ -75,6 +87,15 @@ public class Server {
         }
     }
 
+    public void broadcast(ServerResponseBasePacket packet, List<String> senduserlist) {
+        for(var client : onlineClients) {
+            if(client.isRunning() && client.getSession() != null) {
+                if(senduserlist != null && !senduserlist.contains(client.getSession().getUserId())) continue;
+                client.send(packet);
+            }
+        }
+    }
+
     public ProgramProperties getProperties() {
         return properties;
     }
@@ -82,4 +103,6 @@ public class Server {
     public Database getDatabase() {
         return database;
     }
+
+
 }

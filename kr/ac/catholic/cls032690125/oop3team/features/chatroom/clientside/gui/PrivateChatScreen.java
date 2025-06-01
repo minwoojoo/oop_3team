@@ -1,17 +1,30 @@
-package kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui;
+package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
+
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
+import kr.ac.catholic.cls032690125.oop3team.models.Message;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatScreen extends JFrame {
+public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField messageField;
     private List<String> messages;
 
-    public ChatScreen(String friendName) {
-        setTitle("1:1 채팅 - " + friendName);
+    private Client client;
+    private CChatroomIndividualController controller;
+
+    public PrivateChatScreen(Client client, Chatroom chatroom) {
+        this.client = client;
+        controller = new CChatroomIndividualController(client, chatroom, this);
+
+        setTitle(chatroom.getTitle());
         setSize(500, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -54,9 +67,16 @@ public class ChatScreen extends JFrame {
     private void sendMessage() {
         String message = messageField.getText().trim();
         if (!message.isEmpty()) {
-            messages.add("나: " + message);
-            updateChatArea();
-            messageField.setText("");
+            controller.sendMessage(message, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                    if(data.getData())
+                        messageField.setText("");
+                    else
+                        messageField.setText("오류가 발생했습니다"); //TODO do better
+                }
+            });
+
         }
     }
 
@@ -68,4 +88,10 @@ public class ChatScreen extends JFrame {
         chatArea.setText(chatText.toString());
         chatArea.setCaretPosition(chatArea.getDocument().getLength());
     }
-} 
+
+    @Override
+    public void onChatMessage(Message message) {
+        //TODO
+        // note: client.getChatReceiver.registerChatroom(this.controller)를 호출해야 메시지를 받을 수 있습니다
+    }
+}

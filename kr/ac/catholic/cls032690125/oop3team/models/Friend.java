@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 public class Friend implements Serializable {
     private int key;
-    private int userid;
-    private int friendid;
+    private String userid;
+    private String friendid;
     private byte blocked;
     private boolean pending;
     private LocalDateTime created;
@@ -15,11 +15,11 @@ public class Friend implements Serializable {
         return key;
     }
 
-    public int getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public int getFriendid() {
+    public String getFriendid() {
         return friendid;
     }
 
