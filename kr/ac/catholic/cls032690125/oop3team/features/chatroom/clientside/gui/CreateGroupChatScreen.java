@@ -1,6 +1,13 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.ChatroomDAO;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
+import kr.ac.catholic.cls032690125.oop3team.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +17,13 @@ import java.util.List;
 public class CreateGroupChatScreen extends JFrame {
     private List<JCheckBox> friendCheckBoxes;
     private List<String> friendNames;
+    private Client client;
+    private CChatroomController cChatroomController;
 
-    public CreateGroupChatScreen() {
+    public CreateGroupChatScreen(Client client) {
+        this.client = client;
+        cChatroomController = new CChatroomController(client);
+
         setTitle("그룹 대화방 생성");
         setSize(400, 500);
         setLocationRelativeTo(null);
@@ -72,6 +84,8 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
+                    cChatroomController.sendCreateChatroom();
+
                     GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends());
                     groupChatScreen.setVisible(true);
                     dispose();

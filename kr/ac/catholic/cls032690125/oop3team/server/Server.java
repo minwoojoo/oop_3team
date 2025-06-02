@@ -28,9 +28,9 @@ public class Server {
     private final List<ServerRequestListener> listeners = new ArrayList<>();
 
 
-    private final ServerAuthController authController = new ServerAuthController(this);
-    private final SChatController chatController = new SChatController(this);
-    private final SChatroomController chatroomController = new SChatroomController(this);
+    private final ServerAuthController authController;
+    private final SChatController chatController;
+    private static SChatroomController chatroomController = null;
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }
@@ -45,6 +45,10 @@ public class Server {
         try{
             this.properties = control;
             this.database = new Database(this);
+
+            this.authController     = new ServerAuthController(this);
+            this.chatController     = new SChatController(this);
+            this.chatroomController = new SChatroomController(this);
 
             listeners.add(authController);
             listeners.add(chatController);
