@@ -5,6 +5,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.client.structs.StandardClientControl;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomListLoadPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 
 public class CChatroomController extends StandardClientControl {
@@ -12,11 +13,11 @@ public class CChatroomController extends StandardClientControl {
         super(client);
     }
 
-    public void requestChatroomList(ClientInteractResponse<SChatroomListPacket> callback) {
-        client.request(new CChatroomListLoadPacket(), callback);
+    public void requestChatroomList(boolean isPrivate, ClientInteractResponse<SChatroomListPacket> callback) {
+        client.request(new CChatroomListLoadPacket(isPrivate), callback);
     }
 
-    public void sendCreateChatroom(CChatroomCreatePacket cChatroomCreatePacket) {
-
+    public void sendCreateChatroom(CChatroomCreatePacket cChatroomCreatePacket, ClientInteractResponse<SChatroomCreatePacket> callback) {
+        client.request(cChatroomCreatePacket, callback);
     }
 }

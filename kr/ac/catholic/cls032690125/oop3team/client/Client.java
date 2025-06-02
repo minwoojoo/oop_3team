@@ -169,7 +169,7 @@ public class Client {
     public void startMainScreen() {
         SwingUtilities.invokeLater(() -> {
             mainScreen = new MainScreen(this);
-            mainScreen.setVisible(true);
+            mainScreen.initiate();
         });
     }
 

@@ -10,8 +10,8 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
  *  - errorMsg: 실패 시 에러 메시지
  */
 public class SChatroomCreatePacket extends ServerResponseBasePacket {
-    private final Chatroom       room;
-    private final String         errorMsg;
+    private Chatroom       room;
+    private String         errorMsg;
 
     public SChatroomCreatePacket(long requestId, Chatroom room, String errorMsg) {
         super(requestId);

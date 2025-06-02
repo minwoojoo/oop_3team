@@ -1,13 +1,11 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
-import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.ChatroomDAO;
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
-import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
-import kr.ac.catholic.cls032690125.oop3team.server.Server;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,11 +82,18 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
-                    cChatroomController.sendCreateChatroom();
 
-                    GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends());
-                    groupChatScreen.setVisible(true);
-                    dispose();
+                    /**
+                     *  TODO: 친구 기능이 아직 구현 안되어서 일단 participants는 null 값으로 함
+                     * */
+                    cChatroomController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                        @Override
+                        protected void execute(SChatroomCreatePacket data) {
+                            GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
+                            groupchat.initiate();
+                            CreateGroupChatScreen.this.dispose();
+                        }
+                    });
                 }
             }
         });

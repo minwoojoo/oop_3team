@@ -1,9 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside;
 
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomListLoadPacket;
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
-import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
@@ -20,10 +17,14 @@ public class SChatroomController extends ServerRequestListener {
         this.chatroomDAO = new ChatroomDAO(client);
     }
 
+    @ServerRequestHandler(CChatroomMemberListPacket.class)
+    public void loadMemberList(ServerClientHandler sch, CChatroomMemberListPacket packet) {
+    }
+
     @ServerRequestHandler(CChatroomListLoadPacket.class)
     public void loadChatroomList(ServerClientHandler sch, CChatroomListLoadPacket packet) {
         try {
-            Chatroom[] rooms = chatroomDAO.loadAllChatrooms();
+            Chatroom[] rooms = chatroomDAO.loadAllChatrooms(packet.isPrivate());
             sch.send(new SChatroomListPacket(
                     packet.getRequestId(),
                     rooms,

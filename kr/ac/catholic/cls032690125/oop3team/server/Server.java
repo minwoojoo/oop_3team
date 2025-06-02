@@ -30,7 +30,7 @@ public class Server {
 
     private final ServerAuthController authController;
     private final SChatController chatController;
-    private static SChatroomController chatroomController = null;
+    private final SChatroomController chatroomController;
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }

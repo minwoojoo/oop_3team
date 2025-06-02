@@ -4,21 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="feat:chat">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomCreatePacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Client.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Client.xml" afterDir="false" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="feat: chatroom">
+      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomMemberListPacket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/ChatScreenBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/ChatScreenBase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/ChatroomDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/ChatroomDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/SChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/SChatroomController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomCreatePacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomCreatePacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomListPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomListPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Chatroom.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Chatroom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomListLoadPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomListLoadPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomCreatePacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomCreatePacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Friend.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Friend.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
+    </list>
+    <list id="8886deb4-b5a3-4568-95db-e9e32643ad34" name="spong 님이 변경한 내용" comment="spong 님이 변경한 내용">
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,11 +71,47 @@
     &quot;accountId&quot;: &quot;3833d2b0-39da-49ad-8b07-bc94f2c8372f&quot;
   }
 }</component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java">
+      <ranges>
+        <range start1="2" end1="2" start2="2" end2="4" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+        <range start1="5" end1="5" start2="7" end2="9" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="8" end1="8" start2="12" end2="13" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="29" end1="29" start2="34" end2="37" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="30" end1="33" start2="38" end2="43" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="470" end1="470" start2="480" end2="492" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="471" end1="473" start2="493" end2="493" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java">
+      <ranges>
+        <range start1="2" end1="3" start2="2" end2="2" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="5" end1="5" start2="4" end2="5" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="6" end1="10" start2="6" end2="8" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="86" end1="87" start2="84" end2="84" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+        <range start1="88" end1="91" start2="85" end2="96" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/PrivateChatScreen.java">
+      <ranges>
+        <range start1="4" end1="4" start2="4" end2="5" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+        <range start1="92" end1="92" start2="93" end2="105" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="93" end1="95" start2="106" end2="107" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java">
+      <ranges>
+        <range start1="7" end1="7" start2="7" end2="8" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="14" end1="16" start2="15" end2="17" changelist="137aba0b-8b74-454c-a3af-0e7436cffb7d" />
+        <range start1="18" end1="20" start2="19" end2="21" changelist="8886deb4-b5a3-4568-95db-e9e32643ad34" />
+      </ranges>
+    </file>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -81,37 +124,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Client.executor": "Run",
-    "Application.Server.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "feature/server-network",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "라이브러리",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Client.executor": "Run",
-    "애플리케이션.Main (1).executor": "Run",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Server.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/server-network&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;라이브러리&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Client.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Server.executor&quot;: &quot;Run&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team" />
@@ -124,10 +167,10 @@
       <recent name="gui.schedule" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="애플리케이션.Client">
     <list>
-      <item itemvalue="Application.Client" />
-      <item itemvalue="Application.Server" />
+      <item itemvalue="애플리케이션.Client" />
+      <item itemvalue="애플리케이션.Server" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -411,7 +454,8 @@
     <MESSAGE value="rebase, comment added" />
     <MESSAGE value="update comments" />
     <MESSAGE value="feat:chat" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:chat" />
+    <MESSAGE value="feat: chatroom" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: chatroom" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
