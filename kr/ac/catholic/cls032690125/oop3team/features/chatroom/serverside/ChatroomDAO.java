@@ -70,12 +70,13 @@ public class ChatroomDAO extends StandardDAO {
     /**
      * 모든 대화방 목록을 불러와 Chatroom 배열로 리턴합니다.
      */
-    public Chatroom[] loadAllChatrooms() throws SQLException {
-        String sql = "SELECT * FROM chatrooms ORDER BY created_at DESC";
+    public Chatroom[] loadAllChatrooms(boolean isprivate) throws SQLException {
+        String sql = "SELECT * FROM chatrooms WHERE is_private=? AND parentroom_id IS NULL ORDER BY created_at DESC";
         List<Chatroom> list = new ArrayList<>();
         try (Connection conn = database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql);) {
+            ps.setBoolean(1, isprivate);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Chatroom room = new Chatroom();
                 room.setChatroomId(rs.getInt("chatroom_id"));

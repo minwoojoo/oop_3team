@@ -3,13 +3,16 @@ package kr.ac.catholic.cls032690125.oop3team.client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.AddFriendScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.FriendProfileScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
@@ -22,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MainScreen extends JFrame {
-    public static List<String> friendNames;
+    public static List<String> friendNames; // TODO: 없앨덧
     private List<String> statusMessages;
     private List<String> chatRoomNames;
     private List<String> lastMessages;
@@ -30,10 +33,14 @@ public class MainScreen extends JFrame {
     private Timer sessionTimer;
     private Client client;
 
+    private CChatroomController chatRoomController;
     private CAuthController authController;
+
+    private JPanel chatListPanel;
 
     public MainScreen(Client client) {
         this.client = client;
+        chatRoomController = new CChatroomController(client);
         authController = new CAuthController(client);
         setTitle("메인 화면");
         setSize(600, 400);
@@ -123,46 +130,10 @@ public class MainScreen extends JFrame {
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
-        JPanel chatListPanel = new JPanel();
+        chatListPanel = new JPanel();
         chatListPanel.setLayout(new BoxLayout(chatListPanel, BoxLayout.Y_AXIS));
-        
-        for (int i = 0; i < chatRoomNames.size(); i++) {
-            final int index = i;
-            JPanel chatItemPanel = new JPanel(new BorderLayout());
-            chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            // 대화방 정보
-            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-            JLabel nameLabel = new JLabel(chatRoomNames.get(index));
-            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-            JLabel messageLabel = new JLabel(lastMessages.get(index));
-            messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            messageLabel.setForeground(Color.GRAY);
-            
-            infoPanel.add(nameLabel);
-            infoPanel.add(messageLabel);
-
-            // 시간 표시
-            JLabel timeLabel = new JLabel(lastMessageTimes.get(index));
-            timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
-            timeLabel.setForeground(Color.GRAY);
-
-            chatItemPanel.add(infoPanel, BorderLayout.CENTER);
-            chatItemPanel.add(timeLabel, BorderLayout.EAST);
-
-            // 클릭 이벤트 처리
-            chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    GroupChatScreen chatScreen = new GroupChatScreen(
-                        chatRoomNames.get(index),
-                        new ArrayList<>(friendNames.subList(0, 3))
-                    );
-                    chatScreen.setVisible(true);
-                }
-            });
-
-            chatListPanel.add(chatItemPanel);
-        }
+        loadGroupChat();
 
         JScrollPane chatScrollPane = new JScrollPane(chatListPanel);
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
@@ -357,5 +328,56 @@ public class MainScreen extends JFrame {
         }
         
         return times;
+    }
+
+    public void initiate() {
+        loadGroupChat();
+
+
+
+        this.setVisible(true);
+    }
+
+    private void loadGroupChat() {
+        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+            @Override
+            protected void execute(SChatroomListPacket data) {
+                for (int i = 0; i < data.getRooms().length; i++) {
+                    Chatroom room = data.getRooms()[i];
+
+                    JPanel chatItemPanel = new JPanel(new BorderLayout());
+                    chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+                    // 대화방 정보
+                    JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+                    JLabel nameLabel = new JLabel(room.getTitle());
+                    nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+//                    JLabel messageLabel = new JLabel();
+//                    messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//                    messageLabel.setForeground(Color.GRAY);
+
+                    infoPanel.add(nameLabel);
+//                    infoPanel.add(messageLabel);
+
+                    // 시간 표시
+//                    JLabel timeLabel = new JLabel();
+//                    timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
+//                    timeLabel.setForeground(Color.GRAY);
+
+                    chatItemPanel.add(infoPanel, BorderLayout.CENTER);
+//                    chatItemPanel.add(timeLabel, BorderLayout.EAST);
+
+                    // 클릭 이벤트 처리
+                    chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
+                            chatScreen.setVisible(true);
+                        }
+                    });
+
+                    chatListPanel.add(chatItemPanel);
+                }
+            }
+        });
     }
 } 
