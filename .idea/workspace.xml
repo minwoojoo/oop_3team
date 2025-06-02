@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="feat:chat">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomCreatePacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Client.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Client.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/CChatroomController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/ChatroomDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/ChatroomDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/SChatroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/serverside/SChatroomController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomCreatePacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/CChatroomCreatePacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomListPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/shared/SChatroomListPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Chatroom.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Chatroom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +72,7 @@
   "keyToString": {
     "Application.Client.executor": "Run",
     "Application.Server.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -167,6 +155,7 @@
       <workItem from="1748278891305" duration="2528000" />
       <workItem from="1748281736031" duration="8419000" />
       <workItem from="1748323073470" duration="191000" />
+      <workItem from="1748837966725" duration="543000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />
