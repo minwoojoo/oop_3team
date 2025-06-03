@@ -40,4 +40,28 @@ public class Chatroom implements Serializable {
     public LocalDateTime getCreated() {
         return created;
     }
+
+    public void setChatroomId(int chatroomId) {
+        this.chatroomId = chatroomId;
+    }
+
+    public void setParentroomId(int parentroomId) {
+        this.parentroomId = parentroomId;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
 }

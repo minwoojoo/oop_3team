@@ -14,14 +14,12 @@ import java.util.List;
 public class AttendanceScreen extends JFrame {
     private JPanel recordListPanel;
     private AttendanceDAO attendanceDAO;
-    private Server server;
     private Session session;
 
-    public AttendanceScreen(JFrame patrent) {};
+    //public AttendanceScreen(JFrame patrent) {};
 
     public AttendanceScreen(JFrame parent, Session session,Server server) throws SQLException {
         this.session = session;
-        this.server = server;
         this.attendanceDAO = new AttendanceDAO(server);
 
         setTitle("출퇴근 기록");

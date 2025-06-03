@@ -7,6 +7,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.Keyw
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
+import kr.ac.catholic.cls032690125.oop3team.models.Session;
+import kr.ac.catholic.cls032690125.oop3team.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,9 +30,18 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JPanel threadPanel;
     private JDialog threadListDialog;
 
-    public GroupChatScreen(String groupName, List<String> members) {
+    private Session session;
+    private Server server;
+//
+//    public GroupChatScreen(
+//            String groupName, List<String> members){};
+
+    public GroupChatScreen(
+            String groupName, List<String> members,Session session, Server server) {
         this.groupName = groupName;
         this.members = members;
+        this.session = session;
+        this.server = server;
         
         // 가짜 스레드 데이터 추가
         threads.add(new ThreadInfo("프로젝트 진행 상황", true));
@@ -99,7 +110,11 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 출퇴근 기록 메뉴 아이템
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
-            new AttendanceScreen(this).setVisible(true);
+            try {
+                new AttendanceScreen(this,session,server).setVisible(true);
+            }catch (Exception e1) {
+                e1.printStackTrace();
+            }
         });
         
         // 일정 관련 메뉴 아이템
