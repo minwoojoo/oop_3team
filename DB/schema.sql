@@ -33,6 +33,27 @@ CREATE TABLE IF NOT EXISTS MESSAGE (
     content TEXT
 );
 
+-- CHATROOMS 테이블 생성
+CREATE TABLE IF NOT EXISTS CHATROOM (
+    chatroom_id   INT           AUTO_INCREMENT PRIMARY KEY,
+    parentroom_id INT           DEFAULT NULL,
+    closed        BOOLEAN       DEFAULT FALSE,
+    is_private    BOOLEAN       DEFAULT FALSE,
+    title         VARCHAR(255)  NOT NULL,
+    created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
+
+    FOREIGN KEY (parentroom_id) REFERENCES CHATROOM(chatroom_id)
+);
+
+CREATE TABLE IF NOT EXISTS CHATROOM_PARTICIPANT(
+    chatroom_id INT NOT NULL,
+    user_id VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (chatroom_id, user_id),
+    FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE
+)
+
 -- FRIEND 테이블 생성
 CREATE TABLE IF NOT EXISTS FRIEND (
   CREATE TABLE if not exists friend (

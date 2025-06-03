@@ -1,6 +1,11 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +15,13 @@ import java.util.List;
 public class CreateGroupChatScreen extends JFrame {
     private List<JCheckBox> friendCheckBoxes;
     private List<String> friendNames;
+    private Client client;
+    private CChatroomController cChatroomController;
 
-    public CreateGroupChatScreen() {
+    public CreateGroupChatScreen(Client client) {
+        this.client = client;
+        cChatroomController = new CChatroomController(client);
+
         setTitle("그룹 대화방 생성");
         setSize(400, 500);
         setLocationRelativeTo(null);
@@ -72,9 +82,18 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
-                    GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends());
-                    groupChatScreen.setVisible(true);
-                    dispose();
+
+                    /**
+                     *  TODO: 친구 기능이 아직 구현 안되어서 일단 participants는 null 값으로 함
+                     * */
+                    cChatroomController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                        @Override
+                        protected void execute(SChatroomCreatePacket data) {
+                            GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
+                            groupchat.initiate();
+                            CreateGroupChatScreen.this.dispose();
+                        }
+                    });
                 }
             }
         });

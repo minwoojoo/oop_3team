@@ -48,11 +48,10 @@ public class Server {
             this.properties = control;
             this.database = new Database(this);
 
-            authController = new ServerAuthController(this);
-            chatController = new SChatController(this);
-            chatroomController = new SChatroomController(this);
-            friendController = new SFriendController(this);
-
+            this.authController     = new ServerAuthController(this);
+            this.chatController     = new SChatController(this);
+            this.chatroomController = new SChatroomController(this);
+            this.friendController = new SFriendController(this);
             listeners.add(authController);
             listeners.add(chatController);
             listeners.add(chatroomController);

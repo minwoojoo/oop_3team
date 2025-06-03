@@ -1,11 +1,16 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 
 import javax.swing.*;
@@ -27,10 +32,15 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private List<ThreadInfo> threads = new ArrayList<>();
     private JPanel threadPanel;
     private JDialog threadListDialog;
+    private Client client;
+    private CChatroomIndividualController controller;
+    private Chatroom chatroom;
 
-    public GroupChatScreen(String groupName, List<String> members) {
-        this.groupName = groupName;
-        this.members = members;
+    public GroupChatScreen(Client client, Chatroom chatroom) {
+        this.groupName = chatroom.getTitle();
+        this.client = client;
+        this.chatroom = chatroom;
+        this.controller = new CChatroomIndividualController(client, chatroom, this);
         
         // 가짜 스레드 데이터 추가
         threads.add(new ThreadInfo("프로젝트 진행 상황", true));
@@ -468,9 +478,19 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     @Override
+    public void initiate() {
+        client.getChatReceiver().registerChatroom(controller);
+        controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
+            @Override
+            protected void execute(SMessageLoadPacket data) {
+                //data에 이전 채팅 정보 담김
+            }
+        });
+        //TODO: 이전 채팅 불러오기, 스레드 , 메모, 맴버 불러오기 등
+    }
+
+    @Override
     public void onChatMessage(Message message) {
-        //TODO
-        // note: client.getChatReceiver.registerChatroom(this.controller)를 호출해야 메시지를 받을 수 있습니다
     }
 
     private static class ThreadInfo {
