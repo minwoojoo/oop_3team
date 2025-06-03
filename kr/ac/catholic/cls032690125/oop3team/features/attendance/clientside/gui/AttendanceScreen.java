@@ -117,10 +117,16 @@ public class AttendanceScreen extends JFrame {
             JLabel checkOutLabel = new JLabel("퇴근: " +
                     (record.getCheckOutTime() != null ? record.getCheckOutTime().toLocalDateTime().format(timeFormatter) : "")
             );
-//            checkOutLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 
-            JLabel totalLabel = new JLabel("총 근무: " + record.getWorkTimeTotal() + "분");
-//            totalLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+            int totalMinutes = record.getWorkTimeTotal();
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+            String formattedWorkTime = (hours > 0 ? hours + "시간 " : "") + minutes + "분";
+            JLabel totalLabel = new JLabel("총 근무: " + formattedWorkTime);
+
+
+//            JLabel totalLabel = new JLabel("총 근무: " + record.getWorkTimeTotal() + "분");
+
 
             infoPanel.add(dateLabel);
             infoPanel.add(totalLabel);
