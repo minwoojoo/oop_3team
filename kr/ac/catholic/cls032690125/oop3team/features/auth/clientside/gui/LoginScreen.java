@@ -7,6 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.shared.SLoginResponse;
+import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 
 public class LoginScreen extends JFrame {
     private Client client;
@@ -69,7 +70,7 @@ public class LoginScreen extends JFrame {
                 protected void execute(SLoginResponse data) {
                     if(data.isSuccess()) {
                         JOptionPane.showMessageDialog(LoginScreen.this, "로그인 성공!");
-                        client.startMainScreen();
+                        new MainScreen(userId, client).setVisible(true);
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(LoginScreen.this, "로그인 실패!");

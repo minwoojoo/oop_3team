@@ -31,9 +31,11 @@ public class Server {
     private final ServerAuthController authController;
     private final SChatController chatController;
     private final SChatroomController chatroomController;
+    private final SFriendController friendController;
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }
+    public SFriendController getFriendController() { return friendController; }
 
 
     /**
@@ -49,10 +51,11 @@ public class Server {
             this.authController     = new ServerAuthController(this);
             this.chatController     = new SChatController(this);
             this.chatroomController = new SChatroomController(this);
-
+            this.friendController = new SFriendController(this);
             listeners.add(authController);
             listeners.add(chatController);
             listeners.add(chatroomController);
+            listeners.add(friendController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }

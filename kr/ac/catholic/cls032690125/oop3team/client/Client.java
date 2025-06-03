@@ -168,8 +168,9 @@ public class Client {
 
     public void startMainScreen() {
         SwingUtilities.invokeLater(() -> {
-            mainScreen = new MainScreen(this);
-            mainScreen.initiate();
+            String userId = currentSession.getUserId();
+            mainScreen = new MainScreen(userId, this);
+            mainScreen.setVisible(true);
         });
     }
 

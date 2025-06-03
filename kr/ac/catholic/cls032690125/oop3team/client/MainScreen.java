@@ -14,7 +14,10 @@ import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.Memo
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,13 +35,14 @@ public class MainScreen extends JFrame {
     private List<String> lastMessageTimes;
     private Timer sessionTimer;
     private Client client;
+    private String userId;
 
     private CChatroomController chatRoomController;
     private CAuthController authController;
-
     private JPanel chatListPanel;
 
-    public MainScreen(Client client) {
+    public MainScreen(String userId, Client client) {
+        this.userId = userId;
         this.client = client;
         chatRoomController = new CChatroomController(client);
         authController = new CAuthController(client);
@@ -133,6 +137,7 @@ public class MainScreen extends JFrame {
         chatListPanel = new JPanel();
         chatListPanel.setLayout(new BoxLayout(chatListPanel, BoxLayout.Y_AXIS));
 
+
         loadGroupChat();
 
         JScrollPane chatScrollPane = new JScrollPane(chatListPanel);
@@ -205,7 +210,7 @@ public class MainScreen extends JFrame {
 
         // 버튼 이벤트 처리
         addFriendButton.addActionListener(e -> {
-            AddFriendScreen addFriendScreen = new AddFriendScreen();
+            AddFriendScreen addFriendScreen = new AddFriendScreen(userId, client);
             addFriendScreen.setVisible(true);
         });
 
@@ -240,6 +245,32 @@ public class MainScreen extends JFrame {
             }
         });
         sessionTimer.start();
+
+        // 로그인 성공 후
+        CFriendController friendController = new CFriendController(client);
+        System.out.println("클라이언트: 친구 요청 목록 요청 전송: " + userId);
+        friendController.getPendingFriendRequests(userId, new ClientInteractResponseSwing<SFriendPendingRes>() {
+            @Override
+            protected void execute(SFriendPendingRes data) {
+                if (data.getPendingRequests() != null && data.getPendingRequests().length > 0) {
+                    for (UserProfile requester : data.getPendingRequests()) {
+                        int result = JOptionPane.showConfirmDialog(
+                            MainScreen.this,
+                            requester.getName() + "님이 친구 요청을 보냈습니다. 수락하시겠습니까?",
+                            "친구 요청",
+                            JOptionPane.YES_NO_OPTION
+                        );
+                        if (result == JOptionPane.YES_OPTION) {
+                            friendController.acceptFriendRequest(userId, requester.getUserId());
+                            JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님을 친구로 추가했습니다.");
+                        } else {
+                            friendController.rejectFriendRequest(userId, requester.getUserId());
+                            JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님의 친구 요청을 거절했습니다.");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private static List<String> generateRandomFriendNames() {
@@ -380,4 +411,4 @@ public class MainScreen extends JFrame {
             }
         });
     }
-} 
+}
