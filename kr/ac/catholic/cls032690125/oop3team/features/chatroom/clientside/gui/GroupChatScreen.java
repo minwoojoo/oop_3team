@@ -1,5 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
@@ -30,17 +31,17 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JPanel threadPanel;
     private JDialog threadListDialog;
 
-    private Session session;
+    private Client client;
     private Server server;
 //
 //    public GroupChatScreen(
 //            String groupName, List<String> members){};
 
     public GroupChatScreen(
-            String groupName, List<String> members,Session session, Server server) {
+            String groupName, List<String> members,Client client, Server server) {
         this.groupName = groupName;
         this.members = members;
-        this.session = session;
+        this.client  = client;
         this.server = server;
         
         // 가짜 스레드 데이터 추가
@@ -111,7 +112,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
             try {
-                new AttendanceScreen(this,session,server).setVisible(true);
+                new AttendanceScreen(this,client,server).setVisible(true);
             }catch (Exception e1) {
                 e1.printStackTrace();
             }

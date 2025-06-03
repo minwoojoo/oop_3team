@@ -1,5 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
@@ -13,7 +14,7 @@ public class CreateGroupChatScreen extends JFrame {
     private List<JCheckBox> friendCheckBoxes;
     private List<String> friendNames;
 
-    private Session session;
+    private Client client;
     private Server server;
 
     public CreateGroupChatScreen() {
@@ -77,7 +78,7 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
-                    GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends(),session,server);
+                    GroupChatScreen groupChatScreen = new GroupChatScreen(groupName, getSelectedFriends(),client,server);
                     groupChatScreen.setVisible(true);
                     dispose();
                 }

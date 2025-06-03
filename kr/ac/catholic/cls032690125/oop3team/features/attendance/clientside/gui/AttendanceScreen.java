@@ -1,5 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
@@ -14,12 +15,10 @@ import java.util.List;
 public class AttendanceScreen extends JFrame {
     private JPanel recordListPanel;
     private AttendanceDAO attendanceDAO;
-    private Session session;
+    private Client client;
 
-    //public AttendanceScreen(JFrame patrent) {};
-
-    public AttendanceScreen(JFrame parent, Session session,Server server) throws SQLException {
-        this.session = session;
+    public AttendanceScreen(JFrame parent, Client client,Server server) throws SQLException {
+        this.client = client;
         this.attendanceDAO = new AttendanceDAO(server);
 
         setTitle("출퇴근 기록");
@@ -56,7 +55,7 @@ public class AttendanceScreen extends JFrame {
         checkInButton.addActionListener(e -> {
             // TODO: 출근 처리 로직 구현
             try {
-                attendanceDAO.checkIn(session.getUserId());
+                attendanceDAO.checkIn(client.getCurrentSession().getUserId());
                 JOptionPane.showMessageDialog(this, "출근이 기록되었습니다.");
                 updateRecordList();
             } catch (SQLException ex) {
@@ -67,7 +66,7 @@ public class AttendanceScreen extends JFrame {
 
         checkOutButton.addActionListener(e -> {
             try {
-                attendanceDAO.checkOut(session.getUserId());
+                attendanceDAO.checkOut(client.getCurrentSession().getUserId());
                 JOptionPane.showMessageDialog(this, "퇴근이 기록되었습니다.");
                 updateRecordList();
             } catch (SQLException ex) {
@@ -80,7 +79,7 @@ public class AttendanceScreen extends JFrame {
 
         JButton editRequestButton = new JButton("기록 수정 요청");
         editRequestButton.addActionListener(e -> {
-            new AttendanceEditScreen(this,session,server).setVisible(true);
+            new AttendanceEditScreen(this,client,server).setVisible(true);
         });
 
         bottomPanel.add(checkInButton);
@@ -94,7 +93,7 @@ public class AttendanceScreen extends JFrame {
 
     private void updateRecordList() throws SQLException {
         recordListPanel.removeAll();
-        List<Attendance> records = attendanceDAO.getAttendanceByUserId(session.getUserId());
+        List<Attendance> records = attendanceDAO.getAttendanceByUserId(client.getCurrentSession().getUserId());
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

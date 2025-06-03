@@ -1,5 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
@@ -17,8 +18,8 @@ public class AttendanceEditScreen extends JFrame {
     private Server server;
     private AttendanceDAO attendanceDAO;
 
-    public AttendanceEditScreen(JFrame parent, Session session,Server server) {
-        this.userId = session.getUserId();
+    public AttendanceEditScreen(JFrame parent, Client client, Server server) {
+        this.userId = client.getCurrentSession().getUserId();
         this.server = server;
         this.attendanceDAO = new AttendanceDAO(server);
 

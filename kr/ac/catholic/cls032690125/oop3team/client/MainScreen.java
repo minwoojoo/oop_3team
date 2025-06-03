@@ -33,7 +33,6 @@ public class MainScreen extends JFrame {
 
     private CAuthController authController;
 
-    private Session session;
     private Server server;
 
     public MainScreen(Client client) {
@@ -160,7 +159,7 @@ public class MainScreen extends JFrame {
                     GroupChatScreen chatScreen = new GroupChatScreen(
                             chatRoomNames.get(index),
                             new ArrayList<>(friendNames.subList(0, 3)),
-                            session,
+                            client,
                             server
                     );
                     chatScreen.setVisible(true);
