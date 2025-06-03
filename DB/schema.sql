@@ -32,3 +32,17 @@ CREATE TABLE IF NOT EXISTS MESSAGE (
     is_system TINYINT(1),
     content TEXT
 );
+
+-- FRIEND 테이블 생성
+CREATE TABLE IF NOT EXISTS FRIEND (
+  CREATE TABLE if not exists friend (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(30) NOT NULL,
+    friend_id VARCHAR(30) NOT NULL,
+    is_blocked BOOLEAN DEFAULT FALSE,
+    is_pending BOOLEAN DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user(user_id),
+    CONSTRAINT fk_friend FOREIGN KEY (friend_id) REFERENCES user(user_id)
+);
+
