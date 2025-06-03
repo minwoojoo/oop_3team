@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="feat:chat">
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/clientside/CChatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/ChatDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chat/serverside/ChatDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/team3_messageProgram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/team3_messageProgram.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +35,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="rebase-suggestion" />
+        <entry key="$PROJECT_DIR$" value="rebase-feat/chat" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,8 +49,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/minwoojoo/oop_3team.git&quot;,
-    &quot;accountId&quot;: &quot;3833d2b0-39da-49ad-8b07-bc94f2c8372f&quot;
+    &quot;url&quot;: &quot;https://github.com/minwoojoo/oop_3team&quot;,
+    &quot;accountId&quot;: &quot;64718c8b-0c45-4aa1-9a90-d3726a6effb9&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -67,36 +67,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "rebase-feat/chat",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "라이브러리",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Client.executor": "Run",
-    "애플리케이션.Main (1).executor": "Run",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Server.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestAttendanceScreen.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TetsAttendance.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/attendance&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nvtuy/IdeaProjects/oop_3team/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Client.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Server.executor&quot;: &quot;Run&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nvtuy\IdeaProjects\oop_3team\kr\ac\catholic\cls032690125\oop3team\features\attendance\clientside" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team" />
     </key>
@@ -107,18 +114,34 @@
       <recent name="gui.keyword" />
       <recent name="gui.schedule" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside" />
+      <recent name="kr.ac.catholic.cls032690125.oop3team.models" />
+    </key>
   </component>
-  <component name="RunManager" selected="애플리케이션.Client">
+  <component name="RunManager" selected="Application.Client">
+    <configuration name="TetsAttendance" type="Application" factoryName="Application">
+      <envs>
+        <env name="CLS032690125oop3team_MODE" value="SERVER" />
+        <env name="CLS032690125oop3team_DEBUG" value="true" />
+        <env name="CLS032690125oop3team_SERVER_PORT" value="8080" />
+        <env name="CLS032690125oop3team_SERVER_DB_DRIVER" value="com.mysql.cj.jdbc.Driver" />
+        <env name="CLS032690125oop3team_SERVER_DB_PATH" value="jdbc:mysql://localhost:3306" />
+        <env name="CLS032690125oop3team_SERVER_DB_ID" value="root" />
+        <env name="CLS032690125oop3team_SERVER_DB_PASSWORD" value="Nguyen0220" />
+        <env name="CLS032690125oop3team_SERVER_DB" value="messageprogram " />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.TestAttendanceScreen" />
+      <module name="team3_messageProgram" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="애플리케이션.Client" />
-      <item itemvalue="애플리케이션.Server" />
+      <item itemvalue="Application.TetsAttendance" />
+      <item itemvalue="Application.Client" />
+      <item itemvalue="Application.Server" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="애플리케이션.Client" />
-        <item itemvalue="애플리케이션.Server" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -157,6 +180,7 @@
       <workItem from="1748278891305" duration="2528000" />
       <workItem from="1748281736031" duration="8419000" />
       <workItem from="1748323073470" duration="191000" />
+      <workItem from="1748917744003" duration="13153000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />
@@ -358,7 +382,47 @@
       <option name="project" value="LOCAL" />
       <updated>1748679273322</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="feat: Attendance">
+      <option name="closed" value="true" />
+      <created>1748920488719</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1748920488719</updated>
+    </task>
+    <task id="LOCAL-00027" summary="db">
+      <option name="closed" value="true" />
+      <created>1748920873128</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1748920873128</updated>
+    </task>
+    <task id="LOCAL-00028" summary="db&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
+      <option name="closed" value="true" />
+      <created>1748920908788</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1748920908788</updated>
+    </task>
+    <task id="LOCAL-00029" summary="temporary save">
+      <option name="closed" value="true" />
+      <created>1748951864718</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1748951864718</updated>
+    </task>
+    <task id="LOCAL-00030" summary="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
+      <option name="closed" value="true" />
+      <created>1748951877171</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1748951877171</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,9 +443,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rebase: 패키지 명 추가, 소스 코드 이동" />
-    <MESSAGE value="update: gitignore" />
-    <MESSAGE value="update: gitignore, add env" />
     <MESSAGE value="rebase: apart clientside class" />
     <MESSAGE value="rebase, update: enums" />
     <MESSAGE value="rebase, features: apart client/serverside class | use env" />
@@ -400,8 +461,14 @@
     <MESSAGE value="update gitignore&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
     <MESSAGE value="rebase, comment added" />
     <MESSAGE value="update comments" />
+    <MESSAGE value="fix: potential bug&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
     <MESSAGE value="feat:chat" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat:chat" />
+    <MESSAGE value="feat: Attendance" />
+    <MESSAGE value="db" />
+    <MESSAGE value="db&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <MESSAGE value="temporary save" />
+    <MESSAGE value="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

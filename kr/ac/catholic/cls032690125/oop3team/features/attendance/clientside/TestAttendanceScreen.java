@@ -2,6 +2,7 @@
 //
 //import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 //import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
+//import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 //import kr.ac.catholic.cls032690125.oop3team.models.Session;
 //import kr.ac.catholic.cls032690125.oop3team.server.Server;
 //
@@ -15,8 +16,13 @@
 //
 //        // create session test
 //        Session session = new Session();
-//        session.setUserId("tuyen"); // đảm bảo user_id 'tuyen' có trong DB
+//        session.setUserId("user3"); // đảm bảo user_id 'tuyen' có trong DB
 //        session.setCreatedAt(LocalDateTime.now());
+//
+//        //create ChatRoom test
+//        Chatroom chatroom = new Chatroom();
+//        chatroom.setChatroomId(1);
+//
 //
 //        try {
 //
