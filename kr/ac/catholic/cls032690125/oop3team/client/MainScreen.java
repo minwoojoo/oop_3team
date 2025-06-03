@@ -10,6 +10,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.Frien
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
@@ -34,6 +35,7 @@ public class MainScreen extends JFrame {
     private CAuthController authController;
 
     private Server server;
+    private Chatroom chatRoom;
 
     public MainScreen(Client client) {
         this.client = client;
@@ -160,7 +162,8 @@ public class MainScreen extends JFrame {
                             chatRoomNames.get(index),
                             new ArrayList<>(friendNames.subList(0, 3)),
                             client,
-                            server
+                            server,
+                            chatRoom
                     );
                     chatScreen.setVisible(true);
                 }

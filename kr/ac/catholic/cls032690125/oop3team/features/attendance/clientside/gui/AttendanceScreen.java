@@ -3,6 +3,7 @@ package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 
@@ -17,7 +18,7 @@ public class AttendanceScreen extends JFrame {
     private AttendanceDAO attendanceDAO;
     private Client client;
 
-    public AttendanceScreen(JFrame parent, Client client,Server server) throws SQLException {
+    public AttendanceScreen(JFrame parent, Client client, Server server, Chatroom chatroom) throws SQLException {
         this.client = client;
         this.attendanceDAO = new AttendanceDAO(server);
 

@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="edit and update Attendance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
@@ -137,7 +135,7 @@
         <env name="CLS032690125oop3team_SERVER_DB_PASSWORD" value="Nguyen0220" />
         <env name="CLS032690125oop3team_SERVER_DB" value="messageprogram " />
       </envs>
-      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.TestAttendanceScreen" />
+      <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.TestAttendance" />
       <module name="team3_messageProgram" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -428,7 +426,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748951877171</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="edit and update Attendance">
+      <option name="closed" value="true" />
+      <created>1748962712846</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1748962712846</updated>
+    </task>
+    <task id="LOCAL-00032" summary="edit and update Attendance">
+      <option name="closed" value="true" />
+      <created>1748962731261</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1748962731261</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -449,8 +463,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rebase: apart clientside class" />
-    <MESSAGE value="rebase, update: enums" />
     <MESSAGE value="rebase, features: apart client/serverside class | use env" />
     <MESSAGE value="update workspace.xml" />
     <MESSAGE value="update env" />
@@ -474,7 +486,9 @@
     <MESSAGE value="db&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
     <MESSAGE value="temporary save" />
     <MESSAGE value="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <MESSAGE value="edit and update Attendance&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <MESSAGE value="edit and update Attendance" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit and update Attendance" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

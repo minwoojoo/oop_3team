@@ -7,6 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
@@ -15,6 +16,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,16 +36,18 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     private Client client;
     private Server server;
+    private Chatroom chatroom;
 //
 //    public GroupChatScreen(
 //            String groupName, List<String> members){};
 
     public GroupChatScreen(
-            String groupName, List<String> members,Client client, Server server) {
+            String groupName, List<String> members,Client client, Server server,Chatroom chatroom) {
         this.groupName = groupName;
         this.members = members;
         this.client  = client;
         this.server = server;
+        this.chatroom = chatroom;
         
         // 가짜 스레드 데이터 추가
         threads.add(new ThreadInfo("프로젝트 진행 상황", true));
@@ -112,7 +117,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
             try {
-                new AttendanceScreen(this,client,server).setVisible(true);
+                new AttendanceScreen(this,client,server,chatroom).setVisible(true);
             }catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -170,11 +175,20 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         scheduleBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         scheduleBox.setBackground(Color.WHITE);
         
-        // 샘플 일정 데이터
+        //일정 데이터
         JLabel scheduleTitle = new JLabel("주간 회의");
         scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-        JLabel scheduleDateTime = new JLabel("2024-03-20 14:00");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("현재시간: yyyy년 MM월 dd일 - HH:mm:ss");
+        JLabel scheduleDateTime = new JLabel();
         scheduleDateTime.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+
+// Timer 초 업데이트
+        Timer timer = new Timer(1000, e -> {
+            String currentTime = LocalDateTime.now().format(formatter);
+            scheduleDateTime.setText(currentTime);
+        });
+        timer.start();
         
         JPanel scheduleInfo = new JPanel(new BorderLayout(5, 0));
         scheduleInfo.add(scheduleTitle, BorderLayout.NORTH);
