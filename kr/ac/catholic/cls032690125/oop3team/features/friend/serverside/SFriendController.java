@@ -22,7 +22,32 @@ public class SFriendController extends ServerRequestListener {
 
     @ServerRequestHandler(CFriendListReq.class)
     public void getFriendList(ServerClientHandler sch, CFriendListReq req) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            System.out.println("=== 친구목록 조회 요청 ===");
+            System.out.println("요청한 사용자 ID: " + req.getUserId());
+            
+            // 친구목록 조회
+            List<UserProfile> friends = friendDAO.getFriendList(req.getUserId());
+            UserProfile[] resultArr = friends.toArray(new UserProfile[0]);
+            
+            System.out.println("조회된 친구 수: " + resultArr.length);
+            for (UserProfile friend : resultArr) {
+                System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+            }
+            System.out.println("=====================");
+            
+            // 응답 패킷 생성 및 전송
+            ServerResponsePacketSimplefied<UserProfile[]> response =
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), resultArr);
+            sch.send(response);
+        } catch (Exception e) {
+            System.out.println("친구목록 조회 중 오류 발생!");
+            e.printStackTrace();
+            // 실패 시 null 반환
+            ServerResponsePacketSimplefied<UserProfile[]> response =
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), null);
+            sch.send(response);
+        }
     }
 
     @ServerRequestHandler(CFriendSearchReq.class)

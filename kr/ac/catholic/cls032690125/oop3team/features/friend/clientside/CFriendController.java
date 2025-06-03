@@ -13,8 +13,25 @@ public class CFriendController extends StandardClientControl {
         super(client);
     }
 
-    public void getFriendList(ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
-        client.request(new CFriendListReq(), response);
+    public void getFriendList(String userId, ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
+        CFriendListReq req = new CFriendListReq();
+        req.setUserId(userId);
+        System.out.println("=== 친구목록 조회 요청 ===");
+        System.out.println("요청한 사용자 ID: " + req.getUserId());
+        client.request(req, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                if (data.getData() != null) {
+                    System.out.println("=== 친구목록 조회 결과 ===");
+                    for (UserProfile friend : data.getData()) {
+                        System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+                    }
+                    System.out.println("=====================");
+                } else {
+                    System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
+                }
+            }
+        });
     }
 
     public void searchFriendForInvite(String search, ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {

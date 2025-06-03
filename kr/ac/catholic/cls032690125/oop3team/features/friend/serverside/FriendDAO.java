@@ -116,4 +116,21 @@ public class FriendDAO {
         }
         return false;
     }
+
+    public List<UserProfile> getFriendList(String userId) throws SQLException {
+        String sql = "SELECT friend_id, (SELECT name FROM user WHERE user_id = friend.friend_id) as name FROM friend WHERE user_id = ? AND is_pending = 0";
+        List<UserProfile> result = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String friendId = rs.getString("friend_id");
+                    String name = rs.getString("name");
+                    result.add(new UserProfile(friendId, name));
+                }
+            }
+        }
+        return result;
+    }
 }
