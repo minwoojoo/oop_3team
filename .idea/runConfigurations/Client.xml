@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Client" type="Application" factoryName="Application" singleton="false">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/env/client.env" />
+      <option value="$PROJECT_DIR$/env/client.local.env" />
+    </option>
+    <option name="MAIN_CLASS_NAME" value="kr.ac.catholic.cls032690125.oop3team.Main" />
+    <module name="team3_messageProgram" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
