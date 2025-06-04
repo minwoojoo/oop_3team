@@ -1,12 +1,15 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
@@ -35,13 +38,16 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private Client client;
     private CChatroomIndividualController controller;
     private Chatroom chatroom;
+    private CChatroomController cChatroomController;
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
         this.groupName = chatroom.getTitle();
         this.client = client;
         this.chatroom = chatroom;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
-        
+        this.members = null;
+        this.cChatroomController = new CChatroomController(client);
+
         // 가짜 스레드 데이터 추가
         threads.add(new ThreadInfo("프로젝트 진행 상황", true));
         threads.add(new ThreadInfo("주간 회의 안건", true));
@@ -298,7 +304,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
-            String sender = members.get(random.nextInt(members.size()));
+            String sender = "tom";
             String message = sampleMessages[random.nextInt(sampleMessages.length)];
             
             // 메시지 패널 생성
@@ -480,6 +486,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     @Override
     public void initiate() {
         client.getChatReceiver().registerChatroom(controller);
+        fetchAndStoreMembers(); // 참가자 가져오기
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
@@ -501,5 +508,21 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
             this.title = title;
             this.isOpen = isOpen;
         }
+    }
+
+    private void fetchAndStoreMembers() {
+        CChatroomController ctrl = new CChatroomController(client);
+        ctrl.requestMemberList(
+                chatroom.getChatroomId(),
+                new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                    @Override
+                    protected void execute(SChatroomMemberListPacket data) {
+                        // Server에서 넘어온 멤버 ID 목록을 바로 this.members에 저장
+                        List<String> memberList = data.getMembers();
+                        members = (memberList != null) ? memberList : new ArrayList<>();
+
+                    }
+                }
+        );
     }
 } 
