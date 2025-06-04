@@ -1,51 +1,67 @@
 package kr.ac.catholic.cls032690125.oop3team.client;
 
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.AddFriendScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.FriendProfileScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class MainScreen extends JFrame {
-    public static List<String> friendNames;
+    public static List<String> friendNames = new ArrayList<>(); // TODO: 없앨덧
     private List<String> statusMessages;
     private List<String> chatRoomNames;
     private List<String> lastMessages;
     private List<String> lastMessageTimes;
     private Timer sessionTimer;
     private Client client;
+    private String userId;
 
+    private CChatroomController chatRoomController;
     private CAuthController authController;
+    private JPanel chatListPanel;
+    private CFriendController cFriendController;
+    private JPanel friendListPanel;
 
-    public MainScreen(Client client) {
+    public MainScreen(String userId, Client client) {
+        this.userId = userId;
         this.client = client;
+        chatRoomController = new CChatroomController(client);
         authController = new CAuthController(client);
+        cFriendController = new CFriendController(client);
         setTitle("메인 화면");
         setSize(600, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // 랜덤 데이터 생성
-        friendNames = generateRandomFriendNames();
-        statusMessages = generateRandomStatusMessages();
-        chatRoomNames = generateRandomChatRoomNames();
-        lastMessages = generateRandomLastMessages();
-        lastMessageTimes = generateRandomTimes();
+
+
+        //statusMessages = generateRandomStatusMessages();
+        //chatRoomNames = generateRandomChatRoomNames();
+        //lastMessages = generateRandomLastMessages();
+        //lastMessageTimes = generateRandomTimes();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         
@@ -71,45 +87,67 @@ public class MainScreen extends JFrame {
         friendPanel.add(topPanel, BorderLayout.NORTH);
 
         // 중앙: 친구 리스트
-        JPanel friendListPanel = new JPanel();
+        friendListPanel = new JPanel();
         friendListPanel.setLayout(new BoxLayout(friendListPanel, BoxLayout.Y_AXIS));
-        
-        for (int i = 0; i < friendNames.size(); i++) {
-            final int index = i;
-            JPanel friendItemPanel = new JPanel(new BorderLayout());
-            friendItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            // 상태 점 표시
-            JLabel statusDot = new JLabel("●");
-            statusDot.setForeground(new Random().nextBoolean() ? Color.GREEN : Color.GRAY);
-            
-            // 친구 정보
-            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-            JLabel nameLabel = new JLabel(friendNames.get(index));
-            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-            JLabel statusLabel = new JLabel(statusMessages.get(index));
-            statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            statusLabel.setForeground(Color.GRAY);
-            
-            infoPanel.add(nameLabel);
-            infoPanel.add(statusLabel);
+        /**
+         * 친구 목록 불러오기
+         * */
+        System.out.println("▶ MainScreen: getFriendList 호출 직전");
+        cFriendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> response) {
+                System.out.println("▶ MainScreen: execute 진입 → friends=" + Arrays.toString(response.getData()));
 
-            friendItemPanel.add(statusDot, BorderLayout.WEST);
-            friendItemPanel.add(infoPanel, BorderLayout.CENTER);
-
-            // 클릭 이벤트 처리
-            friendItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    FriendProfileScreen profileScreen = new FriendProfileScreen(
-                        friendNames.get(index), 
-                        statusMessages.get(index)
-                    );
-                    profileScreen.setVisible(true);
+                UserProfile[] friends = response.getData();
+                System.out.println("friends = " + Arrays.toString(friends));
+                if (friends != null) {
+                    friendNames.clear();
+                    for (UserProfile friend : friends) {
+                        friendNames.add(friend.getUserId());
+                    }
+                    updateFriendListUI(friendListPanel);
                 }
-            });
-
-            friendListPanel.add(friendItemPanel);
-        }
+            }
+        });
+        
+//        for (int i = 0; i < friendNames.size(); i++) {
+//            System.out.println("friendNames.get(i) = " + friendNames.get(i));
+//            final int index = i;
+//            JPanel friendItemPanel = new JPanel(new BorderLayout());
+//            friendItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+//
+//            // 상태 점 표시
+//            JLabel statusDot = new JLabel("●");
+//            statusDot.setForeground(new Random().nextBoolean() ? Color.GREEN : Color.GRAY);
+//
+//            // 친구 정보
+//            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+//            JLabel nameLabel = new JLabel(friendNames.get(index));
+//            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+//            JLabel statusLabel = new JLabel(statusMessages.get(index));
+//            statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//            statusLabel.setForeground(Color.GRAY);
+//
+//            infoPanel.add(nameLabel);
+//            infoPanel.add(statusLabel);
+//
+//            friendItemPanel.add(statusDot, BorderLayout.WEST);
+//            friendItemPanel.add(infoPanel, BorderLayout.CENTER);
+//
+//            // 클릭 이벤트 처리
+//            friendItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+//                public void mouseClicked(java.awt.event.MouseEvent evt) {
+//                    FriendProfileScreen profileScreen = new FriendProfileScreen(
+//                        friendNames.get(index),
+//                        statusMessages.get(index)
+//                    );
+//                    profileScreen.setVisible(true);
+//                }
+//            });
+//
+//            friendListPanel.add(friendItemPanel);
+//        }
 
         JScrollPane scrollPane = new JScrollPane(friendListPanel);
         friendPanel.add(scrollPane, BorderLayout.CENTER);
@@ -123,46 +161,11 @@ public class MainScreen extends JFrame {
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
-        JPanel chatListPanel = new JPanel();
+        chatListPanel = new JPanel();
         chatListPanel.setLayout(new BoxLayout(chatListPanel, BoxLayout.Y_AXIS));
-        
-        for (int i = 0; i < chatRoomNames.size(); i++) {
-            final int index = i;
-            JPanel chatItemPanel = new JPanel(new BorderLayout());
-            chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            // 대화방 정보
-            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-            JLabel nameLabel = new JLabel(chatRoomNames.get(index));
-            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-            JLabel messageLabel = new JLabel(lastMessages.get(index));
-            messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            messageLabel.setForeground(Color.GRAY);
-            
-            infoPanel.add(nameLabel);
-            infoPanel.add(messageLabel);
 
-            // 시간 표시
-            JLabel timeLabel = new JLabel(lastMessageTimes.get(index));
-            timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
-            timeLabel.setForeground(Color.GRAY);
-
-            chatItemPanel.add(infoPanel, BorderLayout.CENTER);
-            chatItemPanel.add(timeLabel, BorderLayout.EAST);
-
-            // 클릭 이벤트 처리
-            chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    GroupChatScreen chatScreen = new GroupChatScreen(
-                        chatRoomNames.get(index),
-                        new ArrayList<>(friendNames.subList(0, 3))
-                    );
-                    chatScreen.setVisible(true);
-                }
-            });
-
-            chatListPanel.add(chatItemPanel);
-        }
+        loadGroupChat();
 
         JScrollPane chatScrollPane = new JScrollPane(chatListPanel);
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
@@ -234,12 +237,12 @@ public class MainScreen extends JFrame {
 
         // 버튼 이벤트 처리
         addFriendButton.addActionListener(e -> {
-            AddFriendScreen addFriendScreen = new AddFriendScreen();
+            AddFriendScreen addFriendScreen = new AddFriendScreen(userId, client);
             addFriendScreen.setVisible(true);
         });
 
         createGroupButton.addActionListener(e -> {
-            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen();
+            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
             createGroupScreen.setVisible(true);
         });
 
@@ -269,6 +272,32 @@ public class MainScreen extends JFrame {
             }
         });
         sessionTimer.start();
+
+        // 로그인 성공 후
+        CFriendController friendController = new CFriendController(client);
+        System.out.println("클라이언트: 친구 요청 목록 요청 전송: " + userId);
+        friendController.getPendingFriendRequests(userId, new ClientInteractResponseSwing<SFriendPendingRes>() {
+            @Override
+            protected void execute(SFriendPendingRes data) {
+                if (data.getPendingRequests() != null && data.getPendingRequests().length > 0) {
+                    for (UserProfile requester : data.getPendingRequests()) {
+                        int result = JOptionPane.showConfirmDialog(
+                            MainScreen.this,
+                            requester.getName() + "님이 친구 요청을 보냈습니다. 수락하시겠습니까?",
+                            "친구 요청",
+                            JOptionPane.YES_NO_OPTION
+                        );
+                        if (result == JOptionPane.YES_OPTION) {
+                            friendController.acceptFriendRequest(userId, requester.getUserId());
+                            JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님을 친구로 추가했습니다.");
+                        } else {
+                            friendController.rejectFriendRequest(userId, requester.getUserId());
+                            JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님의 친구 요청을 거절했습니다.");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private static List<String> generateRandomFriendNames() {
@@ -320,7 +349,46 @@ public class MainScreen extends JFrame {
         return names;
     }
 
-    private List<String> generateRandomLastMessages() {
+    private void updateFriendListUI(JPanel friendListPanel) {
+        friendListPanel.removeAll(); // 기존 요소 삭제
+
+        for (int i = 0; i < friendNames.size(); i++) {
+            final int index = i;
+            JPanel friendItemPanel = new JPanel(new BorderLayout());
+            friendItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            JLabel statusDot = new JLabel("●");
+            statusDot.setForeground(new Random().nextBoolean() ? Color.GREEN : Color.GRAY);
+
+            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+            JLabel nameLabel = new JLabel(friendNames.get(index));
+            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+
+            JLabel statusLabel = new JLabel("상태 메시지 없음"); // 임시 메시지
+            statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+            statusLabel.setForeground(Color.GRAY);
+
+            infoPanel.add(nameLabel);
+            infoPanel.add(statusLabel);
+
+            friendItemPanel.add(statusDot, BorderLayout.WEST);
+            friendItemPanel.add(infoPanel, BorderLayout.CENTER);
+
+            friendItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    new FriendProfileScreen(friendNames.get(index), "상태 메시지 없음").setVisible(true);
+                }
+            });
+
+            friendListPanel.add(friendItemPanel);
+        }
+
+        friendListPanel.revalidate();
+        friendListPanel.repaint();
+    }
+
+
+    /**private List<String> generateRandomLastMessages() {
         List<String> messages = new ArrayList<>();
         String[] sampleMessages = {
             "안녕하세요!",
@@ -343,7 +411,7 @@ public class MainScreen extends JFrame {
         }
         
         return messages;
-    }
+    }*/
 
     private List<String> generateRandomTimes() {
         List<String> times = new ArrayList<>();
@@ -358,4 +426,61 @@ public class MainScreen extends JFrame {
         
         return times;
     }
-} 
+
+    public void initiate() {
+        loadGroupChat();
+
+
+
+        this.setVisible(true);
+    }
+
+    private void loadGroupChat() {
+        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+            @Override
+            protected void execute(SChatroomListPacket data) {
+                Chatroom[] rooms = data.getRooms();
+                if (rooms == null || rooms.length == 0) {
+                    System.out.println("참여 중인 채팅방 없음");
+                    return;
+                }
+
+                for (int i = 0; i < data.getRooms().length; i++) {
+                    Chatroom room = data.getRooms()[i];
+
+                    JPanel chatItemPanel = new JPanel(new BorderLayout());
+                    chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+                    // 대화방 정보
+                    JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+                    JLabel nameLabel = new JLabel(room.getTitle());
+                    nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+//                    JLabel messageLabel = new JLabel();
+//                    messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//                    messageLabel.setForeground(Color.GRAY);
+
+                    infoPanel.add(nameLabel);
+//                    infoPanel.add(messageLabel);
+
+                    // 시간 표시
+//                    JLabel timeLabel = new JLabel();
+//                    timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
+//                    timeLabel.setForeground(Color.GRAY);
+
+                    chatItemPanel.add(infoPanel, BorderLayout.CENTER);
+//                    chatItemPanel.add(timeLabel, BorderLayout.EAST);
+
+                    // 클릭 이벤트 처리
+                    chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
+                            chatScreen.setVisible(true);
+                        }
+                    });
+
+                    chatListPanel.add(chatItemPanel);
+                }
+            }
+        });
+    }
+}
