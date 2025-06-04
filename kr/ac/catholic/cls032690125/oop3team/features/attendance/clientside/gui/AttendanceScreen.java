@@ -17,9 +17,13 @@ public class AttendanceScreen extends JFrame {
     private JPanel recordListPanel;
     private AttendanceDAO attendanceDAO;
     private Client client;
+    private Server server;
+    private Chatroom chatroom;
 
     public AttendanceScreen(JFrame parent, Client client, Server server, Chatroom chatroom) throws SQLException {
         this.client = client;
+        this.server = server;
+        this.chatroom = chatroom;
         this.attendanceDAO = new AttendanceDAO(server);
 
         setTitle("출퇴근 기록");
