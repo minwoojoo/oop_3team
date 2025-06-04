@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="edit and update Attendance">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/client/MainScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/CreateGroupChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
-    </list>
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +31,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feat/friend" />
+        <entry key="$PROJECT_DIR$" value="feature/attendance" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -70,40 +63,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Client.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Server.executor": "Run",
-    "Application.TestAttendanceScreen.executor": "Run",
-    "Application.TetsAttendance.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "feature/attendance",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/nvtuy/IdeaProjects/oop_3team/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true",
-    "애플리케이션.Client.executor": "Run",
-    "애플리케이션.Main (1).executor": "Run",
-    "애플리케이션.Main.executor": "Run",
-    "애플리케이션.Server.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Client.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Server.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestAttendanceScreen.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TetsAttendance.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/attandance&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nvtuy/IdeaProjects/oop_3team/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;애플리케이션.Client.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main (1).executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Main.executor&quot;: &quot;Run&quot;,
+    &quot;애플리케이션.Server.executor&quot;: &quot;Run&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\nvtuy\IdeaProjects\oop_3team\kr\ac\catholic\cls032690125\oop3team\features\attendance\clientside" />
@@ -185,6 +178,10 @@
       <workItem from="1748281736031" duration="8419000" />
       <workItem from="1748323073470" duration="191000" />
       <workItem from="1748917744003" duration="13153000" />
+      <workItem from="1749000754110" duration="785000" />
+      <workItem from="1749018864817" duration="1100000" />
+      <workItem from="1749019993005" duration="100000" />
+      <workItem from="1749063698001" duration="398000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />
@@ -442,7 +439,31 @@
       <option name="project" value="LOCAL" />
       <updated>1748962731261</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="formatted work_time_total&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java">
+      <option name="closed" value="true" />
+      <created>1749063806891</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1749063806891</updated>
+    </task>
+    <task id="LOCAL-00034" summary="formatted work_time_total&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java">
+      <option name="closed" value="true" />
+      <created>1749063816587</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1749063816587</updated>
+    </task>
+    <task id="LOCAL-00035" summary="&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java">
+      <option name="closed" value="true" />
+      <created>1749063863161</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1749063863161</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -463,9 +484,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rebase, features: apart client/serverside class | use env" />
-    <MESSAGE value="update workspace.xml" />
-    <MESSAGE value="update env" />
     <MESSAGE value="update env&#10;&#10;Signed-off-by: Hyun-ku Lee &lt;dev@hklee.me&gt;" />
     <MESSAGE value="update database" />
     <MESSAGE value="remove lagacy database" />
@@ -488,7 +506,10 @@
     <MESSAGE value="temporary save&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
     <MESSAGE value="edit and update Attendance&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
     <MESSAGE value="edit and update Attendance" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit and update Attendance" />
+    <MESSAGE value="formatted work_time_total&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" />
+    <MESSAGE value="&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" />
+    <MESSAGE value="# Conflicts:&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="# Conflicts:&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/TestAttendance.java" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
