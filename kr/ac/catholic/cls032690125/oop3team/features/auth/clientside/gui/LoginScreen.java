@@ -76,20 +76,20 @@ public class LoginScreen extends JFrame {
                         
                         // 친구목록 조회
                         CFriendController friendController = new CFriendController(client);
-                        friendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
-                            @Override
-                            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                                if (data.getData() != null) {
-                                    System.out.println("=== 친구목록 조회 결과 ===");
-                                    for (UserProfile friend : data.getData()) {
-                                        System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
-                                    }
-                                    System.out.println("=====================");
-                                } else {
-                                    System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
-                                }
-                            }
-                        });
+//                        friendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+//                            @Override
+//                            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+//                                if (data.getData() != null) {
+//                                    System.out.println("=== 친구목록 조회 결과 ===");
+//                                    for (UserProfile friend : data.getData()) {
+//                                        System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+//                                    }
+//                                    System.out.println("=====================");
+//                                } else {
+//                                    System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
+//                                }
+//                            }
+//                        });
                         
                         new MainScreen(userId, client).setVisible(true);
                         dispose();

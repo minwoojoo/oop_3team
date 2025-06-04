@@ -54,12 +54,13 @@ public class SChatroomController extends ServerRequestListener {
 
     /**
      * 1) CChatroomCreatePacket을 받으면 호출됩니다.
-     *    - 패킷에는 ‘title’과 ‘ownerId’가 들어 있습니다.
+     * - 패킷에는 ‘title’과 ‘ownerId’가 들어 있습니다.
      * 2) DAO를 통해 DB에 INSERT → 생성된 Chatroom 객체를 리턴받습니다.
      * 3) 성공 여부에 따라 SChatroomCreatePacket으로 결과를 클라이언트에 보냅니다.
      */
+    @ServerRequestHandler(CChatroomCreatePacket.class)
     public void createChatroom(ServerClientHandler sch, CChatroomCreatePacket packet) {
-        String title   = packet.getTitle();
+        String title = packet.getTitle();
         String ownerId = packet.getOwnerId();
         try {
             Chatroom newRoom = chatroomDAO.createChatroom(title, ownerId);

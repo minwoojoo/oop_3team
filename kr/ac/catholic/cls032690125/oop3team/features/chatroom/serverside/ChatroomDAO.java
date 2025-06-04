@@ -46,7 +46,7 @@ public class ChatroomDAO extends StandardDAO {
      * DB에서 chatroom_id로 대화방 정보를 조회하여 Chatroom 모델을 만들어 리턴합니다.
      */
     public Chatroom findById(int chatroomId) throws SQLException {
-        String sql = "SELECT * FROM chatrooms WHERE chatroom_id = ?";
+        String sql = "SELECT * FROM chatroom WHERE chatroom_id = ?";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, chatroomId);
@@ -71,7 +71,7 @@ public class ChatroomDAO extends StandardDAO {
      * 모든 대화방 목록을 불러와 Chatroom 배열로 리턴합니다.
      */
     public Chatroom[] loadAllChatrooms(boolean isprivate) throws SQLException {
-        String sql = "SELECT * FROM chatrooms WHERE is_private=? AND parentroom_id IS NULL ORDER BY created_at DESC";
+        String sql = "SELECT * FROM chatroom WHERE is_private=? AND parentroom_id IS NULL ORDER BY created_at DESC";
         List<Chatroom> list = new ArrayList<>();
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);) {

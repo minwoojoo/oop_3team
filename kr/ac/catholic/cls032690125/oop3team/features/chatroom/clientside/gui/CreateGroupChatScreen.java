@@ -6,6 +6,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ public class CreateGroupChatScreen extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // MainScreen의 친구 이름 리스트 사용
+
         friendNames = MainScreen.friendNames;
         friendCheckBoxes = new ArrayList<>();
 
@@ -82,11 +84,9 @@ public class CreateGroupChatScreen extends JFrame {
 
                 if (groupName != null && !groupName.trim().isEmpty()) {
                     // 채팅방 생성 및 입장
+                    List<String> participants = getSelectedFriends();
 
-                    /**
-                     *  TODO: 친구 기능이 아직 구현 안되어서 일단 participants는 null 값으로 함
-                     * */
-                    cChatroomController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                    cChatroomController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
                         @Override
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());

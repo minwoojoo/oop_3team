@@ -13,25 +13,32 @@ public class CFriendController extends StandardClientControl {
         super(client);
     }
 
-    public void getFriendList(String userId, ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
+    public void getFriendList(String userId,
+                              ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
         CFriendListReq req = new CFriendListReq();
         req.setUserId(userId);
         System.out.println("=== 친구목록 조회 요청 ===");
         System.out.println("요청한 사용자 ID: " + req.getUserId());
-        client.request(req, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
-            @Override
-            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                if (data.getData() != null) {
-                    System.out.println("=== 친구목록 조회 결과 ===");
-                    for (UserProfile friend : data.getData()) {
-                        System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+
+        ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>> wrapper =
+                new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                        if (data.getData() != null) {
+                            System.out.println("=== 친구목록 조회 결과 (CFriendController 래퍼) ===");
+                            for (UserProfile friend : data.getData()) {
+                                System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+                            }
+                            System.out.println("=====================");
+                        } else {
+                            System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
+                        }
+
+                        response.run(data);
                     }
-                    System.out.println("=====================");
-                } else {
-                    System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
-                }
-            }
-        });
+                };
+
+        client.request(req, wrapper);
     }
 
     public void searchFriendForInvite(String search, ClientInteractResponse<ServerResponsePacketSimplefied<UserProfile[]>> response) {
