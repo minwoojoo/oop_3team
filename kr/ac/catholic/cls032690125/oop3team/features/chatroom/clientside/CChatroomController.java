@@ -29,4 +29,9 @@ public class CChatroomController extends StandardClientControl {
         CChatroomMemberListPacket cChatroomMemberListPacket = new CChatroomMemberListPacket(chatroomId);
         client.request(cChatroomMemberListPacket, callback);
     }
+
+    public void requestThreadRoomList(int parentId, boolean isOpened, ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        CChatroomThreadListPacket cChatroomThreadListPacket = new CChatroomThreadListPacket(parentId, isOpened);
+        client.request(cChatroomThreadListPacket, callback);
+    }
 }

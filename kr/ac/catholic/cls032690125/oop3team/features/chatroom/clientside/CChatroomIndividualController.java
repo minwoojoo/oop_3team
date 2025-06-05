@@ -8,6 +8,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.CMessageLoadPac
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.ChatScreenBase;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadListPacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.models.MessageBuilder;
@@ -64,7 +65,7 @@ public final class CChatroomIndividualController extends StandardClientControl {
         chatroomController.requestMemberList(chatroom.getChatroomId(), callback);
     }
 
-    public void getThread(ClientInteractResponse<ServerResponsePacketSimplefied<Chatroom[]>> callback) {
-        //TODO
+    public void getThread(int parentId, boolean isOpened,ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        chatroomController.requestThreadRoomList(parentId, isOpened, callback);
     }
 }

@@ -101,4 +101,14 @@ public class SChatroomController extends ServerRequestListener {
             ));
         }
     }
+
+    @ServerRequestHandler(CChatroomThreadListPacket.class)
+    public void getThreadList(ServerClientHandler sch, CChatroomThreadListPacket packet) throws SQLException {
+        int parentId = packet.getParentId();
+        boolean isOpened = packet.getIsOpened();
+
+        ArrayList<Chatroom> threadsByParentId = chatroomDAO.findThreadsByParentId(parentId, isOpened);
+        sch.send(new SChatroomThreadListPacket(threadsByParentId));
+    }
+
 }
