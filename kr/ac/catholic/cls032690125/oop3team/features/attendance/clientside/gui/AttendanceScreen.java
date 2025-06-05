@@ -20,6 +20,8 @@ public class AttendanceScreen extends JFrame {
     private Server server;
     private Chatroom chatroom;
 
+    public AttendanceScreen(JFrame frame) {}
+
     public AttendanceScreen(JFrame parent, Client client, Server server, Chatroom chatroom) throws SQLException {
         this.client = client;
         this.server = server;
