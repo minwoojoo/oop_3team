@@ -34,4 +34,9 @@ public class CChatroomController extends StandardClientControl {
         CChatroomThreadListPacket cChatroomThreadListPacket = new CChatroomThreadListPacket(parentId, isOpened);
         client.request(cChatroomThreadListPacket, callback);
     }
+
+    public void requestThreadRoomClose(int threadId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
+        CChatroomThreadClosePacket cChatroomThreadClosePacket = new CChatroomThreadClosePacket(threadId);
+        client.request(cChatroomThreadClosePacket, callback);
+    }
 }

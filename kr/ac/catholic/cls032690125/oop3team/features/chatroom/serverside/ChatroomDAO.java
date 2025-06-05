@@ -213,4 +213,14 @@ public class ChatroomDAO extends StandardDAO {
 
         return threads;
     }
+
+    public int closeChatroom(int chatroomId) throws SQLException {
+        String sql = "UPDATE chatroom SET closed = TRUE WHERE chatroom_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            return ps.executeUpdate();
+        }
+    }
+
 }

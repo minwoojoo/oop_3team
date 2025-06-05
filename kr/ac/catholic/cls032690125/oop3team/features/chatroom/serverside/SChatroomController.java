@@ -111,4 +111,12 @@ public class SChatroomController extends ServerRequestListener {
         sch.send(new SChatroomThreadListPacket(threadsByParentId));
     }
 
+    @ServerRequestHandler(CChatroomThreadClosePacket.class)
+    public void closeThread(ServerClientHandler sch, CChatroomThreadClosePacket packet) throws SQLException {
+        int threadId = packet.getThreadId();
+        int chatroomId = chatroomDAO.closeChatroom(threadId);
+
+        sch.send(new SChatroomThreadClosePacket(chatroomId));
+    }
+
 }

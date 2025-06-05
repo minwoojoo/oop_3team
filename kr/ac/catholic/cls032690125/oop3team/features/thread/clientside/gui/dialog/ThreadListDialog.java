@@ -4,6 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadClosePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadListPacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
@@ -39,7 +40,12 @@ public class ThreadListDialog extends JDialog {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem closeItem = new JMenuItem("스레드 닫기");
         closeItem.addActionListener(e -> {
-            //TODO
+            cChatroomController.requestThreadRoomClose(chatroom.getChatroomId(), new ClientInteractResponseSwing<SChatroomThreadClosePacket>() {
+                @Override
+                protected void execute(SChatroomThreadClosePacket data) {
+                    System.out.println("스레드 닫음, 스레드 ID: " + data.getThreadId());
+                }
+            });
         });
         popupMenu.add(closeItem);
 
