@@ -4,6 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
@@ -34,6 +35,8 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JPanel threadPanel;
     private JDialog threadListDialog;
 
+    private CChatroomIndividualController controller;
+
     private Client client;
     private Server server;
     private Chatroom chatroom;
@@ -41,13 +44,20 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 //    public GroupChatScreen(
 //            String groupName, List<String> members){};
 
+    public GroupChatScreen(Client client, Chatroom chatroom) {
+        this(null, null, client, null, chatroom);
+    }
+
+
     public GroupChatScreen(
             String groupName, List<String> members,Client client, Server server,Chatroom chatroom) {
-        this.groupName = groupName;
-        this.members = members;
-        this.client  = client;
+        this.groupName = groupName != null ? groupName : chatroom.getTitle();
+        this.members = members != null ? members : new ArrayList<>();
+        this.client = client;
         this.server = server;
         this.chatroom = chatroom;
+
+        this.controller = new CChatroomIndividualController(client, chatroom, this);
         
         // 가짜 스레드 데이터 추가
         threads.add(new ThreadInfo("프로젝트 진행 상황", true));
