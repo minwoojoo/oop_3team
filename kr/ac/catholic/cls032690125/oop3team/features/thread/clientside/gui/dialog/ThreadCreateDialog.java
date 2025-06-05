@@ -1,0 +1,63 @@
+package kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog;
+
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ThreadCreateDialog extends JDialog {
+    private Client client;
+    private GroupChatScreen screen;
+    private CChatroomIndividualController controller;
+
+    public ThreadCreateDialog(Client client, GroupChatScreen screen) {
+        super(screen, "새 스레드 만들기", true);
+
+        this.client = client;
+        this.screen = screen;
+        this.controller = screen.getController();
+
+        setSize(300, 150);
+        setLocationRelativeTo(this);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel titleLabel = new JLabel("스레드 제목을 입력하세요");
+        JTextField titleField = new JTextField();
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton createButton = new JButton("생성");
+        JButton cancelButton = new JButton("취소");
+
+        createButton.addActionListener(e -> {
+            String title = titleField.getText().trim();
+            if (!title.isEmpty()) {
+                //TODO: CREATE THREAD
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "스레드 제목을 입력해주세요.",
+                        "입력 오류",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        cancelButton.addActionListener(e -> dispose());
+
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(createButton);
+
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        mainPanel.add(titleField, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
+    }
+
+    private void create() {
+        //TODO
+    }
+}

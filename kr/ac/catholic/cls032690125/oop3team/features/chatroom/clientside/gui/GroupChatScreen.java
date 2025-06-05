@@ -1,20 +1,21 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponse;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
-import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.dialog.GroupChatFriendInviteDialog;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
-import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog.ThreadCreateDialog;
+import kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog.ThreadListDialog;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,41 +23,44 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField inputField;
+
     private boolean notificationsEnabled = true;
-    private String groupName;
+
     private List<String> members;
-    private List<ThreadInfo> threads = new ArrayList<>();
-    private JPanel threadPanel;
+    private void setMembers(List<String> members) {
+        this.members = members;
+    }
+    public List<String> getMembers() { return members; }
+
+    private List<Message> messages;
+    private void addMessage(Message message) {
+        messages.add(message);
+        StringBuilder str = new StringBuilder(chatArea.getText());
+        str.append("["+message.getSenderId()+","+message.getSent().toString()+"] "+message.getContent()).append("\n");
+        chatArea.setText(str.toString());
+    }
+
     private JDialog threadListDialog;
+
     private Client client;
-    private CChatroomIndividualController controller;
     private Chatroom chatroom;
-    private CChatroomController cChatroomController;
+    private CChatroomIndividualController controller;
+    public CChatroomIndividualController getController() { return controller; }
+    private CChatroomController chatroomsControl;
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
-        this.groupName = chatroom.getTitle();
         this.client = client;
         this.chatroom = chatroom;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
-        this.members = null;
-        this.cChatroomController = new CChatroomController(client);
+        this.chatroomsControl = new CChatroomController(client);
 
-        // 가짜 스레드 데이터 추가
-        threads.add(new ThreadInfo("프로젝트 진행 상황", true));
-        threads.add(new ThreadInfo("주간 회의 안건", true));
-        threads.add(new ThreadInfo("버그 리포트", true));
-        threads.add(new ThreadInfo("기획 회의", false));
-        threads.add(new ThreadInfo("디자인 리뷰", false));
-        threads.add(new ThreadInfo("QA 테스트 결과", false));
+        this.members = new ArrayList<>();
         
-        setTitle("그룹 채팅 - " + groupName);
+        setTitle("그룹 채팅 - " + chatroom.getTitle());
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -214,273 +218,39 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
         // 이벤트 처리
         sendButton.addActionListener(e -> sendMessage());
-        inputField.addActionListener(e -> sendMessage());
-
-        // 샘플 메시지 추가
-        addRandomMessages();
+        //inputField.addActionListener(e -> sendMessage()); //TODO: WHAT IS THIS???
 
         add(mainPanel);
     }
 
     private void showInviteDialog() {
-        JDialog inviteDialog = new JDialog(this, "친구 초대", true);
-        inviteDialog.setSize(300, 400);
-        inviteDialog.setLocationRelativeTo(this);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        
-        // 친구 목록
-        JPanel friendListPanel = new JPanel();
-        friendListPanel.setLayout(new BoxLayout(friendListPanel, BoxLayout.Y_AXIS));
-        
-        List<String> allFriends = MainScreen.friendNames;  // MainScreen의 친구 목록 사용
-        List<JCheckBox> checkBoxes = new ArrayList<>();
-        
-        for (String friend : allFriends) {
-            if (!members.contains(friend)) {  // 이미 대화방에 있는 친구는 제외
-                JCheckBox checkBox = new JCheckBox(friend);
-                checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-                checkBoxes.add(checkBox);
-                friendListPanel.add(checkBox);
-            }
-        }
-
-        JScrollPane scrollPane = new JScrollPane(friendListPanel);
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        // 초대 버튼
-        JButton inviteButton = new JButton("초대");
-        inviteButton.addActionListener(e -> {
-            boolean invited = false;
-            for (JCheckBox checkBox : checkBoxes) {
-                if (checkBox.isSelected()) {
-                    String friendName = checkBox.getText();
-                    members.add(friendName);
-                    chatArea.append("[시스템] " + friendName + "님이 초대되었습니다.\n");
-                    invited = true;
-                }
-            }
-            
-            if (invited) {
-                inviteDialog.dispose();
-            } else {
-                JOptionPane.showMessageDialog(inviteDialog,
-                    "초대할 친구를 선택해주세요.",
-                    "알림",
-                    JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-        panel.add(inviteButton, BorderLayout.SOUTH);
-        inviteDialog.add(panel);
-        inviteDialog.setVisible(true);
+        var invd = new GroupChatFriendInviteDialog(client, controller, this);
+        invd.setVisible(true);
     }
 
     private void sendMessage() {
         String message = inputField.getText().trim();
         if (!message.isEmpty()) {
-            chatArea.append("나: " + message + "\n");
-            inputField.setText("");
-        }
-    }
-
-    private void addRandomMessages() {
-        String[] sampleMessages = {
-            "안녕하세요!",
-            "반갑습니다.",
-            "오늘 날씨가 좋네요.",
-            "어제 영화 재미있었어요.",
-            "점심 먹었어요?",
-            "주말에 뭐 하실 거예요?",
-            "다음 주에 만나요!",
-            "회의는 언제 하나요?",
-            "보고서는 언제까지 제출이죠?",
-            "개발 예상 기간이 어떻게 되나요?",
-            "내일 회의는 15:30분 예정입니다.",
-            "좋은 하루 되세요!",
-            "수고하셨습니다.",
-            "잘 지내고 계신가요?"
-        };
-        
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            String sender = "tom";
-            String message = sampleMessages[random.nextInt(sampleMessages.length)];
-            
-            // 메시지 패널 생성
-            JPanel messagePanel = new JPanel(new BorderLayout());
-            messagePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-            
-            // 메시지 내용
-            JLabel messageLabel = new JLabel(sender + ": " + message);
-            messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            
-            // 북마크 버튼
-            JButton bookmarkButton = new JButton("📌");
-            bookmarkButton.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            bookmarkButton.setBorderPainted(false);
-            bookmarkButton.setContentAreaFilled(false);
-            bookmarkButton.setFocusPainted(false);
-            bookmarkButton.setVisible(false);
-            
-            // 마우스 이벤트 처리
-            messagePanel.addMouseListener(new MouseAdapter() {
+            controller.sendMessage(message, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                 @Override
-                public void mouseEntered(MouseEvent e) {
-                    bookmarkButton.setVisible(true);
-                }
-                
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    if (!bookmarkButton.getBounds().contains(e.getPoint())) {
-                        bookmarkButton.setVisible(false);
-                    }
+                protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                    if(data.getData())
+                        inputField.setText("");
+                    else
+                        inputField.setText("오류가 발생했습니다"); //TODO do better
                 }
             });
-            
-            bookmarkButton.addActionListener(e -> {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-                String timestamp = sdf.format(new Date());
-                new ChatMemoPopup(GroupChatScreen.this, message, timestamp).setVisible(true);
-            });
-            
-            messagePanel.add(messageLabel, BorderLayout.WEST);
-            messagePanel.add(bookmarkButton, BorderLayout.EAST);
-            
-            chatArea.append(sender + ": " + message + "\n");
         }
     }
 
     private void showCreateThreadDialog() {
-        JDialog dialog = new JDialog(this, "새 스레드 만들기", true);
-        dialog.setSize(300, 150);
-        dialog.setLocationRelativeTo(this);
-
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        JLabel titleLabel = new JLabel("스레드 제목을 입력하세요");
-        JTextField titleField = new JTextField();
-        
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton createButton = new JButton("생성");
-        JButton cancelButton = new JButton("취소");
-
-        createButton.addActionListener(e -> {
-            String title = titleField.getText().trim();
-            if (!title.isEmpty()) {
-                threads.add(new ThreadInfo(title, true));
-                updateThreadList();
-                dialog.dispose();
-            } else {
-                JOptionPane.showMessageDialog(dialog,
-                    "스레드 제목을 입력해주세요.",
-                    "입력 오류",
-                    JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-        cancelButton.addActionListener(e -> dialog.dispose());
-
-        buttonPanel.add(cancelButton);
-        buttonPanel.add(createButton);
-
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-        mainPanel.add(titleField, BorderLayout.CENTER);
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        dialog.add(mainPanel);
+        var dialog = new ThreadCreateDialog(client, this);
         dialog.setVisible(true);
     }
 
     private void showThreadList() {
-        if (threadListDialog == null) {
-            threadListDialog = new JDialog(this, "스레드 목록", false);
-            threadListDialog.setSize(300, 400);
-            threadListDialog.setLocationRelativeTo(this);
-
-            JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-            threadPanel = new JPanel();
-            threadPanel.setLayout(new BoxLayout(threadPanel, BoxLayout.Y_AXIS));
-            updateThreadList();
-
-            JScrollPane scrollPane = new JScrollPane(threadPanel);
-            mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-            threadListDialog.add(mainPanel);
-        }
+        threadListDialog = new ThreadListDialog(client, this);
         threadListDialog.setVisible(true);
-    }
-
-    private void updateThreadList() {
-        if (threadPanel == null) return;
-        
-        threadPanel.removeAll();
-        
-        // 열린 스레드
-        JLabel openLabel = new JLabel("📂 [열린 스레드]");
-        openLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-        threadPanel.add(openLabel);
-        threadPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        
-        for (ThreadInfo thread : threads) {
-            if (thread.isOpen) {
-                JPanel threadItem = new JPanel(new BorderLayout());
-                threadItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                
-                JLabel titleLabel = new JLabel("📎 " + thread.title);
-                titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-                
-                JPopupMenu popupMenu = new JPopupMenu();
-                JMenuItem closeItem = new JMenuItem("스레드 닫기");
-                closeItem.addActionListener(e -> {
-                    thread.isOpen = false;
-                    updateThreadList();
-                });
-                popupMenu.add(closeItem);
-                
-                threadItem.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        if (SwingUtilities.isRightMouseButton(e)) {
-                            popupMenu.show(threadItem, e.getX(), e.getY());
-                        }
-                    }
-                });
-                
-                threadItem.add(titleLabel, BorderLayout.WEST);
-                threadPanel.add(threadItem);
-                threadPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-            }
-        }
-        
-        threadPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        
-        // 닫힌 스레드
-        JLabel closedLabel = new JLabel("📂 [닫힌 스레드]");
-        closedLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-        threadPanel.add(closedLabel);
-        threadPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        
-        for (ThreadInfo thread : threads) {
-            if (!thread.isOpen) {
-                JPanel threadItem = new JPanel(new BorderLayout());
-                threadItem.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-                
-                JLabel titleLabel = new JLabel("📎 " + thread.title);
-                titleLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-                titleLabel.setForeground(Color.GRAY);
-                
-                threadItem.add(titleLabel, BorderLayout.WEST);
-                threadPanel.add(threadItem);
-                threadPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-            }
-        }
-        
-        threadPanel.revalidate();
-        threadPanel.repaint();
     }
 
     @Override
@@ -498,8 +268,19 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void onChatMessage(Message message) {
+        addMessage(message);
     }
 
+    private void fetchAndStoreMembers() {
+        controller.getMemberList(
+                new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                    @Override
+                    protected void execute(SChatroomMemberListPacket data) { setMembers(data.getMembers()); }
+                }
+        );
+    }
+
+    @Deprecated
     private static class ThreadInfo {
         String title;
         boolean isOpen;
@@ -509,20 +290,45 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
             this.isOpen = isOpen;
         }
     }
+}
 
-    private void fetchAndStoreMembers() {
-        CChatroomController ctrl = new CChatroomController(client);
-        ctrl.requestMemberList(
-                chatroom.getChatroomId(),
-                new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
-                    @Override
-                    protected void execute(SChatroomMemberListPacket data) {
-                        // Server에서 넘어온 멤버 ID 목록을 바로 this.members에 저장
-                        List<String> memberList = data.getMembers();
-                        members = (memberList != null) ? memberList : new ArrayList<>();
 
-                    }
-                }
-        );
-    }
-} 
+//// 메시지 패널 생성
+//JPanel messagePanel = new JPanel(new BorderLayout());
+//            messagePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+//
+//// 메시지 내용
+//JLabel messageLabel = new JLabel(sender + ": " + message);
+//            messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//
+//// 북마크 버튼
+//JButton bookmarkButton = new JButton("📌");
+//            bookmarkButton.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//        bookmarkButton.setBorderPainted(false);
+//            bookmarkButton.setContentAreaFilled(false);
+//            bookmarkButton.setFocusPainted(false);
+//            bookmarkButton.setVisible(false);
+//
+//// 마우스 이벤트 처리
+//            messagePanel.addMouseListener(new MouseAdapter() {
+//    @Override
+//    public void mouseEntered(MouseEvent e) {
+//        bookmarkButton.setVisible(true);
+//    }
+//
+//    @Override
+//    public void mouseExited(MouseEvent e) {
+//        if (!bookmarkButton.getBounds().contains(e.getPoint())) {
+//            bookmarkButton.setVisible(false);
+//        }
+//    }
+//});
+//
+//        bookmarkButton.addActionListener(e -> {
+//SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+//String timestamp = sdf.format(new Date());
+//                new ChatMemoPopup(GroupChatScreen.this, message, timestamp).setVisible(true);
+//            });
+//
+//                    messagePanel.add(messageLabel, BorderLayout.WEST);
+//            messagePanel.add(bookmarkButton, BorderLayout.EAST);

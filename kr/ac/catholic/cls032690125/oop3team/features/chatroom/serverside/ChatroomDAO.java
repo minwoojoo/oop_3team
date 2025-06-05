@@ -156,9 +156,9 @@ public class ChatroomDAO extends StandardDAO {
      * @param chatroomId 대상 채팅방 ID
      * @return 해당 방의 참가자 user_id 목록 (없으면 빈 리스트)
      */
-    public List<String> getMemberList(int chatroomId) throws SQLException {
+    public ArrayList<String> getMemberList(int chatroomId) throws SQLException {
         String sql = "SELECT user_id FROM chatroom_participant WHERE chatroom_id = ?";
-        List<String> members = new ArrayList<>();
+        ArrayList<String> members = new ArrayList<>();
 
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

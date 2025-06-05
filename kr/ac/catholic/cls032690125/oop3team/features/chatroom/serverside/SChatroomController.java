@@ -23,15 +23,9 @@ public class SChatroomController extends ServerRequestListener {
     @ServerRequestHandler(CChatroomMemberListPacket.class)
     public void loadMemberList(ServerClientHandler sch, CChatroomMemberListPacket packet) {
         int roomId = packet.getChatroomId();
-        try {
-            List<String> members = chatroomDAO.getMemberList(roomId);
-            // 정상 조회된 member 목록을 그대로 응답 패킷에 담아 전송
-            sch.send(new SChatroomMemberListPacket(roomId, members));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // 예외 발생 시 빈 리스트로 응답하거나, 오류 메시지를 담은 별도 필드를 추가할 수도 있음
-            sch.send(new SChatroomMemberListPacket(roomId, Collections.emptyList()));
-        }
+        ArrayList<String> members = getMemberList(roomId);
+        // 정상 조회된 member 목록을 그대로 응답 패킷에 담아 전송
+        sch.send(new SChatroomMemberListPacket(roomId, members));
     }
 
     @ServerRequestHandler(CChatroomListLoadPacket.class)
@@ -59,9 +53,13 @@ public class SChatroomController extends ServerRequestListener {
      * @param chatroomId 채팅방 id
      * @return 채팅방 맴버의 user id
      */
-    public String[] getMemberList(int chatroomId) {
-        //TODO: IMPL IT
-        return null;
+    public ArrayList<String> getMemberList(int chatroomId) {
+        try{
+            return chatroomDAO.getMemberList(chatroomId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 

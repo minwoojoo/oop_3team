@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS MESSAGES (
     content TEXT
 );
 
--- CHATROOMS 테이블 생성
+-- CHATROOM 테이블 생성
 CREATE TABLE IF NOT EXISTS CHATROOM (
     chatroom_id   INT           AUTO_INCREMENT PRIMARY KEY,
     parentroom_id INT           DEFAULT NULL,

@@ -7,6 +7,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatro
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateGroupChatScreen extends JFrame {
-    private List<JCheckBox> friendCheckBoxes;
-    private List<String> friendNames;
+
     private Client client;
-    private CChatroomController cChatroomController;
+    private CChatroomController chatroomsController;
+    private CFriendController friendController;
+
+    private List<UserProfile> friendList;
+    private List<JCheckBox> friendCheckBoxes;
+    private JPanel friendListPanel;
+    private void addFriendList(UserProfile userProfile) {
+        JCheckBox checkBox = new JCheckBox(userProfile.getName());
+        checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        friendCheckBoxes.add(checkBox);
+        friendListPanel.add(checkBox);
+    }
 
     public CreateGroupChatScreen(Client client) {
         this.client = client;
-        cChatroomController = new CChatroomController(client);
+        chatroomsController = new CChatroomController(client);
 
         setTitle("그룹 대화방 생성");
         setSize(400, 500);
@@ -29,10 +41,7 @@ public class CreateGroupChatScreen extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // MainScreen의 친구 이름 리스트 사용
-
-        friendNames = MainScreen.friendNames;
         friendCheckBoxes = new ArrayList<>();
-
         JPanel mainPanel = new JPanel(new BorderLayout());
         
         // 상단 앱명 표시
@@ -42,15 +51,8 @@ public class CreateGroupChatScreen extends JFrame {
         mainPanel.add(appTitle, BorderLayout.NORTH);
 
         // 친구 선택 영역
-        JPanel friendListPanel = new JPanel();
+        friendListPanel = new JPanel();
         friendListPanel.setLayout(new BoxLayout(friendListPanel, BoxLayout.Y_AXIS));
-        
-        for (String name : friendNames) {
-            JCheckBox checkBox = new JCheckBox(name);
-            checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-            friendCheckBoxes.add(checkBox);
-            friendListPanel.add(checkBox);
-        }
 
         JScrollPane scrollPane = new JScrollPane(friendListPanel);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -86,7 +88,7 @@ public class CreateGroupChatScreen extends JFrame {
                     // 채팅방 생성 및 입장
                     List<String> participants = getSelectedFriends();
 
-                    cChatroomController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                    chatroomsController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
                         @Override
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
@@ -106,9 +108,26 @@ public class CreateGroupChatScreen extends JFrame {
         List<String> selectedFriends = new ArrayList<>();
         for (int i = 0; i < friendCheckBoxes.size(); i++) {
             if (friendCheckBoxes.get(i).isSelected()) {
-                selectedFriends.add(friendNames.get(i));
+                selectedFriends.add(friendList.get(i).getUserId());
             }
         }
         return selectedFriends;
+    }
+
+    private void initiate() {
+        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                for(var d : data.getData()){
+                    CreateGroupChatScreen.this.addFriendList(d);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if(b) initiate();
     }
 } 

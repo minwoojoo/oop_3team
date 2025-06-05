@@ -32,7 +32,7 @@ public class SChatController extends ServerRequestListener {
             msg = new Message(newid, msg.getChatroomId(), msg.getSenderId(), msg.getContent(), msg.isSystem(), msg.getSent());
             server.broadcast(
                     new SMessageBroadcastPacket(msg),
-                    List.of(server.getChatroomController().getMemberList(msg.getChatroomId()))
+                    server.getChatroomController().getMemberList(msg.getChatroomId())
             );
             sch.send(new ServerResponsePacketSimplefied<>(packet.getRequestId(), true));
         } catch (Exception e) {

@@ -2,13 +2,15 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared;
 
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SChatroomMemberListPacket extends ServerResponseBasePacket {
     private int chatroomId;
-    private List<String> members;
+    // List는 Serializeable하지 않습니다.
+    private ArrayList<String> members;
 
-    public SChatroomMemberListPacket(int chatroomId, List<String> members) {
+    public SChatroomMemberListPacket(int chatroomId, ArrayList<String> members) {
         this.chatroomId = chatroomId;
         this.members = members;
     }
@@ -21,11 +23,11 @@ public class SChatroomMemberListPacket extends ServerResponseBasePacket {
         this.chatroomId = chatroomId;
     }
 
-    public List<String> getMembers() {
+    public ArrayList<String> getMembers() {
         return members;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(ArrayList<String> members) {
         this.members = members;
     }
 }
