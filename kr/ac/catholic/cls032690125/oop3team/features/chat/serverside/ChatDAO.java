@@ -34,13 +34,13 @@ public class ChatDAO extends StandardDAO {
     }
 
     public Message[] loadMessages(int chatroomId, long refPoint, int period){
-        String sqlup = "SELECT * FROM (SELECT * FROM messages WHERE chatroom_id = ? AND message_id < ? ORDER BY message_id DESC LIMIT ?) ORCER BY message_id ASC";
+        String sqlup = "SELECT * FROM (SELECT * FROM messages WHERE chatroom_id = ? AND message_id < ? ORDER BY message_id DESC LIMIT ?) AS up ORDER BY message_id ASC";
         String sqldown = "SELECT * FROM messages WHERE chatroom_id = ? AND message_id > ? ORDER BY message_id ASC LIMIT ?";
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(period < 0 ? sqlup : sqldown)) {
             pstmt.setInt(1, chatroomId);
             pstmt.setLong(2, refPoint == 0 ? (period < 0 ? Long.MAX_VALUE-1 : 0) : refPoint);
-            pstmt.setInt(3, period);
+            pstmt.setInt(3, Math.abs(period));
             ResultSet rs = pstmt.executeQuery();
             List<Message> messages = new ArrayList<>();
             while (rs.next()) {
@@ -53,7 +53,8 @@ public class ChatDAO extends StandardDAO {
                         rs.getTimestamp("sent").toLocalDateTime()
                 ));
             }
-            return (Message[]) messages.toArray();
+            //return (Message[]) messages.toArray();
+            return messages.toArray(new Message[0]);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

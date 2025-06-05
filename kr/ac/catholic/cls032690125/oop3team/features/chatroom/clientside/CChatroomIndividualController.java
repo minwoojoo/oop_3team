@@ -7,6 +7,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.chat.clientside.CChatContro
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.CMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.ChatScreenBase;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadListPacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.models.MessageBuilder;
@@ -19,6 +21,7 @@ public final class CChatroomIndividualController extends StandardClientControl {
     private ChatScreenBase screen;
 
     private CChatController chatcon;
+    private CChatroomController chatroomController;
 
     public Chatroom getChatroom() { return chatroom; }
     public ChatScreenBase getScreen() { return screen; }
@@ -29,6 +32,7 @@ public final class CChatroomIndividualController extends StandardClientControl {
         this.screen = screen;
 
         this.chatcon = new CChatController(client);
+        this.chatroomController = new CChatroomController(client);
     }
 
     public void messageReceived(Message message) {
@@ -55,5 +59,13 @@ public final class CChatroomIndividualController extends StandardClientControl {
 
     public void loadMessages(long refPoint, int period, ClientInteractResponse<SMessageLoadPacket> callback) {
         client.request(new CMessageLoadPacket(chatroom.getChatroomId(), refPoint, period), callback);
+    }
+
+    public void getMemberList(ClientInteractResponse<SChatroomMemberListPacket> callback) {
+        chatroomController.requestMemberList(chatroom.getChatroomId(), callback);
+    }
+
+    public void getThread(int parentId, boolean isOpened,ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        chatroomController.requestThreadRoomList(parentId, isOpened, callback);
     }
 }

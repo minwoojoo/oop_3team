@@ -18,21 +18,29 @@ public class ChatroomDAO extends StandardDAO {
     /**
      * 새 대화방을 생성하고, 생성된 Chatroom 객체를 리턴합니다. 실패 시 null 리턴.
      */
-    public Chatroom createChatroom(String title, String ownerId) throws SQLException {
-        String sql = "INSERT INTO chatrooms (title, parentroom_id, closed, is_private) " +
-                "VALUES (?, 0, FALSE, FALSE)";
+    public Chatroom createChatroom(String title, String ownerId, Integer parentRoomId) throws SQLException {
+        String sql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) " +
+                "VALUES (?, ?, FALSE, FALSE)";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, title);
+
+            if (parentRoomId != null) {
+                ps.setInt(2, parentRoomId);
+            } else {
+                ps.setNull(2, java.sql.Types.INTEGER);
+            }
+
             int affected = ps.executeUpdate();
             if (affected == 0) {
                 return null;
             }
 
             // 생성된 방 ID를 받아온다
+            int newId;
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int newId = rs.getInt(1);
+                    newId = rs.getInt(1);
                     // 방 생성 시각은 DB의 default CURRENT_TIMESTAMP로 채워졌으니, 다시 한 번 조회해서 Chatroom 객체를 완성한다.
                     return findById(newId);
                 } else {
@@ -91,32 +99,128 @@ public class ChatroomDAO extends StandardDAO {
         return list.toArray(new Chatroom[0]);
     }
 
-    public boolean createChatroomWithParticipants(String title, String ownerId, List<String> userIds) throws SQLException {
-        Chatroom chatroom = createChatroom(title, ownerId);
-        if (chatroom != null) {
-            return insertParticipants(chatroom.getChatroomId(), userIds);
+    public Chatroom createChatroomWithParticipants(String title, String ownerId, List<String> participants, Integer parentRoomId) throws SQLException {
+        String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) " +
+                "VALUES (?, ?, FALSE, FALSE)";
+        try (Connection conn = database.getConnection();
+             PreparedStatement psRoom = conn.prepareStatement(roomSql, Statement.RETURN_GENERATED_KEYS)) {
+
+            psRoom.setString(1, title);
+            if (parentRoomId != null) {
+                psRoom.setInt(2, parentRoomId);
+            } else {
+                psRoom.setNull(2, Types.INTEGER);
+            }
+
+            int affected = psRoom.executeUpdate();
+            if (affected == 0) {
+                return null;
+            }
+
+            // 2) 방 생성 후, 생성된 chatroom_id를 꺼낸다
+            int newChatroomId;
+            try (ResultSet rs = psRoom.getGeneratedKeys()) {
+                if (rs.next()) {
+                    newChatroomId = rs.getInt(1);
+                } else {
+                    return null;
+                }
+            }
+
+            // 3) CHATROOM_PARTICIPANT 테이블에 방장(ownerId) 추가
+            insertParticipants(conn, newChatroomId, ownerId);
+
+            // 4) participants 리스트(초대된 친구들)가 있으면 순회하면서 삽입
+            if (participants != null) {
+                for (String userId : participants) {
+                    insertParticipants(conn, newChatroomId, userId);
+                }
+            }
+
+            // 5) 완성된 Chatroom 정보를 DB에서 다시 조회하여 객체로 만들어 반환
+            return findById(newChatroomId);
         }
-        return false;
     }
 
-    public boolean insertParticipants(int chatroomId, List<String> userIds) throws SQLException {
-        String sql = "INSERT INTO CHATROOM_PARTICIPANT (chatroom_id, user_id) VALUES (?,?)";
+    private void insertParticipants(Connection conn,int chatroomId, String userId) throws SQLException {
+        String sql = "INSERT INTO chatroom_participant(chatroom_id, user_id) VALUES(?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            ps.setString(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * 특정 chatroomId에 속한 모든 user_id를 String 리스트로 반환.
+     * @param chatroomId 대상 채팅방 ID
+     * @return 해당 방의 참가자 user_id 목록 (없으면 빈 리스트)
+     */
+    public ArrayList<String> getMemberList(int chatroomId) throws SQLException {
+        String sql = "SELECT user_id FROM chatroom_participant WHERE chatroom_id = ?";
+        ArrayList<String> members = new ArrayList<>();
 
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            for (String userId : userIds) {
-                ps.setInt(1, chatroomId);       // chatroom_id는 INT
-                ps.setString(2, userId);        // user_id는 VARCHAR (String)
-                ps.addBatch();
+            ps.setInt(1, chatroomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    members.add(rs.getString("user_id"));
+                }
             }
+        }
 
-            ps.executeBatch();
-            return true;
+        return members;
+    }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    /**
+     * parentroom_id가 특정 값인 모든 스레드(하위 채팅방)를 조회하여 Chatroom 리스트로 반환
+     */
+    public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isOpened) throws SQLException {
+        String sql = "SELECT chatroom_id, parentroom_id,closed, title, created_at " +
+                "FROM chatroom " +
+                "WHERE parentroom_id = ? " +
+                "WHERE closed = ? " +
+                "ORDER BY created_at DESC";
+
+        ArrayList<Chatroom> threads = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, parentId);
+            ps.setBoolean(2, isOpened);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int chatId = rs.getInt("chatroom_id");
+                    Integer prId = rs.getObject("parentroom_id") == null
+                            ? null
+                            : rs.getInt("parentroom_id");
+                    String title = rs.getString("title");
+                    LocalDateTime created = rs.getTimestamp("created_at").toLocalDateTime();
+
+                    Chatroom c = new Chatroom();
+                    c.setChatroomId(chatId);
+                    c.setParentroomId(prId);
+                    c.setTitle(title);
+                    c.setCreated(created);
+                    c.setClosed(isOpened);
+
+                    threads.add(c);
+                }
+            }
+        }
+
+        return threads;
+    }
+
+    public int closeChatroom(int chatroomId) throws SQLException {
+        String sql = "UPDATE chatroom SET closed = TRUE WHERE chatroom_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            return ps.executeUpdate();
         }
     }
+
 }

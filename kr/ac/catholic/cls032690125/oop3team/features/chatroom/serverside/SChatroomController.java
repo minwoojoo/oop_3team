@@ -8,6 +8,9 @@ import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class SChatroomController extends ServerRequestListener {
     private final ChatroomDAO chatroomDAO;
@@ -19,6 +22,10 @@ public class SChatroomController extends ServerRequestListener {
 
     @ServerRequestHandler(CChatroomMemberListPacket.class)
     public void loadMemberList(ServerClientHandler sch, CChatroomMemberListPacket packet) {
+        int roomId = packet.getChatroomId();
+        ArrayList<String> members = getMemberList(roomId);
+        // 정상 조회된 member 목록을 그대로 응답 패킷에 담아 전송
+        sch.send(new SChatroomMemberListPacket(roomId, members));
     }
 
     @ServerRequestHandler(CChatroomListLoadPacket.class)
@@ -46,9 +53,13 @@ public class SChatroomController extends ServerRequestListener {
      * @param chatroomId 채팅방 id
      * @return 채팅방 맴버의 user id
      */
-    public String[] getMemberList(int chatroomId) {
-        //TODO: IMPL IT
-        return null;
+    public ArrayList<String> getMemberList(int chatroomId) {
+        try{
+            return chatroomDAO.getMemberList(chatroomId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 
@@ -62,8 +73,10 @@ public class SChatroomController extends ServerRequestListener {
     public void createChatroom(ServerClientHandler sch, CChatroomCreatePacket packet) {
         String title = packet.getTitle();
         String ownerId = packet.getOwnerId();
+        Integer parentRoomId = packet.getParentRoomId();
+        List<String> participants = packet.getParticipants();
         try {
-            Chatroom newRoom = chatroomDAO.createChatroom(title, ownerId);
+            Chatroom newRoom = chatroomDAO.createChatroomWithParticipants(title, ownerId, participants, parentRoomId);
             if (newRoom == null) {
                 // DB 삽입 실패
                 sch.send(new SChatroomCreatePacket(
@@ -88,4 +101,22 @@ public class SChatroomController extends ServerRequestListener {
             ));
         }
     }
+
+    @ServerRequestHandler(CChatroomThreadListPacket.class)
+    public void getThreadList(ServerClientHandler sch, CChatroomThreadListPacket packet) throws SQLException {
+        int parentId = packet.getParentId();
+        boolean isOpened = packet.getIsOpened();
+
+        ArrayList<Chatroom> threadsByParentId = chatroomDAO.findThreadsByParentId(parentId, isOpened);
+        sch.send(new SChatroomThreadListPacket(threadsByParentId));
+    }
+
+    @ServerRequestHandler(CChatroomThreadClosePacket.class)
+    public void closeThread(ServerClientHandler sch, CChatroomThreadClosePacket packet) throws SQLException {
+        int threadId = packet.getThreadId();
+        int chatroomId = chatroomDAO.closeChatroom(threadId);
+
+        sch.send(new SChatroomThreadClosePacket(chatroomId));
+    }
+
 }
