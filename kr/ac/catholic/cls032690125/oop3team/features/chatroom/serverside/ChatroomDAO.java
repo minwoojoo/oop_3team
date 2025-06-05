@@ -142,7 +142,7 @@ public class ChatroomDAO extends StandardDAO {
         }
     }
 
-    private void insertParticipants(Connection conn,int chatroomId, String userId) throws SQLException {
+    public void insertParticipants(Connection conn, int chatroomId, String userId) throws SQLException {
         String sql = "INSERT INTO chatroom_participant(chatroom_id, user_id) VALUES(?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, chatroomId);

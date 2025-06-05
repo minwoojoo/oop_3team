@@ -4,6 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomInvitePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
@@ -20,9 +21,11 @@ public class GroupChatFriendInviteDialog extends JDialog {
     private GroupChatScreen screen;
 
     private JPanel friendListPanel;
+    private List<UserProfile> friendList = new ArrayList<>();
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private void addFriends(UserProfile userProfile) {
         if(screen.getMembers().contains(userProfile.getUserId())) return;
+        friendList.add(userProfile);
         JCheckBox checkBox = new JCheckBox(userProfile.getName());
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         checkBoxes.add(checkBox);
@@ -52,19 +55,24 @@ public class GroupChatFriendInviteDialog extends JDialog {
         // 초대 버튼
         JButton inviteButton = new JButton("초대");
         inviteButton.addActionListener(e -> {
-            //TODO
             boolean invited = false;
-            for (JCheckBox checkBox : checkBoxes) {
-                if (checkBox.isSelected()) {
-                    String friendName = checkBox.getText();
-                    members.add(friendName);
-                    chatArea.append("[시스템] " + friendName + "님이 초대되었습니다.\n");
+            ArrayList<String> invs = new ArrayList<>();
+            for (int i = 0; i < checkBoxes.size(); i++) {
+                var ckb = checkBoxes.get(i);
+                if (ckb.isSelected()) {
+                    String friendName = friendList.get(i).getUserId();
+                    invs.add(friendName);
                     invited = true;
                 }
             }
 
             if (invited) {
-                dispose();
+                controller.inviteMember(new CChatroomInvitePacket(controller.getChatroom().getChatroomId(), invs), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        GroupChatFriendInviteDialog.this.dispose();
+                    }
+                });
             } else {
                 JOptionPane.showMessageDialog(this,
                         "초대할 친구를 선택해주세요.",
