@@ -81,4 +81,16 @@ public class CFriendController extends StandardClientControl {
             });
         } catch (Exception e) { e.printStackTrace(); }
     }
+
+    public void blockFriend(String userId, String friendId, ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>> response) {
+        try {
+            client.request(new CFriendBlockReq(userId, friendId), response);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public void deleteFriend(String userId, String friendId, ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>> response) {
+        try {
+            client.request(new CFriendDeleteReq(userId, friendId), response);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
 }

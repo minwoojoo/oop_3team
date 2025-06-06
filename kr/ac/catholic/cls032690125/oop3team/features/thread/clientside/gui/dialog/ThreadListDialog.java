@@ -2,7 +2,10 @@ package kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dial
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadClosePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadListPacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
@@ -12,10 +15,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ThreadListDialog extends JDialog {
-    private Client client;
-    private GroupChatScreen groupChatScreen;
+    private  Client client;
+    private  GroupChatScreen groupChatScreen;
+    private  CChatroomController cChatroomController;
 
     private JPanel threadPanel;
+    private Chatroom parentRoom;
+    private int parentId;
+
     private void addThreadOpenedHeader() {
         JLabel openLabel = new JLabel("📂 [열린 스레드]");
         openLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
@@ -33,7 +40,12 @@ public class ThreadListDialog extends JDialog {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem closeItem = new JMenuItem("스레드 닫기");
         closeItem.addActionListener(e -> {
-            //TODO
+            cChatroomController.requestThreadRoomClose(chatroom.getChatroomId(), new ClientInteractResponseSwing<SChatroomThreadClosePacket>() {
+                @Override
+                protected void execute(SChatroomThreadClosePacket data) {
+                    System.out.println("스레드 닫음, 스레드 ID: " + data.getThreadId());
+                }
+            });
         });
         popupMenu.add(closeItem);
 
@@ -76,6 +88,7 @@ public class ThreadListDialog extends JDialog {
         super(screen, "스레드 목록", false);
         this.client = client;
         this.groupChatScreen = screen;
+        this.cChatroomController = new CChatroomController(client);
 
         setSize(300, 400);
         setLocationRelativeTo(this);
@@ -101,14 +114,29 @@ public class ThreadListDialog extends JDialog {
     }
 
     private void initiate() {
-        groupChatScreen.getController().getThread(new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Chatroom[]>>() {
+        this.parentRoom = groupChatScreen.getChatroom();
+        parentId = parentRoom.getChatroomId();
+
+        // 열린 스레드 목록 조회
+        groupChatScreen.getController().getThread(parentId, false, new ClientInteractResponseSwing<SChatroomThreadListPacket>() {
             @Override
-            protected void execute(ServerResponsePacketSimplefied<Chatroom[]> data) {
+            protected void execute(SChatroomThreadListPacket data) {
                 addThreadOpenedHeader();
-                for(var d : data.getData()) addThreadOpened(d);
-                addThreadClosedHeader();
-                for(var d : data.getData()) addThreadClosed(d);
+                for(var d : data.getThread()) addThreadOpened(d);
             }
         });
+
+        //닫힌 스레드 목록 조회 (변수명 실수 입니다;)
+
+        groupChatScreen.getController().getThread(parentId, true, new ClientInteractResponseSwing<SChatroomThreadListPacket>() {
+            @Override
+            protected void execute(SChatroomThreadListPacket data) {
+                addThreadClosedHeader();
+                for(var d : data.getThread()) addThreadClosed(d);
+            }
+        });
+
+
+
     }
 }

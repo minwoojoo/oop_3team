@@ -51,6 +51,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private CChatroomIndividualController controller;
     public CChatroomIndividualController getController() { return controller; }
     private CChatroomController chatroomsControl;
+    private List<ThreadInfo> threads = new ArrayList<>();
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
@@ -284,11 +285,21 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private static class ThreadInfo {
         String title;
         boolean isOpen;
+        Chatroom newThreadRoom;
 
-        public ThreadInfo(String title, boolean isOpen) {
+        public ThreadInfo(String title, boolean isOpen, Chatroom newThreadRoom) {
             this.title = title;
             this.isOpen = isOpen;
+            this.newThreadRoom = newThreadRoom;
         }
+    }
+
+    public Chatroom getChatroom() {
+        return chatroom;
+    }
+
+    public void addNewThread(Chatroom newThreadRoom, String threadTitle) {
+        threads.add(new ThreadInfo(threadTitle, true, newThreadRoom));
     }
 }
 

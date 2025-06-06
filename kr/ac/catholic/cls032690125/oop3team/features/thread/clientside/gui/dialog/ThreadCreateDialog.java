@@ -1,17 +1,24 @@
 package kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThreadCreateDialog extends JDialog {
     private Client client;
     private GroupChatScreen screen;
     private CChatroomIndividualController controller;
+    private CChatroomController cChatroomController;
 
     public ThreadCreateDialog(Client client, GroupChatScreen screen) {
         super(screen, "새 스레드 만들기", true);
@@ -19,6 +26,7 @@ public class ThreadCreateDialog extends JDialog {
         this.client = client;
         this.screen = screen;
         this.controller = screen.getController();
+        this.cChatroomController = new CChatroomController(client);
 
         setSize(300, 150);
         setLocationRelativeTo(this);
@@ -36,7 +44,7 @@ public class ThreadCreateDialog extends JDialog {
         createButton.addActionListener(e -> {
             String title = titleField.getText().trim();
             if (!title.isEmpty()) {
-                //TODO: CREATE THREAD
+                create(title);
             } else {
                 JOptionPane.showMessageDialog(this,
                         "스레드 제목을 입력해주세요.",
@@ -57,7 +65,22 @@ public class ThreadCreateDialog extends JDialog {
         add(mainPanel);
     }
 
-    private void create() {
-        //TODO
+    private void create(String title) {
+        ArrayList<String> participants = new ArrayList<>(screen.getMembers());
+
+        String ownerId = client.getCurrentSession().getUserId();
+
+        Integer parentId = screen.getChatroom().getChatroomId();
+
+        CChatroomCreatePacket cChatroomCreatePacket = new CChatroomCreatePacket(title, ownerId, participants, parentId);
+        cChatroomController.sendCreateChatroom(cChatroomCreatePacket, new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+            @Override
+            protected void execute(SChatroomCreatePacket data) {
+                Chatroom newThreadRoom = data.getRoom();
+                if (newThreadRoom != null) {
+                    screen.addNewThread(newThreadRoom, title);
+                }
+            }
+        });
     }
 }

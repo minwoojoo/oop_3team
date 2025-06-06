@@ -173,4 +173,54 @@ public class ChatroomDAO extends StandardDAO {
 
         return members;
     }
+
+    /**
+     * parentroom_id가 특정 값인 모든 스레드(하위 채팅방)를 조회하여 Chatroom 리스트로 반환
+     */
+    public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isOpened) throws SQLException {
+        String sql = "SELECT chatroom_id, parentroom_id,closed, title, created_at " +
+                "FROM chatroom " +
+                "WHERE parentroom_id = ? " +
+                "WHERE closed = ? " +
+                "ORDER BY created_at DESC";
+
+        ArrayList<Chatroom> threads = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, parentId);
+            ps.setBoolean(2, isOpened);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int chatId = rs.getInt("chatroom_id");
+                    Integer prId = rs.getObject("parentroom_id") == null
+                            ? null
+                            : rs.getInt("parentroom_id");
+                    String title = rs.getString("title");
+                    LocalDateTime created = rs.getTimestamp("created_at").toLocalDateTime();
+
+                    Chatroom c = new Chatroom();
+                    c.setChatroomId(chatId);
+                    c.setParentroomId(prId);
+                    c.setTitle(title);
+                    c.setCreated(created);
+                    c.setClosed(isOpened);
+
+                    threads.add(c);
+                }
+            }
+        }
+
+        return threads;
+    }
+
+    public int closeChatroom(int chatroomId) throws SQLException {
+        String sql = "UPDATE chatroom SET closed = TRUE WHERE chatroom_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            return ps.executeUpdate();
+        }
+    }
+
 }
