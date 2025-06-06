@@ -31,7 +31,7 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private Client client;
     private CChatroomIndividualController controller;
 
-    public PrivateChatScreen(Client client, Chatroom chatroom, Friend opposite) {
+    public PrivateChatScreen(Client client, Chatroom chatroom, UserProfile friend) {
         this.client = client;
         controller = new CChatroomIndividualController(client, chatroom, this);
 

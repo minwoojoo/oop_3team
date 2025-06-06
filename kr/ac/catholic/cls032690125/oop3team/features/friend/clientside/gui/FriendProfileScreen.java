@@ -2,6 +2,12 @@ package kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.PrivateChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
@@ -11,13 +17,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class FriendProfileScreen extends JFrame {
-    private final Client client;
-    private final String myUserId;
-    private final UserProfile friend;
-    private final MainScreen mainScreen;
-    private final CFriendController friendController;
+    private Client client;
+    private String myUserId;
+    private UserProfile friend;
+    private MainScreen mainScreen;
+    private CFriendController friendController;
+    private CChatroomController cChatroomController;
+
 
     public FriendProfileScreen(Client client, String myUserId, UserProfile friend, MainScreen mainScreen) {
         this.client = client;
@@ -25,6 +34,7 @@ public class FriendProfileScreen extends JFrame {
         this.friend = friend;
         this.mainScreen = mainScreen;
         this.friendController = new CFriendController(client);
+        this.cChatroomController = new CChatroomController(client);
 
         setTitle(friend.getName() + "님의 프로필");
         setSize(400, 300);
@@ -93,7 +103,7 @@ public class FriendProfileScreen extends JFrame {
 
         chatButton.addActionListener(e -> {
             // TODO: 1:1 채팅 기능 구현
-            JOptionPane.showMessageDialog(this, "1:1 채팅 기능은 아직 구현되지 않았습니다.");
+            onPrivateChatButtonClick();
         });
 
         deleteButton.addActionListener(e -> {
@@ -166,5 +176,21 @@ public class FriendProfileScreen extends JFrame {
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(mainPanel);
+    }
+
+    private void onPrivateChatButtonClick() {
+        ArrayList<String> participants = new ArrayList<>();
+        participants.add(friend.getUserId());
+
+        cChatroomController.sendCreateChatroom(new CChatroomCreatePacket("1대1 대화방", myUserId, participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+            @Override
+            protected void execute(SChatroomCreatePacket data) {
+                PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, data.getRoom(), friend);
+                privateChatScreen.setVisible(true);
+                privateChatScreen.initiate();
+                FriendProfileScreen.this.dispose();
+            }
+        });
+
     }
 } 
