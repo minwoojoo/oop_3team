@@ -1,27 +1,21 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
-import kr.ac.catholic.cls032690125.oop3team.models.Session;
-import kr.ac.catholic.cls032690125.oop3team.server.Server;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.*;
 
 import javax.swing.*;
 import java.awt.*;
-
-import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class AttendanceEditScreen extends JFrame {
-    private String userId;
-    private Server server;
-    private AttendanceDAO attendanceDAO;
+    private final String userId;
+    private final Client client;
 
-    public AttendanceEditScreen(JFrame parent, Client client, Server server) {
+    public AttendanceEditScreen(JFrame parent, Client client) {
+        this.client = client;
         this.userId = client.getCurrentSession().getUserId();
-        this.server = server;
-        this.attendanceDAO = new AttendanceDAO(server);
 
         setTitle("출퇴근 기록 수정 요청");
         setSize(400, 300);
@@ -34,9 +28,6 @@ public class AttendanceEditScreen extends JFrame {
         // 날짜 선택 패널
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel dateLabel = new JLabel("수정할 날짜: ");
-//        JComboBox<String> dateComboBox = new JComboBox<>(new String[]{
-//                "2024-03-20", "2024-03-19", "2024-03-18"
-//        });
         SpinnerDateModel dateModel = new SpinnerDateModel();
         JSpinner dateSpinner = new JSpinner(dateModel);
         dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
@@ -46,17 +37,11 @@ public class AttendanceEditScreen extends JFrame {
 
         // 수정 내용 패널
         JPanel editPanel = new JPanel(new GridLayout(3, 2, 5, 5));
-
         JLabel checkInLabel = new JLabel("출근 시간 (HH:mm): ");
         JTextField checkInField = new JTextField("09:00");
-//        JTextField checkInField = new JTextField();
-//        checkInField.setText("09:00");
-
 
         JLabel checkOutLabel = new JLabel("퇴근 시간 (HH:mm): ");
         JTextField checkOutField = new JTextField("18:00");
-//        JTextField checkOutField = new JTextField();
-//        checkOutField.setText("18:00");
 
         JLabel reasonLabel = new JLabel("수정 사유: ");
         JTextArea reasonArea = new JTextArea(3, 20);
@@ -77,6 +62,7 @@ public class AttendanceEditScreen extends JFrame {
         JButton submitButton = new JButton("요청 제출");
         JButton cancelButton = new JButton("취소");
 
+        // 제출 버튼 이벤트 처리
         submitButton.addActionListener(e -> {
             Date selectedDate = (Date) dateSpinner.getValue();
             String date = new SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
@@ -85,34 +71,54 @@ public class AttendanceEditScreen extends JFrame {
             String reason = reasonArea.getText().trim();
 
             if (reason.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "수정 사유를 입력해주세요.",
-                        "입력 오류", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "수정 사유를 입력해주세요.", "입력 오류", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            try {
-                if (!attendanceDAO.hasAttendanceOnDate(userId, date)) {
-                    JOptionPane.showMessageDialog(this,
-                            "선택한 날짜에 출근 기록이 없습니다. 요청을 제출할 수 없습니다.",
-                            "오류", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                attendanceDAO.submitEditRequest(userId, date, checkIn, checkOut, reason);
-                JOptionPane.showMessageDialog(this,
-                        "수정 요청이 제출되었습니다.\n날짜: " + date + "\n출근: " + checkIn + "\n퇴근: " + checkOut,
-                        "요청 완료", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-            } catch (DateTimeParseException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "시간 형식이 잘못되었습니다. 예: 09:00",
-                        "시간 오류", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "요청 저장 중 오류가 발생했습니다:\n" + ex.getMessage(),
-                        "DB 오류", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
+            if (!isValidTimeFormat(checkIn) || !isValidTimeFormat(checkOut)) {
+                JOptionPane.showMessageDialog(this, "시간 형식이 올바르지 않습니다. (예: 09:00)", "시간 오류", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+
+            // 1. 서버에 해당 날짜의 출퇴근 기록이 존재하는지 확인
+            client.request(new CCheckIfAlreadyCheckedInRequest(userId, date), response -> {
+                if (response instanceof SCheckIfAlreadyCheckedInResponse res) {
+                    SwingUtilities.invokeLater(() -> {
+                        if (!res.isSuccess()) {
+                            JOptionPane.showMessageDialog(this, "서버 오류: 출근 기록 확인 실패", "오류", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        if (!res.isAlreadyCheckedIn()) {
+                            JOptionPane.showMessageDialog(this, "해당 날짜에 출퇴근 기록이 없습니다. 수정 요청 불가.", "오류", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+
+                        // 2. 요청 생성 및 전송
+                        long requestId = System.currentTimeMillis();
+                        CSubmitEditAttendanceRequest packet = new CSubmitEditAttendanceRequest(
+                                requestId, userId, date, checkIn, checkOut, reason
+                        );
+
+                        client.request(packet, r -> {
+                            if (r instanceof SSubmitEditAttendanceResponse editRes) {
+                                SwingUtilities.invokeLater(() -> {
+                                    if (editRes.isSuccess()) {
+                                        JOptionPane.showMessageDialog(this,
+                                                "수정 요청이 제출되었습니다.\n날짜: " + date +
+                                                        "\n출근: " + checkIn + "\n퇴근: " + checkOut,
+                                                "요청 완료",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                        dispose();
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, "요청 실패: " + editRes.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+            });
         });
 
         cancelButton.addActionListener(e -> dispose());
@@ -122,5 +128,16 @@ public class AttendanceEditScreen extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+    }
+
+    private boolean isValidTimeFormat(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            sdf.setLenient(false);
+            sdf.parse(time);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

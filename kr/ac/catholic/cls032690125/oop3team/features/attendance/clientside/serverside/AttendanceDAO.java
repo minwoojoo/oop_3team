@@ -4,10 +4,8 @@ import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,12 +82,21 @@ public class AttendanceDAO extends StandardDAO {
     public boolean hasAttendanceOnDate(String userId, String date) throws SQLException {
         String sql = """
         SELECT COUNT(*) FROM attendance 
-        WHERE user_id = ? AND DATE(check_in_time) = ?
+        WHERE user_id = ? 
+          AND check_in_time >= ? 
+          AND check_in_time < ?
     """;
+
+        LocalDate localDate = LocalDate.parse(date);  // Ensure "yyyy-MM-dd" format
+        Timestamp startOfDay = Timestamp.valueOf(localDate.atStartOfDay());
+        Timestamp startOfNextDay = Timestamp.valueOf(localDate.plusDays(1).atStartOfDay());
+
         try (Connection conn = database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, userId);
-            stmt.setDate(2, java.sql.Date.valueOf(date));
+            stmt.setTimestamp(2, startOfDay);
+            stmt.setTimestamp(3, startOfNextDay);
+
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1) > 0;
@@ -97,6 +104,7 @@ public class AttendanceDAO extends StandardDAO {
         }
         return false;
     }
+
 
 
     public void submitEditRequest(String userId, String date, String checkIn, String checkOut, String reason)

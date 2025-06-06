@@ -1,5 +1,12 @@
 package kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendInviteRes;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -10,15 +17,18 @@ public class AddFriendScreen extends JFrame {
     private JTextField searchField;
     private JPanel resultPanel;
     private List<String> friendNames;
+    private String userId;
+    private Client client;
 
-    public AddFriendScreen() {
+    public AddFriendScreen(String userId, Client client) {
         setTitle("친구 추가");
         setSize(400, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // 랜덤 친구 이름 생성
-        friendNames = generateRandomFriendNames();
+        this.userId = userId;
+        this.client = client;
+
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         
@@ -34,8 +44,19 @@ public class AddFriendScreen extends JFrame {
         searchField.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         JButton searchButton = new JButton("검색");
         
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        searchPanel.add(searchButton, BorderLayout.EAST);
+        // 안내 메시지 추가
+        JLabel guideLabel = new JLabel("친구의 아이디를 입력해주세요");
+        guideLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+        guideLabel.setForeground(Color.BLACK);
+        guideLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        JPanel searchContainer = new JPanel(new BorderLayout());
+        searchContainer.add(searchField, BorderLayout.CENTER);
+        searchContainer.add(searchButton, BorderLayout.EAST);
+        
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.add(searchContainer);
+        searchPanel.add(guideLabel);
 
         mainPanel.add(searchPanel, BorderLayout.NORTH);
 
@@ -46,56 +67,50 @@ public class AddFriendScreen extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         // 검색 버튼 이벤트 처리
-        searchButton.addActionListener(e -> searchFriends());
-        searchField.addActionListener(e -> searchFriends());
+        searchButton.addActionListener(e -> {
+            String search = searchField.getText().trim();
+            if (search.isEmpty()) return;
+            
+
+            CFriendController friendController = new CFriendController(client);
+            friendController.searchFriendForInvite(search, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                    System.out.println("서버에서 받은 데이터: " + (data.getData() == null ? "null" : data.getData().length));
+                    resultPanel.removeAll();
+                    if (data.getData() != null && data.getData().length > 0) {
+                        for (UserProfile user : data.getData()) {
+                            System.out.println("userId: " + user.getUserId() + ", name: " + user.getName());
+                            JPanel friendPanel = new JPanel(new BorderLayout());
+                            JLabel nameLabel = new JLabel(user.getName() + " (" + user.getUserId() + ")");
+                            JButton addButton = new JButton("➕ 추가");
+                            friendPanel.add(nameLabel, BorderLayout.CENTER);
+                            friendPanel.add(addButton, BorderLayout.EAST);
+
+                            addButton.addActionListener(ev -> {
+                                // 친구 추가 로직
+                                friendController.inviteFriend(userId, user.getUserId(), new ClientInteractResponseSwing<SFriendInviteRes>() {
+                                    @Override
+                                    protected void execute(SFriendInviteRes data) {
+                                        JOptionPane.showMessageDialog(AddFriendScreen.this, data.getMessage());
+                                        if (data.isSuccess()) {
+                                            dispose();
+                                        }
+                                    }
+                                });
+                            });
+
+                            resultPanel.add(friendPanel);
+                        }
+                    } else {
+                        resultPanel.add(new JLabel("검색 결과가 없습니다."));
+                    }
+                    resultPanel.revalidate();
+                    resultPanel.repaint();
+                }
+            });
+        });
 
         add(mainPanel);
-    }
-
-    private void searchFriends() {
-        String searchText = searchField.getText().toLowerCase();
-        resultPanel.removeAll();
-
-        for (String name : friendNames) {
-            if (name.toLowerCase().contains(searchText)) {
-                JPanel friendPanel = new JPanel(new BorderLayout());
-                friendPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-                JLabel nameLabel = new JLabel(name);
-                nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-
-                JButton addButton = new JButton("➕ 추가");
-
-                friendPanel.add(nameLabel, BorderLayout.CENTER);
-                friendPanel.add(addButton, BorderLayout.EAST);
-
-                addButton.addActionListener(e -> {
-                    JOptionPane.showMessageDialog(this, 
-                        name + "님을 친구로 추가했습니다.", 
-                        "친구 추가", 
-                        JOptionPane.INFORMATION_MESSAGE);
-                });
-
-                resultPanel.add(friendPanel);
-            }
-        }
-
-        resultPanel.revalidate();
-        resultPanel.repaint();
-    }
-
-    private List<String> generateRandomFriendNames() {
-        List<String> names = new ArrayList<>();
-        String[] firstNames = {"김", "이", "박", "최", "정", "강", "조", "윤", "장", "임"};
-        String[] lastNames = {"민준", "서연", "지우", "서준", "하은", "도윤", "시윤", "지아", "하준", "지민"};
-        
-        Random random = new Random();
-        for (int i = 0; i < 20; i++) {
-            String name = firstNames[random.nextInt(firstNames.length)] + 
-                         lastNames[random.nextInt(lastNames.length)];
-            names.add(name);
-        }
-        
-        return names;
     }
 } 
