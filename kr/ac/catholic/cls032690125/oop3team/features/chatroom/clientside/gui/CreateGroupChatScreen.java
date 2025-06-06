@@ -29,6 +29,7 @@ public class CreateGroupChatScreen extends JFrame {
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         friendCheckBoxes.add(checkBox);
         friendListPanel.add(checkBox);
+        repaint();
     }
 
     public CreateGroupChatScreen(Client client) {
@@ -121,6 +122,7 @@ public class CreateGroupChatScreen extends JFrame {
                 for(var d : data.getData()){
                     CreateGroupChatScreen.this.addFriendList(d);
                 }
+                repaint();
             }
         });
     }

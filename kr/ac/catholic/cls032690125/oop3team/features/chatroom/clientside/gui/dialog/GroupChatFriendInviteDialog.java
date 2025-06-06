@@ -95,6 +95,7 @@ public class GroupChatFriendInviteDialog extends JDialog {
                 for(var f : data.getData()) {
                     addFriends(f);
                 }
+                repaint();
             }
         });
     }
