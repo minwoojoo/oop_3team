@@ -1,12 +1,16 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside;
 
+import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageBroadcastPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
+import kr.ac.catholic.cls032690125.oop3team.models.MessageBuilder;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,6 +106,32 @@ public class SChatroomController extends ServerRequestListener {
         }
     }
 
+    @ServerRequestHandler(CChatroomInvitePacket.class)
+    public void inviteUser(ServerClientHandler sch, CChatroomInvitePacket packet) {
+        try (Connection conn = server.getDatabase().getConnection()) {
+            for(var s : packet.getParticipants()) {
+                try {
+                    chatroomDAO.insertParticipants(conn, packet.getChatroomId(), s);
+                    server.getChatController().broadcastMessage(
+                            new MessageBuilder()
+                                    .setChatroomId(packet.getChatroomId())
+                                    .setContent("")
+                                    .setSystem(true)
+                                    .setSenderId(sch.getSession().getUserId())
+                                    .setCurrentTime()
+                                    .build()
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            sch.send(new ServerResponsePacketSimplefied<>(packet.getRequestId(), true));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new ServerResponsePacketSimplefied<>(packet.getRequestId(), false));
+        }
+    }
+
     @ServerRequestHandler(CChatroomThreadListPacket.class)
     public void getThreadList(ServerClientHandler sch, CChatroomThreadListPacket packet) throws SQLException {
         int parentId = packet.getParentId();
@@ -118,5 +148,4 @@ public class SChatroomController extends ServerRequestListener {
 
         sch.send(new SChatroomThreadClosePacket(chatroomId));
     }
-
 }

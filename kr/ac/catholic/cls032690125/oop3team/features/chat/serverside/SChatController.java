@@ -27,13 +27,7 @@ public class SChatController extends ServerRequestListener {
         try{
             // insert
             var msg = packet.getMessage();
-            long newid = chatDAO.insertMessage(msg);
-            if(newid == -1) throw new Exception("DB FAILURE");
-            msg = new Message(newid, msg.getChatroomId(), msg.getSenderId(), msg.getContent(), msg.isSystem(), msg.getSent());
-            server.broadcast(
-                    new SMessageBroadcastPacket(msg),
-                    server.getChatroomController().getMemberList(msg.getChatroomId())
-            );
+            broadcastMessage(msg);
             sch.send(new ServerResponsePacketSimplefied<>(packet.getRequestId(), true));
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,5 +48,16 @@ public class SChatController extends ServerRequestListener {
             e.printStackTrace();
             sch.send(new SMessageLoadPacket(packet.getRequestId(), null));
         }
+    }
+
+    public void broadcastMessage(Message msg) throws Exception {
+        // insert
+        long newid = chatDAO.insertMessage(msg);
+        if(newid == -1) throw new Exception("DB FAILURE");
+        msg = new Message(newid, msg.getChatroomId(), msg.getSenderId(), msg.getContent(), msg.isSystem(), msg.getSent());
+        server.broadcast(
+                new SMessageBroadcastPacket(msg),
+                server.getChatroomController().getMemberList(msg.getChatroomId())
+        );
     }
 }
