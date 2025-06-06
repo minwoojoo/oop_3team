@@ -3,6 +3,13 @@ package kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.CSettingController;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SWorkStatusUpdateRes;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SWorkStatusGetRes;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUserNameGetRes;
+
 
 public class ProfileScreen extends JFrame {
     private JTextField nameField;
@@ -11,9 +18,14 @@ public class ProfileScreen extends JFrame {
     private String[] profileImages = {
         "일톡스"
     };
+    private final Client client;
+    private final String userId;
+    private CSettingController settingController;
 
-    public ProfileScreen(JFrame parent) {
-        setTitle("프로필 설정");
+    public ProfileScreen(JFrame parent, Client client, String userId) {
+        super("프로필 설정");
+        this.client = client;
+        this.userId = userId;
         setSize(400, 500);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -32,10 +44,11 @@ public class ProfileScreen extends JFrame {
         JPanel infoPanel = new JPanel(new GridLayout(2, 2, 5, 5));
         
         JLabel nameLabel = new JLabel("이름:");
-        nameField = new JTextField("홍길동");
+        nameField = new JTextField();
+        nameField.setEditable(false); // 이름은 수정 불가능하도록 설정
         
         JLabel statusLabel = new JLabel("상태 메시지:");
-        statusArea = new JTextArea("오늘도 행복한 하루!");
+        statusArea = new JTextArea();
         statusArea.setLineWrap(true);
         JScrollPane statusScroll = new JScrollPane(statusArea);
 
@@ -52,19 +65,23 @@ public class ProfileScreen extends JFrame {
         JButton cancelButton = new JButton("취소");
 
         saveButton.addActionListener(e -> {
-            String name = nameField.getText();
-            String status = statusArea.getText();
+            String workStatus = statusArea.getText();
 
-            if (name.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "이름을 입력해주세요.", 
-                    "입력 오류", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            System.out.println("업무상태 변경 요청: " + workStatus);
 
-            // 프로필 저장 처리
-            JOptionPane.showMessageDialog(this, "프로필이 저장되었습니다.", 
-                "저장 완료", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            // 업무상태 변경 요청
+            settingController.updateWorkStatus(userId, workStatus, new ClientInteractResponseSwing<SWorkStatusUpdateRes>() {
+                @Override
+                protected void execute(SWorkStatusUpdateRes res) {
+                    if (res.isSuccess()) {
+                        JOptionPane.showMessageDialog(ProfileScreen.this, "업무 상태가 변경되었습니다.", "저장 완료", JOptionPane.INFORMATION_MESSAGE);
+                        // 필요하다면 메인화면 등 다른 화면도 갱신
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(ProfileScreen.this, "업무 상태 변경에 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
         });
 
         cancelButton.addActionListener(e -> dispose());
@@ -74,5 +91,30 @@ public class ProfileScreen extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
+
+        // 컨트롤러 초기화
+        this.settingController = new CSettingController(client);
+
+        // 사용자 이름 조회
+        settingController.getUserName(userId, res -> {
+            String name = res.getData();
+            if (name != null) {
+                nameField.setText(name);
+            } else {
+                nameField.setText("이름을 불러올 수 없습니다.");
+            }
+        });
+
+        // 상태 메시지(work_status) 서버에서 조회해서 표시
+        settingController.getWorkStatus(userId, new ClientInteractResponseSwing<SWorkStatusGetRes>() {
+            @Override
+            protected void execute(SWorkStatusGetRes res) {
+                if (res.isSuccess()) {
+                    statusArea.setText(res.getWorkStatus());
+                } else {
+                    statusArea.setText("상태 메시지 없음");
+                }
+            }
+        });
     }
 } 

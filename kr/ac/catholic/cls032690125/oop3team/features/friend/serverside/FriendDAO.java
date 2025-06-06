@@ -31,7 +31,7 @@ public class FriendDAO {
     }
 
     public List<UserProfile> searchUser(String search) throws SQLException {
-        String sql = "SELECT user_id, name FROM user WHERE user_id = ?";
+        String sql = "SELECT user_id, name, is_online FROM user WHERE user_id = ?";
         List<UserProfile> result = new ArrayList<>();
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -40,7 +40,8 @@ public class FriendDAO {
                 while (rs.next()) {
                     String userId = rs.getString("user_id");
                     String name = rs.getString("name");
-                    result.add(new UserProfile(userId, name));
+                    boolean isActive = rs.getInt("is_online") == 1;
+                    result.add(new UserProfile(userId, name, isActive));
                 }
             }
         }
@@ -48,7 +49,7 @@ public class FriendDAO {
     }
 
     public List<UserProfile> getPendingFriendRequests(String myUserId) throws SQLException {
-        String sql = "SELECT user_id, (SELECT name FROM user WHERE user_id = friend.user_id) as name FROM friend WHERE friend_id = ? AND is_pending = 1";
+        String sql = "SELECT u.user_id, u.name, u.is_online FROM friend f JOIN user u ON f.user_id = u.user_id WHERE f.friend_id = ? AND f.is_pending = 1";
         List<UserProfile> result = new ArrayList<>();
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -57,7 +58,8 @@ public class FriendDAO {
                 while (rs.next()) {
                     String userId = rs.getString("user_id");
                     String name = rs.getString("name");
-                    result.add(new UserProfile(userId, name));
+                    boolean isActive = rs.getInt("is_online") == 1;
+                    result.add(new UserProfile(userId, name, isActive));
                 }
             }
         }
@@ -118,16 +120,20 @@ public class FriendDAO {
     }
 
     public List<UserProfile> getFriendList(String userId) throws SQLException {
-        String sql = "SELECT friend_id, (SELECT name FROM user WHERE user_id = friend.friend_id) as name FROM friend WHERE user_id = ? AND is_pending = 0";
+        String sql = "SELECT u.user_id, u.name, u.is_online, u.work_status " +
+                     "FROM user u JOIN friend f ON u.user_id = f.friend_id " +
+                     "WHERE f.user_id = ? AND f.is_pending = 0";
         List<UserProfile> result = new ArrayList<>();
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, userId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String friendId = rs.getString("friend_id");
+                    String friendId = rs.getString("user_id");
                     String name = rs.getString("name");
-                    result.add(new UserProfile(friendId, name));
+                    boolean isOnline = rs.getInt("is_online") == 1;
+                    String workStatus = rs.getString("work_status");
+                    result.add(new UserProfile(friendId, name, isOnline, workStatus));
                 }
             }
         }
@@ -135,13 +141,11 @@ public class FriendDAO {
     }
 
     public boolean blockFriend(String userId, String friendId) {
-        String sql = "UPDATE friend SET is_blocked = 1 WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
+        String sql = "UPDATE friend SET is_blocked = 1 WHERE user_id = ? AND friend_id = ?";
         try (Connection conn = database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, userId);
             pstmt.setString(2, friendId);
-            pstmt.setString(3, friendId);
-            pstmt.setString(4, userId);
             return pstmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
