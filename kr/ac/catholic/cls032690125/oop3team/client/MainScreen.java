@@ -44,6 +44,7 @@ public class MainScreen extends JFrame {
     private JPanel chatListPanel;
     private CFriendController cFriendController;
     private JPanel friendListPanel;
+    private List<UserProfile> friendProfiles = new ArrayList<>();
 
     public MainScreen(String userId, Client client) {
         this.userId = userId;
@@ -103,8 +104,10 @@ public class MainScreen extends JFrame {
                 System.out.println("friends = " + Arrays.toString(friends));
                 if (friends != null) {
                     friendNames.clear();
+                    friendProfiles.clear();
                     for (UserProfile friend : friends) {
                         friendNames.add(friend.getUserId());
+                        friendProfiles.add(friend);
                     }
                     updateFriendListUI(friendListPanel);
                 }
@@ -290,6 +293,7 @@ public class MainScreen extends JFrame {
                         if (result == JOptionPane.YES_OPTION) {
                             friendController.acceptFriendRequest(userId, requester.getUserId());
                             JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님을 친구로 추가했습니다.");
+                            refreshFriendList(); // 친구 목록 새로고침
                         } else {
                             friendController.rejectFriendRequest(userId, requester.getUserId());
                             JOptionPane.showMessageDialog(MainScreen.this, requester.getName() + "님의 친구 요청을 거절했습니다.");
@@ -352,7 +356,7 @@ public class MainScreen extends JFrame {
     private void updateFriendListUI(JPanel friendListPanel) {
         friendListPanel.removeAll(); // 기존 요소 삭제
 
-        for (int i = 0; i < friendNames.size(); i++) {
+        for (int i = 0; i < friendProfiles.size(); i++) {
             final int index = i;
             JPanel friendItemPanel = new JPanel(new BorderLayout());
             friendItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -361,7 +365,7 @@ public class MainScreen extends JFrame {
             statusDot.setForeground(new Random().nextBoolean() ? Color.GREEN : Color.GRAY);
 
             JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-            JLabel nameLabel = new JLabel(friendNames.get(index));
+            JLabel nameLabel = new JLabel(friendProfiles.get(index).getName());
             nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 
             JLabel statusLabel = new JLabel("상태 메시지 없음"); // 임시 메시지
@@ -376,7 +380,8 @@ public class MainScreen extends JFrame {
 
             friendItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    new FriendProfileScreen(friendNames.get(index), "상태 메시지 없음").setVisible(true);
+                    UserProfile friendProfile = friendProfiles.get(index);
+                    new FriendProfileScreen(client, userId, friendProfile, MainScreen.this).setVisible(true);
                 }
             });
 
@@ -387,6 +392,27 @@ public class MainScreen extends JFrame {
         friendListPanel.repaint();
     }
 
+    public void refreshFriendList() {
+        System.out.println("▶ MainScreen: getFriendList 호출 직전");
+        cFriendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> response) {
+                System.out.println("▶ MainScreen: execute 진입 → friends=" + Arrays.toString(response.getData()));
+
+                UserProfile[] friends = response.getData();
+                System.out.println("friends = " + Arrays.toString(friends));
+                if (friends != null) {
+                    friendNames.clear();
+                    friendProfiles.clear();
+                    for (UserProfile friend : friends) {
+                        friendNames.add(friend.getUserId());
+                        friendProfiles.add(friend);
+                    }
+                    updateFriendListUI(friendListPanel);
+                }
+            }
+        });
+    }
 
     /**private List<String> generateRandomLastMessages() {
         List<String> messages = new ArrayList<>();

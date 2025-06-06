@@ -135,4 +135,34 @@ public class SFriendController extends ServerRequestListener {
             sch.send(response);
         }
     }
+
+    @ServerRequestHandler(CFriendBlockReq.class)
+    public void handleFriendBlock(ServerClientHandler sch, CFriendBlockReq req) {
+        try {
+            boolean success = friendDAO.blockFriend(req.getUserId(), req.getFriendId());
+            ServerResponsePacketSimplefied<Boolean> response = 
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), success);
+            sch.send(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ServerResponsePacketSimplefied<Boolean> response = 
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), false);
+            sch.send(response);
+        }
+    }
+
+    @ServerRequestHandler(CFriendDeleteReq.class)
+    public void handleFriendDelete(ServerClientHandler sch, CFriendDeleteReq req) {
+        try {
+            boolean success = friendDAO.deleteFriend(req.getUserId(), req.getFriendId());
+            ServerResponsePacketSimplefied<Boolean> response = 
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), success);
+            sch.send(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ServerResponsePacketSimplefied<Boolean> response = 
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), false);
+            sch.send(response);
+        }
+    }
 }
