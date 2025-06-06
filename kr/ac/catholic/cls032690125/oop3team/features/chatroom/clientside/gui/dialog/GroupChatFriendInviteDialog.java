@@ -57,8 +57,13 @@ public class GroupChatFriendInviteDialog extends JDialog {
             for (JCheckBox checkBox : checkBoxes) {
                 if (checkBox.isSelected()) {
                     String friendName = checkBox.getText();
-                    members.add(friendName);
-                    chatArea.append("[시스템] " + friendName + "님이 초대되었습니다.\n");
+                    screen.getMembers().add(friendName);
+                    controller.sendMessage("[시스템] " + friendName + "님이 초대되었습니다.", new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                        @Override
+                        protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                            // 메시지 전송 결과는 무시
+                        }
+                    });
                     invited = true;
                 }
             }
