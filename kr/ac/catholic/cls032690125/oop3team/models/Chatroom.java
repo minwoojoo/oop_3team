@@ -2,6 +2,7 @@ package kr.ac.catholic.cls032690125.oop3team.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Chatroom implements Serializable {
     // 스레드일 경우 이곳에 스레드 id

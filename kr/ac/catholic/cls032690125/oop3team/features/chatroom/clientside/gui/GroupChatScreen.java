@@ -1,22 +1,24 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.gui.ChatMemoPopup;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
-import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,29 +36,17 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private List<ThreadInfo> threads = new ArrayList<>();
     private JPanel threadPanel;
     private JDialog threadListDialog;
-
-    private CChatroomIndividualController controller;
-
     private Client client;
-    private Server server;
+    private CChatroomIndividualController controller;
     private Chatroom chatroom;
-//
-//    public GroupChatScreen(
-//            String groupName, List<String> members){};
+    private Server server;
+
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
-        this(null, null, client, null, chatroom);
-    }
-
-
-    public GroupChatScreen(
-            String groupName, List<String> members,Client client, Server server,Chatroom chatroom) {
-        this.groupName = groupName != null ? groupName : chatroom.getTitle();
-        this.members = members != null ? members : new ArrayList<>();
+        this.groupName = chatroom.getTitle();
         this.client = client;
-        this.server = server;
         this.chatroom = chatroom;
-
+        this.server = server;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
         
         // 가짜 스레드 데이터 추가
@@ -126,11 +116,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 출퇴근 기록 메뉴 아이템
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
-            try {
-                new AttendanceScreen(this,client,server,chatroom).setVisible(true);
-            }catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            new AttendanceScreen(this,client,chatroom).setVisible(true);
         });
         
         // 일정 관련 메뉴 아이템
@@ -184,7 +170,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         JPanel scheduleBox = new JPanel(new BorderLayout(5, 5));
         scheduleBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         scheduleBox.setBackground(Color.WHITE);
-        
+
         //일정 데이터
         JLabel scheduleTitle = new JLabel("주간 회의");
         scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
@@ -241,7 +227,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         inputField.addActionListener(e -> sendMessage());
 
         // 샘플 메시지 추가
-        addRandomMessages();
+        //addRandomMessages();
 
         add(mainPanel);
     }
@@ -508,9 +494,19 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     @Override
+    public void initiate() {
+        client.getChatReceiver().registerChatroom(controller);
+        controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
+            @Override
+            protected void execute(SMessageLoadPacket data) {
+                //data에 이전 채팅 정보 담김
+            }
+        });
+        //TODO: 이전 채팅 불러오기, 스레드 , 메모, 맴버 불러오기 등
+    }
+
+    @Override
     public void onChatMessage(Message message) {
-        //TODO
-        // note: client.getChatReceiver.registerChatroom(this.controller)를 호출해야 메시지를 받을 수 있습니다
     }
 
     private static class ThreadInfo {

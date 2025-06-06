@@ -16,10 +16,10 @@ public class CChatReceiver extends ClientResponseListener {
 
     @ClientResponseHandler(SMessageBroadcastPacket.class)
     public void onMessageBroadcast(SMessageBroadcastPacket packet) {
-        var cid = packet.getMessage().getChatroomId();
+        var cid = packet.getMessageData().getChatroomId();
         for(var watch: watchlist) {
             if(cid == watch.getChatroom().getChatroomId())
-                watch.messageReceived(packet.getMessage());
+                watch.messageReceived(packet.getMessageData());
         }
     }
 

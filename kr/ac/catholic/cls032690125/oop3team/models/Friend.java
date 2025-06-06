@@ -7,6 +7,7 @@ public class Friend implements Serializable {
     private int key;
     private String userid;
     private String friendid;
+    /// 0: not blocked, 1: blocked by 'user', 2: blocked by 'friend', 3: blocked by both
     private byte blocked;
     private boolean pending;
     private LocalDateTime created;

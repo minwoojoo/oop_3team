@@ -7,6 +7,10 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.shared.SLoginResponse;
+import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 
 public class LoginScreen extends JFrame {
     private Client client;
@@ -69,7 +73,25 @@ public class LoginScreen extends JFrame {
                 protected void execute(SLoginResponse data) {
                     if(data.isSuccess()) {
                         JOptionPane.showMessageDialog(LoginScreen.this, "로그인 성공!");
-                        client.startMainScreen();
+                        
+                        // 친구목록 조회
+                        CFriendController friendController = new CFriendController(client);
+//                        friendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+//                            @Override
+//                            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+//                                if (data.getData() != null) {
+//                                    System.out.println("=== 친구목록 조회 결과 ===");
+//                                    for (UserProfile friend : data.getData()) {
+//                                        System.out.println("친구 ID: " + friend.getUserId() + ", 이름: " + friend.getName());
+//                                    }
+//                                    System.out.println("=====================");
+//                                } else {
+//                                    System.out.println("친구목록 조회 실패 또는 친구가 없습니다.");
+//                                }
+//                            }
+//                        });
+                        
+                        new MainScreen(userId, client).setVisible(true);
                         dispose();
                     } else {
                         JOptionPane.showMessageDialog(LoginScreen.this, "로그인 실패!");

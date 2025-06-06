@@ -1,27 +1,21 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
-import kr.ac.catholic.cls032690125.oop3team.models.Session;
-import kr.ac.catholic.cls032690125.oop3team.server.Server;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.CSubmitEditAttendanceRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.SSubmitEditAttendanceResponse;
 
 import javax.swing.*;
 import java.awt.*;
-
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class AttendanceEditScreen extends JFrame {
-    private String userId;
-    private Server server;
-    private AttendanceDAO attendanceDAO;
+    private final String userId;
+    private final Client client;
 
-    public AttendanceEditScreen(JFrame parent, Client client, Server server) {
+    public AttendanceEditScreen(JFrame parent, Client client) {
+        this.client = client;
         this.userId = client.getCurrentSession().getUserId();
-        this.server = server;
-        this.attendanceDAO = new AttendanceDAO(server);
 
         setTitle("출퇴근 기록 수정 요청");
         setSize(400, 300);
@@ -34,9 +28,6 @@ public class AttendanceEditScreen extends JFrame {
         // 날짜 선택 패널
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel dateLabel = new JLabel("수정할 날짜: ");
-//        JComboBox<String> dateComboBox = new JComboBox<>(new String[]{
-//                "2024-03-20", "2024-03-19", "2024-03-18"
-//        });
         SpinnerDateModel dateModel = new SpinnerDateModel();
         JSpinner dateSpinner = new JSpinner(dateModel);
         dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
@@ -49,14 +40,9 @@ public class AttendanceEditScreen extends JFrame {
 
         JLabel checkInLabel = new JLabel("출근 시간 (HH:mm): ");
         JTextField checkInField = new JTextField("09:00");
-//        JTextField checkInField = new JTextField();
-//        checkInField.setText("09:00");
-
 
         JLabel checkOutLabel = new JLabel("퇴근 시간 (HH:mm): ");
         JTextField checkOutField = new JTextField("18:00");
-//        JTextField checkOutField = new JTextField();
-//        checkOutField.setText("18:00");
 
         JLabel reasonLabel = new JLabel("수정 사유: ");
         JTextArea reasonArea = new JTextArea(3, 20);
@@ -77,7 +63,9 @@ public class AttendanceEditScreen extends JFrame {
         JButton submitButton = new JButton("요청 제출");
         JButton cancelButton = new JButton("취소");
 
+        // 제출 버튼 클릭 이벤트 처리
         submitButton.addActionListener(e -> {
+            // 선택한 날짜, 출근 시간, 퇴근 시간, 사유 읽기
             Date selectedDate = (Date) dateSpinner.getValue();
             String date = new SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
             String checkIn = checkInField.getText().trim();
@@ -85,36 +73,44 @@ public class AttendanceEditScreen extends JFrame {
             String reason = reasonArea.getText().trim();
 
             if (reason.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "수정 사유를 입력해주세요.",
-                        "입력 오류", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "수정 사유를 입력해주세요.",
+                        "입력 오류",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            try {
-                if (!attendanceDAO.hasAttendanceOnDate(userId, date)) {
-                    JOptionPane.showMessageDialog(this,
-                            "선택한 날짜에 출근 기록이 없습니다. 요청을 제출할 수 없습니다.",
-                            "오류", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            // 생성 요청 ID (유니크하게)
+            long requestId = System.currentTimeMillis();
 
-                attendanceDAO.submitEditRequest(userId, date, checkIn, checkOut, reason);
-                JOptionPane.showMessageDialog(this,
-                        "수정 요청이 제출되었습니다.\n날짜: " + date + "\n출근: " + checkIn + "\n퇴근: " + checkOut,
-                        "요청 완료", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-            } catch (DateTimeParseException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "시간 형식이 잘못되었습니다. 예: 09:00",
-                        "시간 오류", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "요청 저장 중 오류가 발생했습니다:\n" + ex.getMessage(),
-                        "DB 오류", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
+            // 서버에 제출 요청 패킷 생성
+            CSubmitEditAttendanceRequest packet = new CSubmitEditAttendanceRequest(
+                    requestId, userId, date, checkIn, checkOut, reason);
+
+            // client.request로 서버에 요청 전송 및 응답 처리
+            client.request(packet, response -> {
+                if (response instanceof SSubmitEditAttendanceResponse editResponse) {
+                    SwingUtilities.invokeLater(() -> {
+                        if (editResponse.isSuccess()) {
+                            JOptionPane.showMessageDialog(this,
+                                    "수정 요청이 제출되었습니다.\n날짜: " + date +
+                                            "\n출근: " + checkIn +
+                                            "\n퇴근: " + checkOut,
+                                    "요청 완료",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            dispose(); // 창 닫기
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                    "요청 실패: " + editResponse.getMessage(),
+                                    "오류",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+                }
+            });
         });
 
+        // 취소 버튼 - 창 닫기
         cancelButton.addActionListener(e -> dispose());
 
         buttonPanel.add(cancelButton);

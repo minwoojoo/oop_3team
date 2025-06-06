@@ -2,10 +2,16 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.SAttendanceController;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.UserProfileDAO;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.CUpdateUserProfileRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUpdateUserProfileResponse;
 import kr.ac.catholic.cls032690125.oop3team.models.User;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
@@ -31,9 +37,13 @@ public class Server {
     private final ServerAuthController authController;
     private final SChatController chatController;
     private final SChatroomController chatroomController;
+    private final SFriendController friendController;
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }
+    public SFriendController getFriendController() { return friendController; }
+
+    private final SAttendanceController attendanceController;
 
 
     /**
@@ -46,13 +56,17 @@ public class Server {
             this.properties = control;
             this.database = new Database(this);
 
-            authController = new ServerAuthController(this);
-            chatController = new SChatController(this);
-            chatroomController = new SChatroomController(this);
+            this.authController     = new ServerAuthController(this);
+            this.chatController     = new SChatController(this);
+            this.chatroomController = new SChatroomController(this);
+            this.friendController = new SFriendController(this);
+            this.attendanceController = new SAttendanceController(this);
 
             listeners.add(authController);
             listeners.add(chatController);
             listeners.add(chatroomController);
+            listeners.add(friendController);
+            listeners.add(attendanceController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }

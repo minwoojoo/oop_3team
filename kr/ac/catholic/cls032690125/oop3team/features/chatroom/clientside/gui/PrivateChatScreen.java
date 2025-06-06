@@ -2,6 +2,7 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
@@ -90,8 +91,19 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     }
 
     @Override
+    public void initiate() {
+        client.getChatReceiver().registerChatroom(controller);
+        controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
+            @Override
+            protected void execute(SMessageLoadPacket data) {
+                //data에 이전 채팅 정보 담김
+            }
+        });
+        //TODO: 이전 채팅 불러오기, 맴버 불러오기 등
+    }
+
+    @Override
     public void onChatMessage(Message message) {
-        //TODO
-        // note: client.getChatReceiver.registerChatroom(this.controller)를 호출해야 메시지를 받을 수 있습니다
+        // TODO: 이거는ㅃ 뿌리면 ㄷㅁ
     }
 }

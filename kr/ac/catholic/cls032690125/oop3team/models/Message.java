@@ -46,4 +46,28 @@ public class Message implements Serializable {
     public String getContent() {
         return content;
     }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
+    }
+
+    public void setChatroomId(int chatroomId) {
+        this.chatroomId = chatroomId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public void setSent(LocalDateTime sent) {
+        this.sent = sent;
+    }
+
+    public void setSystem(boolean system) {
+        isSystem = system;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

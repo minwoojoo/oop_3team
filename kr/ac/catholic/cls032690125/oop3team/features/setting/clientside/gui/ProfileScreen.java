@@ -1,5 +1,9 @@
 package kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.CUpdateUserProfileRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUpdateUserProfileResponse;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -9,10 +13,10 @@ public class ProfileScreen extends JFrame {
     private JTextArea statusArea;
     private JLabel profileImageLabel;
     private String[] profileImages = {
-        "일톡스"
+            "일톡스"
     };
 
-    public ProfileScreen(JFrame parent) {
+    public ProfileScreen(JFrame parent, Client client) {
         setTitle("프로필 설정");
         setSize(400, 500);
         setLocationRelativeTo(parent);
@@ -30,10 +34,10 @@ public class ProfileScreen extends JFrame {
 
         // 정보 입력 패널
         JPanel infoPanel = new JPanel(new GridLayout(2, 2, 5, 5));
-        
+
         JLabel nameLabel = new JLabel("이름:");
         nameField = new JTextField("홍길동");
-        
+
         JLabel statusLabel = new JLabel("상태 메시지:");
         statusArea = new JTextArea("오늘도 행복한 하루!");
         statusArea.setLineWrap(true);
@@ -56,15 +60,26 @@ public class ProfileScreen extends JFrame {
             String status = statusArea.getText();
 
             if (name.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "이름을 입력해주세요.", 
-                    "입력 오류", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "이름을 입력해주세요.",
+                        "입력 오류", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             // 프로필 저장 처리
-            JOptionPane.showMessageDialog(this, "프로필이 저장되었습니다.", 
-                "저장 완료", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            String userId = client.getCurrentSession().getUserId();
+            var packet = new CUpdateUserProfileRequest(userId, name, status);
+            client.request(packet, response -> {
+                if (response instanceof SUpdateUserProfileResponse res){
+                    if (res.isSuccess()){
+                        JOptionPane.showMessageDialog(this,"프로필이 저장되었습니다",
+                                "성공",JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(this,res.getMessage(),
+                                "실패",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
         });
 
         cancelButton.addActionListener(e -> dispose());

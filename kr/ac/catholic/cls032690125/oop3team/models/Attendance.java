@@ -1,8 +1,9 @@
 package kr.ac.catholic.cls032690125.oop3team.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Attendance {
+public class Attendance implements Serializable {
     private int id;
     private String userId;
     private Timestamp checkInTime;
