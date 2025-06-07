@@ -249,7 +249,7 @@ public class MainScreen extends JFrame {
         });
 
         createGroupButton.addActionListener(e -> {
-            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
+            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(cFriendController, client);
             createGroupScreen.setVisible(true);
         });
 

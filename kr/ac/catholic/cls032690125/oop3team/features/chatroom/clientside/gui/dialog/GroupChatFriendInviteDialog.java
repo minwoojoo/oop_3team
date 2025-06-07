@@ -52,13 +52,12 @@ public class GroupChatFriendInviteDialog extends JDialog {
         // 초대 버튼
         JButton inviteButton = new JButton("초대");
         inviteButton.addActionListener(e -> {
-            //TODO
             boolean invited = false;
             for (JCheckBox checkBox : checkBoxes) {
                 if (checkBox.isSelected()) {
-                    String friendName = checkBox.getText();
-                    screen.getMembers().add(friendName);
-                    controller.sendMessage("[시스템] " + friendName + "님이 초대되었습니다.", new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                    String userId = (String) checkBox.getClientProperty("userId");
+                    screen.getMembers().add(userId);
+                    controller.sendMessage("[시스템] " + userId + "님이 초대되었습니다.", new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                         @Override
                         protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
                             // 메시지 전송 결과는 무시
@@ -67,7 +66,6 @@ public class GroupChatFriendInviteDialog extends JDialog {
                     invited = true;
                 }
             }
-
             if (invited) {
                 dispose();
             } else {
@@ -80,6 +78,7 @@ public class GroupChatFriendInviteDialog extends JDialog {
 
         panel.add(inviteButton, BorderLayout.SOUTH);
         add(panel);
+        initiate();
     }
 
     @Override
@@ -89,12 +88,28 @@ public class GroupChatFriendInviteDialog extends JDialog {
     }
 
     private void initiate() {
-        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+        System.out.println("[초대 다이얼로그] initiate() 진입");
+        String userId = client.getCurrentSession() != null ? client.getCurrentSession().getUserId() : "null";
+        System.out.println("[초대 다이얼로그] userId: " + userId);
+        checkBoxes.clear();
+        friendListPanel.removeAll();
+        friendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                for(var f : data.getData()) {
-                    addFriends(f);
+                System.out.println("[초대 다이얼로그] 친구 목록 수신: " + (data.getData() == null ? "null" : data.getData().length));
+                for (var f : data.getData()) {
+                    System.out.println("[초대 다이얼로그] 친구: " + f.getName() + " / " + f.getUserId());
+                    if (screen.getMembers().contains(f.getUserId())) continue;
+                    JCheckBox checkBox = new JCheckBox(f.getName() + " (" + f.getUserId() + ")");
+                    checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+                    checkBox.putClientProperty("userId", f.getUserId());
+                    checkBoxes.add(checkBox);
+                    friendListPanel.add(checkBox);
                 }
+                SwingUtilities.invokeLater(() -> {
+                    friendListPanel.revalidate();
+                    friendListPanel.repaint();
+                });
             }
         });
     }

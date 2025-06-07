@@ -32,8 +32,13 @@ public class CreateGroupChatScreen extends JFrame {
     }
 
     public CreateGroupChatScreen(Client client) {
+        this(new CFriendController(client), client);
+    }
+
+    public CreateGroupChatScreen(CFriendController friendController, Client client) {
         this.client = client;
-        chatroomsController = new CChatroomController(client);
+        this.friendController = friendController;
+        this.chatroomsController = new CChatroomController(client);
 
         setTitle("그룹 대화방 생성");
         setSize(400, 500);
@@ -115,12 +120,16 @@ public class CreateGroupChatScreen extends JFrame {
     }
 
     private void initiate() {
+        friendList = new ArrayList<>();
         friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
                 for(var d : data.getData()){
+                    friendList.add(d);
                     CreateGroupChatScreen.this.addFriendList(d);
                 }
+                friendListPanel.revalidate();
+                friendListPanel.repaint();
             }
         });
     }
