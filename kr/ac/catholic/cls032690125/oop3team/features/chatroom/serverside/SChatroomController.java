@@ -162,4 +162,23 @@ public class SChatroomController extends ServerRequestListener {
             sch.send(new SPrivateChatRoomResponsePacket(packet.getRequestId(), null));
         }
     }
+
+    @ServerRequestHandler(CChatroomListLoadByUserPacket.class)
+    public void loadChatroomByUserIdList(ServerClientHandler sch, CChatroomListLoadByUserPacket packet) {
+        try {
+            Chatroom[] rooms = chatroomDAO.loadChatroomsByUser(packet.getUserId(), packet.isPrivate());
+            sch.send(new SChatroomListPacket(
+                    packet.getRequestId(),
+                    rooms,
+                    null
+            ));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new SChatroomListPacket(
+                    packet.getRequestId(),
+                    null,
+                    "방 목록을 불러오는 중 오류가 발생했습니다: " + e.getMessage()
+            ));
+        }
+    }
 }

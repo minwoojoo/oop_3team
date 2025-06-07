@@ -276,4 +276,40 @@ public class ChatroomDAO extends StandardDAO {
         }
     }
 
+    public Chatroom[] loadChatroomsByUser(String userId, boolean isPrivate) throws SQLException {
+        String sql = ""
+                + "SELECT c.* "
+                + "  FROM chatroom c "
+                + "  JOIN chatroom_participant cp "
+                + "    ON c.chatroom_id = cp.chatroom_id "
+                + " WHERE cp.user_id = ? "
+                + "   AND c.is_private = ? "
+                + "   AND c.parentroom_id IS NULL "
+                + " ORDER BY c.created_at DESC";
+        List<Chatroom> list = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ps.setBoolean(2, isPrivate);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Chatroom room = mapRowToChatroom(rs);
+                list.add(room);
+            }
+        }
+        return list.toArray(new Chatroom[0]);
+    }
+
+    private Chatroom mapRowToChatroom(ResultSet rs) throws SQLException {
+        Chatroom room = new Chatroom();
+        room.setChatroomId(rs.getInt("chatroom_id"));
+        room.setParentroomId(rs.getInt("parentroom_id"));
+        room.setClosed(rs.getBoolean("closed"));
+        room.setPrivate(rs.getBoolean("is_private"));
+        room.setTitle(rs.getString("title"));
+        room.setCreated(rs.getTimestamp("created_at").toLocalDateTime());
+        return room;
+    }
+
+
 }

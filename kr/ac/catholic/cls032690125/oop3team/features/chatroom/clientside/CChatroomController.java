@@ -44,4 +44,8 @@ public class CChatroomController extends StandardClientControl {
         CPrivateChatRoomRequestPacket cPrivateChatRoomRequestPacket = new CPrivateChatRoomRequestPacket(userAId, userBId);
         client.request(cPrivateChatRoomRequestPacket, callback);
     }
+
+    public void requestChatroomListByUserId(String userID, boolean isPrivate, ClientInteractResponse<SChatroomListPacket> callback) {
+        client.request(new CChatroomListLoadByUserPacket(userID, isPrivate), callback);
+    }
 }

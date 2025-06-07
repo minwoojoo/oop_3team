@@ -490,7 +490,7 @@ public class MainScreen extends JFrame {
     }
 
     private void loadGroupChat() {
-        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+        chatRoomController.requestChatroomListByUserId(userId, false, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
                 Chatroom[] rooms = data.getRooms();
