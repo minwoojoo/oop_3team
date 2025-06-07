@@ -22,6 +22,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GroupChatScreen extends JFrame implements ChatScreenBase {
@@ -38,9 +39,9 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     private List<Message> messages;
     private void addMessage(Message message) {
-        messages.add(message);
+        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+","+message.getSent().toString()+"] "+message.getContent()).append("\n");
+        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -219,7 +220,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
         // 이벤트 처리
         sendButton.addActionListener(e -> sendMessage());
-        //inputField.addActionListener(e -> sendMessage()); //TODO: WHAT IS THIS???
+        inputField.addActionListener(e -> sendMessage()); //TODO: WHAT IS THIS???
 
         add(mainPanel);
     }
@@ -255,13 +256,30 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if(b) initiate();
+    }
+
+    @Override
     public void initiate() {
+        System.out.println("initiate");
         client.getChatReceiver().registerChatroom(controller);
         fetchAndStoreMembers(); // 참가자 가져오기
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
-                //data에 이전 채팅 정보 담김
+                StringBuilder str = new StringBuilder();
+                var msgs = Arrays.asList(data.getMessages());
+                System.out.println(data.getMessages().length);
+                for(Message message : msgs) {
+                    System.out.println(message.getContent());
+                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+                }
+                //msgs.addAll(messages);
+                messages = msgs;
+                str.append(chatArea.getText());
+                chatArea.setText(str.toString());
             }
         });
         //TODO: 이전 채팅 불러오기, 스레드 , 메모, 맴버 불러오기 등

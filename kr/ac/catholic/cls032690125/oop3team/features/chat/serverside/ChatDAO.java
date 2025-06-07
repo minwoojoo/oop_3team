@@ -4,10 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +14,24 @@ public class ChatDAO extends StandardDAO {
     }
 
     public long insertMessage(Message message) {
-        String sql = "INSERT INTO MESSAGE (chatroom_id, sender_id, sent, is_system, content) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO MESSAGES (chatroom_id, sender_id, sent, is_system, content) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn  = database.getConnection();
-             PreparedStatement insertStmt = conn.prepareStatement(sql)) {
+             PreparedStatement insertStmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             insertStmt.setInt(1, message.getChatroomId());
             insertStmt.setString(2, message.getSenderId());
             insertStmt.setObject(3, message.getSent());
             insertStmt.setBoolean(4, message.isSystem());
             insertStmt.setString(5, message.getContent());
             insertStmt.executeUpdate();
-            return insertStmt.getGeneratedKeys().getLong(1);
+            long newId;
+            try (ResultSet rs = insertStmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    newId = rs.getLong(1);
+                    return newId;
+                } else {
+                    return -1;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;

@@ -4,6 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomInvitePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
@@ -20,9 +21,11 @@ public class GroupChatFriendInviteDialog extends JDialog {
     private GroupChatScreen screen;
 
     private JPanel friendListPanel;
+    private List<UserProfile> friendList = new ArrayList<>();
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private void addFriends(UserProfile userProfile) {
         if(screen.getMembers().contains(userProfile.getUserId())) return;
+        friendList.add(userProfile);
         JCheckBox checkBox = new JCheckBox(userProfile.getName());
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         checkBoxes.add(checkBox);
@@ -53,21 +56,23 @@ public class GroupChatFriendInviteDialog extends JDialog {
         JButton inviteButton = new JButton("초대");
         inviteButton.addActionListener(e -> {
             boolean invited = false;
-            for (JCheckBox checkBox : checkBoxes) {
-                if (checkBox.isSelected()) {
-                    String userId = (String) checkBox.getClientProperty("userId");
-                    screen.getMembers().add(userId);
-                    controller.sendMessage("[시스템] " + userId + "님이 초대되었습니다.", new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
-                        @Override
-                        protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
-                            // 메시지 전송 결과는 무시
-                        }
-                    });
+            ArrayList<String> invs = new ArrayList<>();
+            for (int i = 0; i < checkBoxes.size(); i++) {
+                var ckb = checkBoxes.get(i);
+                if (ckb.isSelected()) {
+                    String friendName = friendList.get(i).getUserId();
+                    invs.add(friendName);
                     invited = true;
                 }
             }
+
             if (invited) {
-                dispose();
+                controller.inviteMember(new CChatroomInvitePacket(controller.getChatroom().getChatroomId(), invs), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        GroupChatFriendInviteDialog.this.dispose();
+                    }
+                });
             } else {
                 JOptionPane.showMessageDialog(this,
                         "초대할 친구를 선택해주세요.",
@@ -88,28 +93,13 @@ public class GroupChatFriendInviteDialog extends JDialog {
     }
 
     private void initiate() {
-        System.out.println("[초대 다이얼로그] initiate() 진입");
-        String userId = client.getCurrentSession() != null ? client.getCurrentSession().getUserId() : "null";
-        System.out.println("[초대 다이얼로그] userId: " + userId);
-        checkBoxes.clear();
-        friendListPanel.removeAll();
-        friendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                System.out.println("[초대 다이얼로그] 친구 목록 수신: " + (data.getData() == null ? "null" : data.getData().length));
-                for (var f : data.getData()) {
-                    System.out.println("[초대 다이얼로그] 친구: " + f.getName() + " / " + f.getUserId());
-                    if (screen.getMembers().contains(f.getUserId())) continue;
-                    JCheckBox checkBox = new JCheckBox(f.getName() + " (" + f.getUserId() + ")");
-                    checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-                    checkBox.putClientProperty("userId", f.getUserId());
-                    checkBoxes.add(checkBox);
-                    friendListPanel.add(checkBox);
+                for(var f : data.getData()) {
+                    addFriends(f);
                 }
-                SwingUtilities.invokeLater(() -> {
-                    friendListPanel.revalidate();
-                    friendListPanel.repaint();
-                });
+                repaint();
             }
         });
     }
