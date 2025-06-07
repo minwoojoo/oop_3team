@@ -5,6 +5,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.ThreadChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
@@ -79,6 +80,10 @@ public class ThreadCreateDialog extends JDialog {
                 Chatroom newThreadRoom = data.getRoom();
                 if (newThreadRoom != null) {
                     screen.addNewThread(newThreadRoom, title);
+                    // 스레드 채팅방 화면 열기
+                    ThreadChatScreen threadScreen = new ThreadChatScreen(client, newThreadRoom, screen.getChatroom());
+                    threadScreen.setVisible(true);
+                    dispose(); // 다이얼로그 닫기
                 }
             }
         });

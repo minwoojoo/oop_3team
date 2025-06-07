@@ -16,10 +16,15 @@ public class CChatReceiver extends ClientResponseListener {
 
     @ClientResponseHandler(SMessageBroadcastPacket.class)
     public void onMessageBroadcast(SMessageBroadcastPacket packet) {
-        var cid = packet.getMessage().getChatroomId();
-        for(var watch: watchlist) {
-            if(cid == watch.getChatroom().getChatroomId())
-                watch.messageReceived(packet.getMessage());
+        try {
+            var cid = packet.getMessage().getChatroomId();
+            for(var watch: watchlist) {
+                if(cid == watch.getChatroom().getChatroomId())
+                    watch.messageReceived(packet.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("[CChatReceiver] 패킷 수신/핸들러 실행 중 예외 발생: " + e.getClass().getName() + " - " + e.getMessage());
         }
     }
 

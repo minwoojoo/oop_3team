@@ -31,8 +31,19 @@ public class CChatroomController extends StandardClientControl {
     }
 
     public void requestThreadRoomList(int parentId, boolean isOpened, ClientInteractResponse<SChatroomThreadListPacket> callback) {
-        CChatroomThreadListPacket cChatroomThreadListPacket = new CChatroomThreadListPacket(parentId, isOpened);
-        client.request(cChatroomThreadListPacket, callback);
+        try {
+            client.request(new CChatroomThreadListPacket(parentId, isOpened), response -> {
+                try {
+                    callback.run((SChatroomThreadListPacket) response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("[CChatroomController] SChatroomThreadListPacket 핸들러 실행 중 예외 발생: " + e.getClass().getName() + " - " + e.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("[CChatroomController] requestThreadRoomList 네트워크 예외: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     public void requestThreadRoomClose(int threadId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {

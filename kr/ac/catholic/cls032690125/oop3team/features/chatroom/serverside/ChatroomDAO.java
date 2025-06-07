@@ -66,7 +66,8 @@ public class ChatroomDAO extends StandardDAO {
                     room.setClosed(rs.getBoolean("closed"));
                     room.setPrivate(rs.getBoolean("is_private"));
                     room.setTitle(rs.getString("title"));
-                    room.setCreated(rs.getTimestamp("created_at").toLocalDateTime());
+                    LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
+                    room.setCreated(createdDateTime);
                     return room;
                 } else {
                     return null;
@@ -92,7 +93,8 @@ public class ChatroomDAO extends StandardDAO {
                 room.setClosed(rs.getBoolean("closed"));
                 room.setPrivate(rs.getBoolean("is_private"));
                 room.setTitle(rs.getString("title"));
-                room.setCreated(rs.getTimestamp("created_at").toLocalDateTime());
+                LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
+                room.setCreated(createdDateTime);
                 list.add(room);
             }
         }
@@ -180,8 +182,7 @@ public class ChatroomDAO extends StandardDAO {
     public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isOpened) throws SQLException {
         String sql = "SELECT chatroom_id, parentroom_id,closed, title, created_at " +
                 "FROM chatroom " +
-                "WHERE parentroom_id = ? " +
-                "WHERE closed = ? " +
+                "WHERE parentroom_id = ? AND closed = ? " +
                 "ORDER BY created_at DESC";
 
         ArrayList<Chatroom> threads = new ArrayList<>();
@@ -197,13 +198,13 @@ public class ChatroomDAO extends StandardDAO {
                             ? null
                             : rs.getInt("parentroom_id");
                     String title = rs.getString("title");
-                    LocalDateTime created = rs.getTimestamp("created_at").toLocalDateTime();
+                    LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
 
                     Chatroom c = new Chatroom();
                     c.setChatroomId(chatId);
                     c.setParentroomId(prId);
                     c.setTitle(title);
-                    c.setCreated(created);
+                    c.setCreated(createdDateTime);
                     c.setClosed(isOpened);
 
                     threads.add(c);

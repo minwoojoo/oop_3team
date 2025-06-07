@@ -69,7 +69,7 @@ public class SChatroomController extends ServerRequestListener {
 
     /**
      * 1) CChatroomCreatePacket을 받으면 호출됩니다.
-     * - 패킷에는 ‘title’과 ‘ownerId’가 들어 있습니다.
+     * - 패킷에는 'title'과 'ownerId'가 들어 있습니다.
      * 2) DAO를 통해 DB에 INSERT → 생성된 Chatroom 객체를 리턴받습니다.
      * 3) 성공 여부에 따라 SChatroomCreatePacket으로 결과를 클라이언트에 보냅니다.
      */
@@ -138,6 +138,7 @@ public class SChatroomController extends ServerRequestListener {
         boolean isOpened = packet.getIsOpened();
 
         ArrayList<Chatroom> threadsByParentId = chatroomDAO.findThreadsByParentId(parentId, isOpened);
+        System.out.println("조회된 스레드 개수: " + threadsByParentId.size());
         sch.send(new SChatroomThreadListPacket(threadsByParentId));
     }
 
