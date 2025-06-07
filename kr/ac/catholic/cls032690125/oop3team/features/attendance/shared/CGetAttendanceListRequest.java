@@ -1,8 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared;
+package kr.ac.catholic.cls032690125.oop3team.features.attendance.shared;
 
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
-
-import java.io.Serializable;
 
 public class CGetAttendanceListRequest extends ClientOrderBasePacket {
     private final String userId;
