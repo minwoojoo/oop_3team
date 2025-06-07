@@ -72,6 +72,12 @@ public class GroupChatFriendInviteDialog extends JDialog {
                 controller.inviteMember(new CChatroomInvitePacket(controller.getChatroom().getChatroomId(), invs), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                     @Override
                     protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        // 초대된 친구마다 시스템 메시지 추가
+                        for (String invitedUserId : invs) {
+                            String name = screen.getUserNameById(invitedUserId);
+                            screen.addSystemMessage(name + "님이 들어왔습니다");
+                        }
+                        screen.fetchAndStoreMembers(); // 멤버 목록 즉시 갱신
                         GroupChatFriendInviteDialog.this.dispose();
                     }
                 });

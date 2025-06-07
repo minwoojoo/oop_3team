@@ -9,6 +9,9 @@ import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.ChatDAO;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.SettingDAO;
+import kr.ac.catholic.cls032690125.oop3team.models.Message;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,6 +20,8 @@ import java.util.List;
 
 public class SChatroomController extends ServerRequestListener {
     private final ChatroomDAO chatroomDAO;
+    private final ChatDAO chatDAO = new ChatDAO(server);
+    private final SettingDAO settingDAO = new SettingDAO(server);
 
     public SChatroomController(Server client) {
         super(client);
@@ -79,7 +84,9 @@ public class SChatroomController extends ServerRequestListener {
         Integer parentRoomId = packet.getParentRoomId();
         List<String> participants = packet.getParticipants();
         try {
-            Chatroom newRoom = chatroomDAO.createChatroomWithParticipants(title, ownerId, participants, parentRoomId);
+            Chatroom newRoom = chatroomDAO.createChatroomWithParticipants(
+                title, ownerId, participants, parentRoomId, packet.getIsPrivate()
+            );
             if (newRoom == null) {
                 // DB 삽입 실패
                 sch.send(new SChatroomCreatePacket(
@@ -111,15 +118,20 @@ public class SChatroomController extends ServerRequestListener {
             for(var s : packet.getParticipants()) {
                 try {
                     chatroomDAO.insertParticipants(conn, packet.getChatroomId(), s);
-                    server.getChatController().broadcastMessage(
-                            new MessageBuilder()
-                                    .setChatroomId(packet.getChatroomId())
-                                    .setContent("")
-                                    .setSystem(true)
-                                    .setSenderId(sch.getSession().getUserId())
-                                    .setCurrentTime()
-                                    .build()
-                    );
+
+                    // 1. userId → 이름 변환
+                    String name = settingDAO.getUserName(s);
+                    // 2. 시스템 메시지 생성 및 저장
+                    Message systemMsg = new MessageBuilder()
+                        .setChatroomId(packet.getChatroomId())
+                        .setSenderId("system")
+                        .setContent(name + "님이 들어왔습니다")
+                        .setSystem(true)
+                        .setCurrentTime()
+                        .build();
+                    chatDAO.insertMessage(systemMsg);
+
+                    // (기존 broadcastMessage 등은 필요에 따라 유지)
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -171,6 +183,18 @@ public class SChatroomController extends ServerRequestListener {
         try {
             boolean result = chatroomDAO.removeParticipant(packet.getChatroomId(), packet.getUserId());
             if (result) {
+                // 1. userId → 이름 변환
+                String name = settingDAO.getUserName(packet.getUserId());
+                // 2. 시스템 메시지 생성 및 저장
+                Message systemMsg = new MessageBuilder()
+                    .setChatroomId(packet.getChatroomId())
+                    .setSenderId("system")
+                    .setContent(name + "님이 나갔습니다")
+                    .setSystem(true)
+                    .setCurrentTime()
+                    .build();
+                chatDAO.insertMessage(systemMsg);
+
                 sch.send(new SChatroomLeavePacket(true, "채팅방을 성공적으로 나갔습니다."));
             } else {
                 sch.send(new SChatroomLeavePacket(false, "채팅방 나가기에 실패했습니다."));

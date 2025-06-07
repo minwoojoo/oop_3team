@@ -101,9 +101,14 @@ public class ChatroomDAO extends StandardDAO {
         return list.toArray(new Chatroom[0]);
     }
 
-    public Chatroom createChatroomWithParticipants(String title, String ownerId, List<String> participants, Integer parentRoomId) throws SQLException {
-        String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private, leader_id) " +
-                "VALUES (?, ?, FALSE, FALSE, ?)";
+    public Chatroom createChatroomWithParticipants(
+        String title,
+        String ownerId,
+        List<String> participants,
+        Integer parentRoomId,
+        boolean isPrivate
+    ) throws SQLException {
+        String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private, leader_id) VALUES (?, ?, FALSE, ?, ?)";
         try (Connection conn = database.getConnection();
              PreparedStatement psRoom = conn.prepareStatement(roomSql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -113,7 +118,8 @@ public class ChatroomDAO extends StandardDAO {
             } else {
                 psRoom.setNull(2, Types.INTEGER);
             }
-            psRoom.setString(3, ownerId); // leader_id
+            psRoom.setBoolean(3, isPrivate);
+            psRoom.setString(4, ownerId);
 
             int affected = psRoom.executeUpdate();
             if (affected == 0) {
