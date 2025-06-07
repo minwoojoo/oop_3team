@@ -7,6 +7,7 @@ public class CChatroomThreadListPacket extends ClientOrderBasePacket {
     private boolean isOpened;
 
     public CChatroomThreadListPacket(int parentId, boolean isOpened) {
+        super();
         this.isOpened = isOpened;
         this.parentId = parentId;
     }

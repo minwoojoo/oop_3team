@@ -7,6 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginSc
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.PrivateChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.AddFriendScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.FriendProfileScreen;
@@ -526,8 +527,17 @@ public class MainScreen extends JFrame {
                     // 클릭 이벤트 처리
                     chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
-                            chatScreen.setVisible(true);
+
+                            if (room.isPrivate()) {
+                                new PrivateChatScreen(client, room)
+                                        .setVisible(true);
+                            } else {
+                                // 그룹 채팅
+                                new GroupChatScreen(client, room)
+                                        .setVisible(true);
+                            }
+//                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
+//                            chatScreen.setVisible(true);
                         }
                     });
 

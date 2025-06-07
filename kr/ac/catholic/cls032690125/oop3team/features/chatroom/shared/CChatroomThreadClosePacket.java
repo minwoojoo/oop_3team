@@ -6,6 +6,7 @@ public class CChatroomThreadClosePacket extends ClientOrderBasePacket {
     private int threadId;
 
     public CChatroomThreadClosePacket(int threadId) {
+        super();
         this.threadId = threadId;
     }
 

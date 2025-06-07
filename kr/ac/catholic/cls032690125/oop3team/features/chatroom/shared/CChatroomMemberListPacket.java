@@ -7,6 +7,7 @@ public class CChatroomMemberListPacket extends ClientOrderBasePacket {
     private int chatroomId;
 
     public CChatroomMemberListPacket(int chatroomId) {
+        super();
         this.chatroomId = chatroomId;
     }
 

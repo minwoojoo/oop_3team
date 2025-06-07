@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class SChatroomThreadListPacket extends ServerResponseBasePacket {
     private ArrayList<Chatroom> threads;
 
-    public SChatroomThreadListPacket(ArrayList<Chatroom> thread) {
+    public SChatroomThreadListPacket(long requestId,ArrayList<Chatroom> thread) {
+        super(requestId);
         this.threads = thread;
     }
 

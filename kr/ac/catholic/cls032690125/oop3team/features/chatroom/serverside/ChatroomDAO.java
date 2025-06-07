@@ -7,6 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChatroomDAO extends StandardDAO {
@@ -99,9 +100,9 @@ public class ChatroomDAO extends StandardDAO {
         return list.toArray(new Chatroom[0]);
     }
 
-    public Chatroom createChatroomWithParticipants(String title, String ownerId, List<String> participants, Integer parentRoomId) throws SQLException {
+    public Chatroom createChatroomWithParticipants(String title, String ownerId, List<String> participants, Integer parentRoomId, boolean isPrivate) throws SQLException {
         String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) " +
-                "VALUES (?, ?, FALSE, FALSE)";
+                "VALUES (?, ?, FALSE, ?)";
         try (Connection conn = database.getConnection();
              PreparedStatement psRoom = conn.prepareStatement(roomSql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -111,6 +112,8 @@ public class ChatroomDAO extends StandardDAO {
             } else {
                 psRoom.setNull(2, Types.INTEGER);
             }
+
+            psRoom.setBoolean(3, isPrivate);
 
             int affected = psRoom.executeUpdate();
             if (affected == 0) {
@@ -220,6 +223,56 @@ public class ChatroomDAO extends StandardDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, chatroomId);
             return ps.executeUpdate();
+        }
+    }
+
+    public Chatroom findOrCreatePrivateChatRoom(String userA, String userB) throws SQLException {
+        String[] duo = new String[]{userA, userB};
+        Arrays.sort(duo);
+
+        String checkSql =
+                "SELECT c.chatroom_id " +
+                        "  FROM chatroom c " +
+                        " JOIN chatroom_participant p1 ON c.chatroom_id = p1.chatroom_id AND p1.user_id = ? " +
+                        " JOIN chatroom_participant p2 ON c.chatroom_id = p2.chatroom_id AND p2.user_id = ? " +
+                        " WHERE c.is_private = TRUE ";
+
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(checkSql);
+
+            ps.setString(1, duo[0]);
+            ps.setString(2, duo[1]);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return findById(rs.getInt("chatroom_id"));
+                }
+            }
+        }
+
+        String insertRoomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) VALUES (?, NULL, FALSE, TRUE)";
+        int newRoomId;
+
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, duo[0] + "," + duo[1] + " 1:1 대화");
+            ps.executeUpdate();
+
+            try (ResultSet gk = ps.getGeneratedKeys()) {
+                gk.next();
+                newRoomId = gk.getInt(1);
+            }
+        }
+
+        String partSql = "INSERT INTO chatroom_participant (chatroom_id, user_id) VALUES (?, ?), (?, ?)";
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(partSql);
+            ps.setInt(1, newRoomId);
+            ps.setString(2, duo[0]);
+            ps.setInt(3, newRoomId);
+            ps.setString(4, duo[1]);
+            ps.executeUpdate();
+            return findById(newRoomId);
         }
     }
 

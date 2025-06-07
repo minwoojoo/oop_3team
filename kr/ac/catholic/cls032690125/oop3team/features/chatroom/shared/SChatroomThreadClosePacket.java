@@ -5,7 +5,8 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 public class SChatroomThreadClosePacket extends ServerResponseBasePacket {
     private int threadId;
 
-    public SChatroomThreadClosePacket(int threadId) {
+    public SChatroomThreadClosePacket(long requestId,int threadId) {
+        super(requestId);
         this.threadId = threadId;
     }
 

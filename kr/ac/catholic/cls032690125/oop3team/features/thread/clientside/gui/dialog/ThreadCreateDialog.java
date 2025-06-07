@@ -72,7 +72,7 @@ public class ThreadCreateDialog extends JDialog {
 
         Integer parentId = screen.getChatroom().getChatroomId();
 
-        CChatroomCreatePacket cChatroomCreatePacket = new CChatroomCreatePacket(title, ownerId, participants, parentId);
+        CChatroomCreatePacket cChatroomCreatePacket = new CChatroomCreatePacket(title, ownerId, participants, parentId, false);
         cChatroomController.sendCreateChatroom(cChatroomCreatePacket, new ClientInteractResponseSwing<SChatroomCreatePacket>() {
             @Override
             protected void execute(SChatroomCreatePacket data) {

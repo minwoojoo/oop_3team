@@ -10,7 +10,8 @@ public class SChatroomMemberListPacket extends ServerResponseBasePacket {
     // List는 Serializeable하지 않습니다.
     private ArrayList<String> members;
 
-    public SChatroomMemberListPacket(int chatroomId, ArrayList<String> members) {
+    public SChatroomMemberListPacket(long requestId,int chatroomId, ArrayList<String> members) {
+        super(requestId);
         this.chatroomId = chatroomId;
         this.members = members;
     }
