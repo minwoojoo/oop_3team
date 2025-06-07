@@ -63,8 +63,8 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
         // 제목 패널
         JPanel titlePanel = new JPanel(new GridLayout(2, 1));
         titlePanel.setOpaque(false);
-        titlePanel.add(parentTitleLabel);
         titlePanel.add(threadTitleLabel);
+        titlePanel.add(parentTitleLabel);
         topPanel.add(titlePanel, BorderLayout.CENTER);
         topPanel.add(topRightPanel, BorderLayout.EAST);
         
