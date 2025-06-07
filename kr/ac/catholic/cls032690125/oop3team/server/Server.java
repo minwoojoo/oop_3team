@@ -9,6 +9,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthC
 import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.serverside.SKeywordController;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.UserProfileDAO;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.CUpdateUserProfileRequest;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUpdateUserProfileResponse;
@@ -44,6 +45,7 @@ public class Server {
     public SFriendController getFriendController() { return friendController; }
 
     private final SAttendanceController attendanceController;
+    private final SKeywordController keywordController;
 
 
     /**
@@ -61,12 +63,14 @@ public class Server {
             this.chatroomController = new SChatroomController(this);
             this.friendController = new SFriendController(this);
             this.attendanceController = new SAttendanceController(this);
+            this.keywordController = new SKeywordController(this);
 
             listeners.add(authController);
             listeners.add(chatController);
             listeners.add(chatroomController);
             listeners.add(friendController);
             listeners.add(attendanceController);
+            listeners.add(keywordController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }
