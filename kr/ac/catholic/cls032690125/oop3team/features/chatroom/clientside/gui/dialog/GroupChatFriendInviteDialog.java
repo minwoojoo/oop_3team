@@ -87,17 +87,22 @@ public class GroupChatFriendInviteDialog extends JDialog {
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible);
         if (visible) { initiate(); }
+        super.setVisible(visible);
     }
 
     private void initiate() {
         friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                System.out.println(data.getData().length);
                 for(var f : data.getData()) {
                     addFriends(f);
                 }
+                friendListPanel.revalidate();
+                friendListPanel.repaint();
+
+                revalidate();
                 repaint();
             }
         });

@@ -257,8 +257,8 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void setVisible(boolean b) {
-        super.setVisible(b);
         if(b) initiate();
+        super.setVisible(b);
     }
 
     @Override
