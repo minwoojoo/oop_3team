@@ -20,7 +20,7 @@ public class ScheduleDAO extends StandardDAO {
         String sql = "INSERT INTO schedule (chatroom_id, title, schedule_date, schedule_time, memo) VALUES (?,?,?,?,?)";
         try (Connection conn = database.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, schedule.getScheduleId());
+            ps.setInt(1, schedule.getChatroomId());
             ps.setString(2, schedule.getTitle());
             ps.setString(3, schedule.getDate());
             ps.setString(4, schedule.getTime());
