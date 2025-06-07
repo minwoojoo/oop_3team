@@ -9,6 +9,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatro
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.dialog.GroupChatFriendInviteDialog;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomLeavePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog.ThreadCreateDialog;
@@ -32,7 +33,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private boolean notificationsEnabled = true;
 
     private List<String> members;
-    private void setMembers(List<String> members) {
+    public void setMembers(List<String> members) {
         this.members = members;
     }
     public List<String> getMembers() { return members; }
@@ -150,6 +151,16 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                 JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
+                chatroomController.requestLeaveChatroom(
+                    chatroom.getChatroomId(),
+                    client.getCurrentSession().getUserId(),
+                    new ClientInteractResponseSwing<SChatroomLeavePacket>() {
+                        @Override
+                        protected void execute(SChatroomLeavePacket data) {
+                            JOptionPane.showMessageDialog(GroupChatScreen.this, data.getMessage());
+                        }
+                    }
+                );
                 dispose();
             }
         });

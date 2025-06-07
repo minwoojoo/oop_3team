@@ -3,7 +3,6 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SChatroomMemberListPacket extends ServerResponseBasePacket {
     private int chatroomId;

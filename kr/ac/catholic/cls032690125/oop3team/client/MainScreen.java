@@ -352,6 +352,14 @@ public class MainScreen extends JFrame {
             }
         });
         friendListTimer.start();
+
+        // 대화방 목록 자동 새로고침 타이머 (20초마다)
+        Timer chatRoomListTimer = new Timer(20 * 1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refreshChatRoomList();
+            }
+        });
+        chatRoomListTimer.start();
     }
 
     private static List<String> generateRandomFriendNames() {
@@ -450,7 +458,6 @@ public class MainScreen extends JFrame {
     }
 
     public void refreshFriendList() {
-        System.out.println("▶ MainScreen: getFriendList 호출 직전");
         cFriendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> response) {
@@ -519,70 +526,66 @@ public class MainScreen extends JFrame {
     }
 
     private void loadGroupChat() {
-        chatRoomController.requestChatroomListByUserId(userId,false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+        refreshChatRoomList();
+    }
+
+    public void refreshChatRoomList() {
+        System.out.println("▶ MainScreen: 대화방목록 새로고침");
+        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
-                Chatroom[] rooms = data.getRooms();
-                currentRooms = data.getRooms();
-                if (rooms == null || rooms.length == 0) {
-                    System.out.println("참여 중인 채팅방 없음");
-                    return;
-                }
-
-                for (int i = 0; i < data.getRooms().length; i++) {
-                    Chatroom room = data.getRooms()[i];
-
-                    JPanel chatItemPanel = new JPanel(new BorderLayout());
-                    chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-                    // 대화방 정보
-                    JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-                    JLabel nameLabel = new JLabel(room.getTitle());
-                    nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-//                    JLabel messageLabel = new JLabel();
-//                    messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-//                    messageLabel.setForeground(Color.GRAY);
-
-                    infoPanel.add(nameLabel);
-//                    infoPanel.add(messageLabel);
-
-                    // 시간 표시
-//                    JLabel timeLabel = new JLabel();
-//                    timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
-//                    timeLabel.setForeground(Color.GRAY);
-
-                    chatItemPanel.add(infoPanel, BorderLayout.CENTER);
-//                    chatItemPanel.add(timeLabel, BorderLayout.EAST);
-
-                    // 클릭 이벤트 처리
-                    chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-
-                            if (room.isPrivate()) {
-                                new PrivateChatScreen(client, room)
-                                        .setVisible(true);
-                            } else {
-                                // 그룹 채팅
-                                GroupChatScreen screen = new GroupChatScreen(client, room);
-                                screen
-                                        .setVisible(true);
-                                openChatRooms.add(room.getChatroomId());
-                                screen.addWindowListener(new WindowAdapter() {
-                                    @Override
-                                    public void windowClosed(WindowEvent e) {
-                                        openChatRooms.remove(room.getChatroomId());
-                                    }
-                                });
-                            }
-//                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
-//                            chatScreen.setVisible(true);
-                        }
-                    });
-
-                    chatListPanel.add(chatItemPanel);
-                }
+                updateChatRoomListUI(data.getRooms());
             }
         });
+    }
+
+    private void updateChatRoomListUI(Chatroom[] rooms) {
+        chatListPanel.removeAll();
+        currentRooms = rooms;
+
+        if (rooms == null || rooms.length == 0) {
+            System.out.println("참여 중인 채팅방 없음");
+            return;
+        }
+
+        for (Chatroom room : rooms) {
+            JPanel chatItemPanel = new JPanel(new BorderLayout());
+            chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            // 대화방 정보
+            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+            JLabel nameLabel = new JLabel(room.getTitle());
+            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+
+            infoPanel.add(nameLabel);
+            chatItemPanel.add(infoPanel, BorderLayout.CENTER);
+
+            // 클릭 이벤트 처리
+            chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    if (room.isPrivate()) {
+                        new PrivateChatScreen(client, room)
+                                .setVisible(true);
+                    } else {
+                        // 그룹 채팅
+                        GroupChatScreen screen = new GroupChatScreen(client, room);
+                        screen.setVisible(true);
+                        openChatRooms.add(room.getChatroomId());
+                        screen.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                openChatRooms.remove(room.getChatroomId());
+                            }
+                        });
+                    }
+                }
+            });
+
+            chatListPanel.add(chatItemPanel);
+        }
+
+        chatListPanel.revalidate();
+        chatListPanel.repaint();
     }
 
     private void showToast(String message) {

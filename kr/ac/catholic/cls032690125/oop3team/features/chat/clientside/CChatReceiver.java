@@ -27,8 +27,8 @@ public class CChatReceiver extends ClientResponseListener {
 
     @ClientResponseHandler(SMessageBroadcastPacket.class)
     public void onMessageBroadcast(SMessageBroadcastPacket packet) {
+        var cid = packet.getMessage().getChatroomId();
         try {
-            var cid = packet.getMessage().getChatroomId();
             for(var watch: watchlist) {
                 if(cid == watch.getChatroom().getChatroomId())
                     watch.messageReceived(packet.getMessage());
@@ -37,7 +37,6 @@ public class CChatReceiver extends ClientResponseListener {
             e.printStackTrace();
             System.err.println("[CChatReceiver] 패킷 수신/핸들러 실행 중 예외 발생: " + e.getClass().getName() + " - " + e.getMessage());
         }
-
 
         // 2) 전역 리스너 호출
         for (NewMessageListener listener : globalListeners) {

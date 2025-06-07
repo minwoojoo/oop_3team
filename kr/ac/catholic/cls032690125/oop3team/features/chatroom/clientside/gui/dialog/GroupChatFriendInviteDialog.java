@@ -8,6 +8,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomIn
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,7 @@ public class GroupChatFriendInviteDialog extends JDialog {
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private void addFriends(UserProfile userProfile) {
         if(screen.getMembers().contains(userProfile.getUserId())) return;
+        if(friendList.stream().anyMatch(f -> f.getUserId().equals(userProfile.getUserId()))) return;
         friendList.add(userProfile);
         JCheckBox checkBox = new JCheckBox(userProfile.getName());
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -93,19 +95,30 @@ public class GroupChatFriendInviteDialog extends JDialog {
     }
 
     private void initiate() {
-        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
-            @Override
-            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                System.out.println(data.getData().length);
-                for(var f : data.getData()) {
-                    addFriends(f);
+        // 1. 대화방 멤버 목록을 먼저 최신화
+        screen.getController().getMemberList(
+            new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                @Override
+                protected void execute(SChatroomMemberListPacket memberData) {
+                    screen.setMembers(memberData.getMembers());
+                    // 2. 멤버 최신화 후 친구 목록 불러오기
+                    friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                        @Override
+                        protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                            friendList.clear();
+                            checkBoxes.clear();
+                            friendListPanel.removeAll();
+                            for(var f : data.getData()) {
+                                addFriends(f);
+                            }
+                            friendListPanel.revalidate();
+                            friendListPanel.repaint();
+                            revalidate();
+                            repaint();
+                        }
+                    });
                 }
-                friendListPanel.revalidate();
-                friendListPanel.repaint();
-
-                revalidate();
-                repaint();
             }
-        });
+        );
     }
 }

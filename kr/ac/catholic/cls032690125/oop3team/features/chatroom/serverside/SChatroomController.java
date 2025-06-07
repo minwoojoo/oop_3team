@@ -28,7 +28,7 @@ public class SChatroomController extends ServerRequestListener {
         int roomId = packet.getChatroomId();
         ArrayList<String> members = getMemberList(roomId);
         // 정상 조회된 member 목록을 그대로 응답 패킷에 담아 전송
-        sch.send(new SChatroomMemberListPacket(roomId, members));
+        sch.send(new SChatroomMemberListPacket(packet.getRequestId(), roomId, members));
     }
 
     @ServerRequestHandler(CChatroomListLoadPacket.class)
@@ -163,6 +163,21 @@ public class SChatroomController extends ServerRequestListener {
         } catch (SQLException e) {
             e.printStackTrace();
             sch.send(new SChatroomThreadClosePacket(packet.getRequestId(), false, "스레드 닫기 실패: " + e.getMessage()));
+        }
+    }
+
+    @ServerRequestHandler(CChatroomLeavePacket.class)
+    public void leaveChatroom(ServerClientHandler sch, CChatroomLeavePacket packet) {
+        try {
+            boolean result = chatroomDAO.removeParticipant(packet.getChatroomId(), packet.getUserId());
+            if (result) {
+                sch.send(new SChatroomLeavePacket(true, "채팅방을 성공적으로 나갔습니다."));
+            } else {
+                sch.send(new SChatroomLeavePacket(false, "채팅방 나가기에 실패했습니다."));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new SChatroomLeavePacket(false, "서버 오류: " + e.getMessage()));
         }
     }
 }

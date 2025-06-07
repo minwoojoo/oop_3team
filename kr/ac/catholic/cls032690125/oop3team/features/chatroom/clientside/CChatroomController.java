@@ -50,4 +50,8 @@ public class CChatroomController extends StandardClientControl {
     public void requestChatRoomByRoomId(int roomId, ClientInteractResponse<SChatroomByIdResponsePacket> callback) {
         client.request(new CChatroomGetByIdPacket(roomId), callback);
     }
+
+    public void requestLeaveChatroom(int chatroomId, String userId, ClientInteractResponse<SChatroomLeavePacket> callback) {
+        client.request(new CChatroomLeavePacket(chatroomId, userId), callback);
+    }
 }

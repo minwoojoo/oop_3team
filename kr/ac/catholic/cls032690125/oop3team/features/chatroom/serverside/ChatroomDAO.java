@@ -7,7 +7,6 @@ import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ChatroomDAO extends StandardDAO {
@@ -236,6 +235,17 @@ public class ChatroomDAO extends StandardDAO {
             }
         }
         return null;
+    }
+
+    public boolean removeParticipant(int chatroomId, String userId) throws SQLException {
+        String sql = "DELETE FROM chatroom_participant WHERE chatroom_id = ? AND user_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            ps.setString(2, userId);
+            int affected = ps.executeUpdate();
+            return affected > 0;
+        }
     }
 
 }
