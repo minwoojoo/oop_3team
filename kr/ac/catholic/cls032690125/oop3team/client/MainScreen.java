@@ -4,6 +4,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.clientside.CChatReceiver;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
@@ -22,13 +23,14 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendCo
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -45,14 +47,25 @@ public class MainScreen extends JFrame {
 
     private CChatroomController chatRoomController;
     private CAuthController authController;
+    private CChatReceiver chatReceiver;
     private JPanel chatListPanel;
     private CFriendController cFriendController;
     private JPanel friendListPanel;
     private List<UserProfile> friendProfiles = new ArrayList<>();
 
+    // 새 메시지 배지 레이블 맵
+    private final Map<Integer, JLabel> badgeLabels = new HashMap<>();
+    // 최근 로드된 방 정보
+    private Chatroom[] currentRooms = new Chatroom[0];
+
+    // MainScreen 클래스 필드
+    private final Set<Integer> openChatRooms = new HashSet<>();
+
+
     public MainScreen(String userId, Client client) {
         this.userId = userId;
         this.client = client;
+        chatReceiver = client.getChatReceiver();
         chatRoomController = new CChatroomController(client);
         authController = new CAuthController(client);
         cFriendController = new CFriendController(client);
@@ -262,6 +275,22 @@ public class MainScreen extends JFrame {
         });
 
         add(mainPanel);
+
+        // 전역 새 메시지 리스너 등록
+        chatReceiver.addNewMessageListener((roomId, msg) -> {
+            SwingUtilities.invokeLater(() -> {
+                if (openChatRooms.contains(roomId)) {
+                    return;
+                }
+                JLabel badge = badgeLabels.get(roomId);
+                if (badge != null) badge.setText("●");
+                String title = getRoomTitle(roomId);
+                String preview = msg.getContent().length() > 30
+                        ? msg.getContent().substring(0, 30) + "…"
+                        : msg.getContent();
+                showToast("새로운 메시지 - [" + title + "] " + preview);
+            });
+        });
 
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
@@ -490,10 +519,11 @@ public class MainScreen extends JFrame {
     }
 
     private void loadGroupChat() {
-        chatRoomController.requestChatroomListByUserId(userId, false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+        chatRoomController.requestChatroomListByUserId(userId,false, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
                 Chatroom[] rooms = data.getRooms();
+                currentRooms = data.getRooms();
                 if (rooms == null || rooms.length == 0) {
                     System.out.println("참여 중인 채팅방 없음");
                     return;
@@ -533,8 +563,16 @@ public class MainScreen extends JFrame {
                                         .setVisible(true);
                             } else {
                                 // 그룹 채팅
-                                new GroupChatScreen(client, room)
+                                GroupChatScreen screen = new GroupChatScreen(client, room);
+                                screen
                                         .setVisible(true);
+                                openChatRooms.add(room.getChatroomId());
+                                screen.addWindowListener(new WindowAdapter() {
+                                    @Override
+                                    public void windowClosed(WindowEvent e) {
+                                        openChatRooms.remove(room.getChatroomId());
+                                    }
+                                });
                             }
 //                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
 //                            chatScreen.setVisible(true);
@@ -545,5 +583,36 @@ public class MainScreen extends JFrame {
                 }
             }
         });
+    }
+
+    private void showToast(String message) {
+        JWindow toast = new JWindow(this);
+        toast.setBackground(new Color(0,0,0,0));
+        JLabel lbl = new JLabel(message);
+        lbl.setOpaque(true);
+        lbl.setBackground(new Color(0,0,0,170));
+        lbl.setForeground(Color.WHITE);
+        lbl.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));  // 패딩 확대
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));  // 폰트 크기 확대
+        toast.getContentPane().add(lbl);
+        toast.pack();
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screen.width - toast.getWidth())/2;
+        int y = (screen.height) / 4;  // 화면 위쪽 1/4 지점에 위치
+        toast.setLocation(x, y);
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+        new Timer(3000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                toast.dispose();
+            }
+        }) {{ setRepeats(false); start(); }};
+    }
+
+    private String getRoomTitle(int roomId) {
+        for (Chatroom r : currentRooms) {
+            if (r.getChatroomId() == roomId) return r.getTitle();
+        }
+        return "알 수 없는 방";
     }
 }

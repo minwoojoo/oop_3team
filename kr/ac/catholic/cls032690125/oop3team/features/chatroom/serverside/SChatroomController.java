@@ -181,4 +181,10 @@ public class SChatroomController extends ServerRequestListener {
             ));
         }
     }
+
+    @ServerRequestHandler(CChatroomGetByIdPacket.class)
+    public void getChatroomByRoomId(ServerClientHandler sch, CChatroomGetByIdPacket packet) throws SQLException {
+        Chatroom byId = chatroomDAO.findById(packet.getRoomId());
+        sch.send(new SChatroomByIdResponsePacket(packet.getRequestId(), byId));
+    }
 }
