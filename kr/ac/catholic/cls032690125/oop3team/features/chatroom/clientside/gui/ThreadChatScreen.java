@@ -7,6 +7,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatro
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadClosePacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,12 +24,14 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
     private CChatroomIndividualController controller;
     private Chatroom parentChatroom;
     private Chatroom threadChatroom;
+    private final CChatroomController chatroomController;
 
-    public ThreadChatScreen(Client client, Chatroom threadChatroom, Chatroom parentChatroom) {
+    public ThreadChatScreen(Client client, Chatroom threadChatroom, Chatroom parentChatroom, CChatroomController chatroomController) {
         this.client = client;
         this.threadChatroom = threadChatroom;
         this.parentChatroom = parentChatroom;
         this.controller = new CChatroomIndividualController(client, threadChatroom, this);
+        this.chatroomController = chatroomController;
 
         setTitle("스레드: " + threadChatroom.getTitle());
         setSize(500, 600);
@@ -55,7 +59,7 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
         // 닫기 버튼
         JButton closeButton = new JButton("닫기");
         closeButton.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        closeButton.addActionListener(e -> {/* 아무 동작도 하지 않음 */});
+        closeButton.addActionListener(e -> closeThread());
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         topRightPanel.setOpaque(false);
         topRightPanel.add(closeButton);
@@ -146,5 +150,23 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
         StringBuilder str = new StringBuilder(chatArea.getText());
         str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
         chatArea.setText(str.toString());
+    }
+
+    private void closeThread() {
+        chatroomController.requestThreadRoomClose(
+            threadChatroom.getChatroomId(),
+            client.getCurrentSession().getUserId(),
+            new ClientInteractResponseSwing<SChatroomThreadClosePacket>() {
+                @Override
+                protected void execute(SChatroomThreadClosePacket data) {
+                    if (data.isSuccess()) {
+                        JOptionPane.showMessageDialog(ThreadChatScreen.this, "스레드가 성공적으로 닫혔습니다.");
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(ThreadChatScreen.this, "스레드 닫기 실패: " + data.getErrorMessage());
+                    }
+                }
+            }
+        );
     }
 }

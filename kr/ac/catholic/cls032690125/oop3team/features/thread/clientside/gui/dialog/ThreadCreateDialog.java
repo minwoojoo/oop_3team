@@ -81,8 +81,7 @@ public class ThreadCreateDialog extends JDialog {
                 if (newThreadRoom != null) {
                     screen.addNewThread(newThreadRoom, title);
                     // 스레드 채팅방 화면 열기
-                    ThreadChatScreen threadScreen = new ThreadChatScreen(client, newThreadRoom, screen.getChatroom());
-                    threadScreen.setVisible(true);
+                    new ThreadChatScreen(client, newThreadRoom, screen.getChatroom(), cChatroomController).setVisible(true);
                     dispose(); // 다이얼로그 닫기
                 }
             }

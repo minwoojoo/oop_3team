@@ -70,7 +70,7 @@ public final class CChatroomIndividualController extends StandardClientControl {
         client.request(pkt, callback);
     }
 
-    public void getThread(int parentId, boolean isOpened,ClientInteractResponse<SChatroomThreadListPacket> callback) {
-        chatroomController.requestThreadRoomList(parentId, isOpened, callback);
+    public void requestThreadRoomList(ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        chatroomController.requestThreadRoomList(chatroom.getChatroomId(), false, callback);
     }
 }

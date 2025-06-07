@@ -102,8 +102,8 @@ public class ChatroomDAO extends StandardDAO {
     }
 
     public Chatroom createChatroomWithParticipants(String title, String ownerId, List<String> participants, Integer parentRoomId) throws SQLException {
-        String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) " +
-                "VALUES (?, ?, FALSE, FALSE)";
+        String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private, leader_id) " +
+                "VALUES (?, ?, FALSE, FALSE, ?)";
         try (Connection conn = database.getConnection();
              PreparedStatement psRoom = conn.prepareStatement(roomSql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -113,6 +113,7 @@ public class ChatroomDAO extends StandardDAO {
             } else {
                 psRoom.setNull(2, Types.INTEGER);
             }
+            psRoom.setString(3, ownerId); // leader_id
 
             int affected = psRoom.executeUpdate();
             if (affected == 0) {
@@ -177,41 +178,36 @@ public class ChatroomDAO extends StandardDAO {
     }
 
     /**
-     * parentroom_id가 특정 값인 모든 스레드(하위 채팅방)를 조회하여 Chatroom 리스트로 반환
+     * 특정 부모 채팅방의 스레드 목록을 조회하여 Chatroom 리스트로 반환
+     * @param parentId 부모 채팅방 ID
+     * @param isClosed 종료된 스레드 포함 여부
+     * @return 스레드 목록
      */
-    public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isOpened) throws SQLException {
-        String sql = "SELECT chatroom_id, parentroom_id,closed, title, created_at " +
-                "FROM chatroom " +
-                "WHERE parentroom_id = ? AND closed = ? " +
-                "ORDER BY created_at DESC";
-
+    public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isClosed) throws SQLException {
+        String sql = "SELECT * FROM chatroom WHERE parentroom_id = ? AND closed = ? ORDER BY created_at DESC";
         ArrayList<Chatroom> threads = new ArrayList<>();
+        
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
+            
             ps.setInt(1, parentId);
-            ps.setBoolean(2, isOpened);
+            ps.setBoolean(2, isClosed);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int chatId = rs.getInt("chatroom_id");
-                    Integer prId = rs.getObject("parentroom_id") == null
-                            ? null
-                            : rs.getInt("parentroom_id");
-                    String title = rs.getString("title");
+                    Chatroom thread = new Chatroom();
+                    thread.setChatroomId(rs.getInt("chatroom_id"));
+                    thread.setParentroomId(rs.getInt("parentroom_id"));
+                    thread.setClosed(rs.getBoolean("closed"));
+                    thread.setPrivate(rs.getBoolean("is_private"));
+                    thread.setTitle(rs.getString("title"));
                     LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
-
-                    Chatroom c = new Chatroom();
-                    c.setChatroomId(chatId);
-                    c.setParentroomId(prId);
-                    c.setTitle(title);
-                    c.setCreated(createdDateTime);
-                    c.setClosed(isOpened);
-
-                    threads.add(c);
+                    thread.setCreated(createdDateTime);
+                    threads.add(thread);
                 }
             }
         }
-
+        
         return threads;
     }
 
@@ -222,6 +218,23 @@ public class ChatroomDAO extends StandardDAO {
             ps.setInt(1, chatroomId);
             return ps.executeUpdate();
         }
+    }
+
+    /**
+     * 해당 chatroom_id의 leader_id를 반환
+     */
+    public String getLeaderId(int chatroomId) throws SQLException {
+        String sql = "SELECT leader_id FROM chatroom WHERE chatroom_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("leader_id");
+                }
+            }
+        }
+        return null;
     }
 
 }

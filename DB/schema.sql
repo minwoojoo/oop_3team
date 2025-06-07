@@ -40,9 +40,10 @@ CREATE TABLE IF NOT EXISTS CHATROOM (
     closed        BOOLEAN       DEFAULT FALSE,
     is_private    BOOLEAN       DEFAULT FALSE,
     title         VARCHAR(255)  NOT NULL,
-    created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
-
-    FOREIGN KEY (parentroom_id) REFERENCES CHATROOM(chatroom_id)
+    created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+    leader_id     VARCHAR(50)  DEFAULT NULL,
+    FOREIGN KEY (parentroom_id) REFERENCES CHATROOM(chatroom_id),
+    FOREIGN KEY (leader_id) REFERENCES USER(user_id)
 );
 
 -- CHATROOM_PARTICIPANT 테이블 생성

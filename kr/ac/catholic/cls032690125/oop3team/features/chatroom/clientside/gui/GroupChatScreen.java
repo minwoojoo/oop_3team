@@ -51,14 +51,14 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private Chatroom chatroom;
     private CChatroomIndividualController controller;
     public CChatroomIndividualController getController() { return controller; }
-    private CChatroomController chatroomsControl;
+    private final CChatroomController chatroomController;
     private List<ThreadInfo> threads = new ArrayList<>();
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
         this.chatroom = chatroom;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
-        this.chatroomsControl = new CChatroomController(client);
+        this.chatroomController = new CChatroomController(client);
 
         this.members = new ArrayList<>();
         
@@ -251,8 +251,13 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     private void showThreadList() {
-        threadListDialog = new ThreadListDialog(client, this);
-        threadListDialog.setVisible(true);
+        ThreadListDialog dialog = new ThreadListDialog(
+            this,                // Frame parent
+            client,              // Client 객체
+            chatroom,            // 현재 그룹채팅방 Chatroom 객체 (부모방)
+            chatroomController   // 컨트롤러
+        );
+        dialog.setVisible(true);
     }
 
     @Override

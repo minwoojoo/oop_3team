@@ -30,24 +30,11 @@ public class CChatroomController extends StandardClientControl {
         client.request(cChatroomMemberListPacket, callback);
     }
 
-    public void requestThreadRoomList(int parentId, boolean isOpened, ClientInteractResponse<SChatroomThreadListPacket> callback) {
-        try {
-            client.request(new CChatroomThreadListPacket(parentId, isOpened), response -> {
-                try {
-                    callback.run((SChatroomThreadListPacket) response);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.err.println("[CChatroomController] SChatroomThreadListPacket 핸들러 실행 중 예외 발생: " + e.getClass().getName() + " - " + e.getMessage());
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("[CChatroomController] requestThreadRoomList 네트워크 예외: " + e.getClass().getName() + " - " + e.getMessage());
-        }
+    public void requestThreadRoomList(int parentId, boolean isClosed, ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        client.request(new CChatroomThreadListPacket(parentId, isClosed), callback);
     }
 
-    public void requestThreadRoomClose(int threadId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
-        CChatroomThreadClosePacket cChatroomThreadClosePacket = new CChatroomThreadClosePacket(threadId);
-        client.request(cChatroomThreadClosePacket, callback);
+    public void requestThreadRoomClose(int threadId, String userId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
+        client.request(new CChatroomThreadClosePacket(threadId, userId), callback);
     }
 }

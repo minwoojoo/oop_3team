@@ -133,20 +133,37 @@ public class SChatroomController extends ServerRequestListener {
     }
 
     @ServerRequestHandler(CChatroomThreadListPacket.class)
-    public void getThreadList(ServerClientHandler sch, CChatroomThreadListPacket packet) throws SQLException {
-        int parentId = packet.getParentId();
-        boolean isOpened = packet.getIsOpened();
-
-        ArrayList<Chatroom> threadsByParentId = chatroomDAO.findThreadsByParentId(parentId, isOpened);
-        System.out.println("조회된 스레드 개수: " + threadsByParentId.size());
-        sch.send(new SChatroomThreadListPacket(threadsByParentId));
+    public void loadThreadList(ServerClientHandler sch, CChatroomThreadListPacket packet) {
+        try {
+            ArrayList<Chatroom> threads = chatroomDAO.findThreadsByParentId(packet.getParentId(), packet.isClosed());
+            sch.send(new SChatroomThreadListPacket(
+                    packet.getRequestId(),
+                    threads,
+                    null
+            ));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new SChatroomThreadListPacket(
+                    packet.getRequestId(),
+                    null,
+                    "스레드 목록을 불러오는 중 오류가 발생했습니다: " + e.getMessage()
+            ));
+        }
     }
 
     @ServerRequestHandler(CChatroomThreadClosePacket.class)
-    public void closeThread(ServerClientHandler sch, CChatroomThreadClosePacket packet) throws SQLException {
-        int threadId = packet.getThreadId();
-        int chatroomId = chatroomDAO.closeChatroom(threadId);
-
-        sch.send(new SChatroomThreadClosePacket(chatroomId));
+    public void closeThread(ServerClientHandler sch, CChatroomThreadClosePacket packet) {
+        try {
+            String leaderId = chatroomDAO.getLeaderId(packet.getThreadId());
+            if (leaderId != null && leaderId.equals(packet.getUserId())) {
+                int result = chatroomDAO.closeChatroom(packet.getThreadId());
+                sch.send(new SChatroomThreadClosePacket(packet.getRequestId(), result > 0, null));
+            } else {
+                sch.send(new SChatroomThreadClosePacket(packet.getRequestId(), false, "권한이 없습니다: 리더만 닫을 수 있습니다."));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new SChatroomThreadClosePacket(packet.getRequestId(), false, "스레드 닫기 실패: " + e.getMessage()));
+        }
     }
 }
