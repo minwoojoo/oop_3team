@@ -88,4 +88,50 @@ public class AuthDAO extends StandardDAO {
             e.printStackTrace();
         }
     }
+
+    public void setUserOnline(String userId, boolean isOnline) {
+        String sql = "UPDATE user SET is_online = ? WHERE user_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, isOnline ? 1 : 0);
+            pstmt.setString(2, userId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteExpiredSessionsAndSetOffline() {
+        String selectSql = "SELECT user_id FROM session WHERE expired_at < NOW()";
+        String deleteSql = "DELETE FROM session WHERE expired_at < NOW()";
+        String updateSql = "UPDATE user SET is_online = 0 WHERE user_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+             PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+             PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+            ResultSet rs = selectStmt.executeQuery();
+            while (rs.next()) {
+                String userId = rs.getString("user_id");
+                updateStmt.setString(1, userId);
+                updateStmt.executeUpdate();
+            }
+            deleteStmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 세션ID로 DB에 세션이 존재하는지 확인
+    public boolean isSessionInDB(String sessionId) {
+        String sql = "SELECT 1 FROM session WHERE session_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, sessionId);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

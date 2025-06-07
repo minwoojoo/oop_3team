@@ -6,6 +6,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthC
 import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.SsettingController;
 import kr.ac.catholic.cls032690125.oop3team.models.User;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
@@ -32,10 +33,12 @@ public class Server {
     private final SChatController chatController;
     private final SChatroomController chatroomController;
     private final SFriendController friendController;
+    private final SsettingController settingController;
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }
     public SFriendController getFriendController() { return friendController; }
+    public SsettingController getSettingController() { return settingController; }
 
 
     /**
@@ -52,10 +55,12 @@ public class Server {
             this.chatController     = new SChatController(this);
             this.chatroomController = new SChatroomController(this);
             this.friendController = new SFriendController(this);
+            this.settingController = new SsettingController(this);
             listeners.add(authController);
             listeners.add(chatController);
             listeners.add(chatroomController);
             listeners.add(friendController);
+            listeners.add(settingController);
         } catch (ClassNotFoundException e) {
             throw new ServerIgnitionFailureException("Not found database driver", e);
         }

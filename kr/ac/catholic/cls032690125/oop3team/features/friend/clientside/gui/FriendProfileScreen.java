@@ -83,7 +83,10 @@ public class FriendProfileScreen extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        JLabel statusLabel = new JLabel("온라인"); // TODO: 실제 업무상태 연동
+        String workStatus = friend.getWorkStatus();
+        JLabel statusLabel = new JLabel(
+            (workStatus != null && !workStatus.isEmpty()) ? workStatus : "상태 메시지 없음"
+        );
         statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
         profilePanel.add(statusLabel, gbc);
 
@@ -187,7 +190,6 @@ public class FriendProfileScreen extends JFrame {
             protected void execute(SChatroomCreatePacket data) {
                 PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, data.getRoom(), friend);
                 privateChatScreen.setVisible(true);
-                privateChatScreen.initiate();
                 FriendProfileScreen.this.dispose();
             }
         });

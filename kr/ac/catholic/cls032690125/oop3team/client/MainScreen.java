@@ -28,9 +28,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainScreen extends JFrame {
-    public static List<String> friendNames = new ArrayList<>(); // TODO: 없앨덧
+    public List<String> friendNames = new ArrayList<>(); // TODO: 없앨덧
     private List<String> statusMessages;
     private List<String> chatRoomNames;
     private List<String> lastMessages;
@@ -193,7 +196,7 @@ public class MainScreen extends JFrame {
         logoutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         profileButton.addActionListener(e -> {
-            new ProfileScreen(this).setVisible(true);
+            new ProfileScreen(this, client, userId).setVisible(true);
         });
 
         memoButton.addActionListener(e -> {
@@ -201,7 +204,8 @@ public class MainScreen extends JFrame {
         });
 
         blockListButton.addActionListener(e -> {
-            new BlockListScreen(this).setVisible(true);
+            BlockListScreen blockListScreen = new BlockListScreen(this, client, userId);
+            blockListScreen.setVisible(true);
         });
 
         logoutButton.addActionListener(e -> {
@@ -245,8 +249,15 @@ public class MainScreen extends JFrame {
         });
 
         createGroupButton.addActionListener(e -> {
-            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
-            createGroupScreen.setVisible(true);
+            cFriendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()));
+                    createGroupScreen.setVisible(true);
+                }
+            });
+            //CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
+            //createGroupScreen.setVisible(true);
         });
 
         add(mainPanel);
@@ -258,6 +269,7 @@ public class MainScreen extends JFrame {
                     @Override
                     protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
                         sessionTimer.stop();
+                        refreshFriendList();
                         dispose();
                         new LoginScreen(client).setVisible(true);
                     }
@@ -302,6 +314,14 @@ public class MainScreen extends JFrame {
                 }
             }
         });
+
+        // 친구 목록 자동 새로고침 타이머 (20초마다)
+        Timer friendListTimer = new Timer(20 * 1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refreshFriendList();
+            }
+        });
+        friendListTimer.start();
     }
 
     private static List<String> generateRandomFriendNames() {
@@ -354,7 +374,7 @@ public class MainScreen extends JFrame {
     }
 
     private void updateFriendListUI(JPanel friendListPanel) {
-        friendListPanel.removeAll(); // 기존 요소 삭제
+        friendListPanel.removeAll();
 
         for (int i = 0; i < friendProfiles.size(); i++) {
             final int index = i;
@@ -362,13 +382,20 @@ public class MainScreen extends JFrame {
             friendItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
             JLabel statusDot = new JLabel("●");
-            statusDot.setForeground(new Random().nextBoolean() ? Color.GREEN : Color.GRAY);
+            statusDot.setForeground(friendProfiles.get(index).isOnline() ? Color.GREEN : Color.GRAY);
 
             JPanel infoPanel = new JPanel(new GridLayout(2, 1));
             JLabel nameLabel = new JLabel(friendProfiles.get(index).getName());
             nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 
-            JLabel statusLabel = new JLabel("상태 메시지 없음"); // 임시 메시지
+            // 업무상태(workStatus) 표시
+            String workStatus = null;
+            try {
+                workStatus = friendProfiles.get(index).getWorkStatus();
+            } catch (Exception e) { workStatus = null; }
+            JLabel statusLabel = new JLabel(
+                (workStatus != null && !workStatus.isEmpty()) ? workStatus : "상태 메시지 없음"
+            );
             statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
             statusLabel.setForeground(Color.GRAY);
 
