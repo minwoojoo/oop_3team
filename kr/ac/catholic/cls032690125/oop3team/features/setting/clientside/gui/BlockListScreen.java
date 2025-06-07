@@ -6,21 +6,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.CSettingController;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SBlockListRes;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUnblockUserRes;
+
 public class BlockListScreen extends JFrame {
     private List<String> blockedUsers;
     private JPanel blockListPanel;
+    private CSettingController settingController;
+    private String userId;
+    private final Client client;
 
-    public BlockListScreen(JFrame parent) {
+    public BlockListScreen(JFrame parent, Client client, String userId) {
         setTitle("차단 목록");
         setSize(400, 500);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // 샘플 데이터 추가
+        this.client = client;
+        this.userId = userId;
+        settingController = new CSettingController(client);
+
         blockedUsers = new ArrayList<>();
-        blockedUsers.add("김철수");
-        blockedUsers.add("이영희");
-        blockedUsers.add("박민수");
 
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -28,7 +37,7 @@ public class BlockListScreen extends JFrame {
         // 차단 목록 패널
         blockListPanel = new JPanel();
         blockListPanel.setLayout(new BoxLayout(blockListPanel, BoxLayout.Y_AXIS));
-        updateBlockList();
+        refreshBlockList();
 
         JScrollPane scrollPane = new JScrollPane(blockListPanel);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -57,8 +66,24 @@ public class BlockListScreen extends JFrame {
                     JOptionPane.YES_NO_OPTION);
                 
                 if (result == JOptionPane.YES_OPTION) {
-                    blockedUsers.remove(user);
-                    updateBlockList();
+                    settingController.unblockUser(userId, user, new ClientInteractResponseSwing<SUnblockUserRes>() {
+                        @Override
+                        protected void execute(SUnblockUserRes res) {
+                            if (res.isSuccess()) {
+                                blockedUsers.remove(user);
+                                updateBlockList();
+                                JOptionPane.showMessageDialog(BlockListScreen.this,
+                                    "차단이 해제되었습니다.",
+                                    "알림",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(BlockListScreen.this,
+                                    "차단 해제에 실패했습니다.",
+                                    "오류",
+                                    JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    });
                 }
             });
 
@@ -84,5 +109,15 @@ public class BlockListScreen extends JFrame {
         blocked.add(name);
         
         return blocked;
+    }
+
+    public void refreshBlockList() {
+        settingController.getBlockedList(userId, new ClientInteractResponseSwing<SBlockListRes>() {
+            @Override
+            protected void execute(SBlockListRes res) {
+                blockedUsers = res.getBlockedNames();
+                updateBlockList();
+            }
+        });
     }
 } 

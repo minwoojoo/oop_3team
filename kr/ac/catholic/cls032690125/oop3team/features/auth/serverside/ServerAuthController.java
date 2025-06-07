@@ -12,6 +12,9 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefie
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ServerAuthController extends ServerRequestListener {
     private final AuthDAO authDAO;
@@ -25,6 +28,12 @@ public class ServerAuthController extends ServerRequestListener {
     public ServerAuthController(Server server) {
         super(server);
         authDAO = new AuthDAO(server);
+
+        // 1분마다 만료 세션 자동 삭제 스케줄러 추가
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            authDAO.deleteExpiredSessionsAndSetOffline();
+        }, 0, 1, TimeUnit.MINUTES);
     }
 
     @ServerRequestHandler(CLoginRequest.class)
@@ -34,6 +43,7 @@ public class ServerAuthController extends ServerRequestListener {
         else {
             var session = createSession(req.getUserId());
             sch.updateSession(session);
+            authDAO.setUserOnline(req.getUserId(), true);
             sch.send(new SLoginResponse(req.getRequestId(), true, session));
         }
     }
@@ -105,10 +115,20 @@ public class ServerAuthController extends ServerRequestListener {
     // 세션 갱신 (활동 시 만료 시간 연장)
     public Session refreshSession(String userId) {
         Session session = sessionMap.get(userId);
-        if (session != null && session.isActive()) {
-            session.setExpiredAt(LocalDateTime.now().plusMinutes(SESSION_TIMEOUT_MINUTES));
+        if (session == null) return null;
+
+        // DB에도 세션이 남아있는지 확인
+        if (!authDAO.isSessionInDB(session.getSessionId())) {
+            // 세션 만료 처리: 세션 삭제 및 is_online=0 처리
+            removeSession(userId);
+            return null;
         }
-        return session;
+
+        if (session.isActive()) {
+            session.setExpiredAt(LocalDateTime.now().plusMinutes(SESSION_TIMEOUT_MINUTES));
+            return session;
+        }
+        return null;
     }
 
     // 로그아웃 또는 만료 시 세션 삭제
@@ -116,5 +136,7 @@ public class ServerAuthController extends ServerRequestListener {
         sessionMap.remove(userId);
         // DB에서도 세션 삭제
         authDAO.removeSessionFromDB(userId);
+        // 항상 is_online=0 처리 추가
+        authDAO.setUserOnline(userId, false);
     }
 }
