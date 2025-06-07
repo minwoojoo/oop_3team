@@ -1,9 +1,8 @@
-package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared;
+package kr.ac.catholic.cls032690125.oop3team.features.attendance.shared;
 
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class SGetAttendanceListResponse extends ServerResponseBasePacket {

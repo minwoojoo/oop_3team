@@ -1,7 +1,10 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.*;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.CCheckIfAlreadyCheckedInRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.CSubmitEditAttendanceRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.SCheckIfAlreadyCheckedInResponse;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.SSubmitEditAttendanceResponse;
 
 import javax.swing.*;
 import java.awt.*;

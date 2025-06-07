@@ -2,17 +2,11 @@ package kr.ac.catholic.cls032690125.oop3team.server;
 
 import kr.ac.catholic.cls032690125.oop3team.ProgramProperties;
 import kr.ac.catholic.cls032690125.oop3team.exceptions.runtime.ServerIgnitionFailureException;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.AttendanceDAO;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside.SAttendanceController;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.*;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.serverside.SAttendanceController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
-import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.UserProfileDAO;
-import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.CUpdateUserProfileRequest;
-import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUpdateUserProfileResponse;
-import kr.ac.catholic.cls032690125.oop3team.models.User;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
