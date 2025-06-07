@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainScreen extends JFrame {
-    public static List<String> friendNames = new ArrayList<>(); // TODO: 없앨덧
+    public List<String> friendNames = new ArrayList<>(); // TODO: 없앨덧
     private List<String> statusMessages;
     private List<String> chatRoomNames;
     private List<String> lastMessages;
@@ -249,8 +249,15 @@ public class MainScreen extends JFrame {
         });
 
         createGroupButton.addActionListener(e -> {
-            CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
-            createGroupScreen.setVisible(true);
+            cFriendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()));
+                    createGroupScreen.setVisible(true);
+                }
+            });
+            //CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client);
+            //createGroupScreen.setVisible(true);
         });
 
         add(mainPanel);

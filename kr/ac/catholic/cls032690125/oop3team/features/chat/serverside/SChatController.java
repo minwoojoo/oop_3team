@@ -38,12 +38,14 @@ public class SChatController extends ServerRequestListener {
     @ServerRequestHandler(CMessageLoadPacket.class)
     public void loadMessage(ServerClientHandler sch, CMessageLoadPacket packet) {
         try{
+            System.out.println("TEST");
             sch.send(
                     new SMessageLoadPacket(
                             packet.getRequestId(),
                             chatDAO.loadMessages(packet.getChatroomId(), packet.getRefPoint(), packet.getPeriod())
                     )
             );
+            System.out.println("TES2");
         } catch (Exception e) {
             e.printStackTrace();
             sch.send(new SMessageLoadPacket(packet.getRequestId(), null));

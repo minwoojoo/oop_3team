@@ -190,7 +190,6 @@ public class FriendProfileScreen extends JFrame {
             protected void execute(SChatroomCreatePacket data) {
                 PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, data.getRoom(), friend);
                 privateChatScreen.setVisible(true);
-                privateChatScreen.initiate();
                 FriendProfileScreen.this.dispose();
             }
         });

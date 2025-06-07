@@ -29,12 +29,13 @@ public class CreateGroupChatScreen extends JFrame {
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         friendCheckBoxes.add(checkBox);
         friendListPanel.add(checkBox);
-        repaint();
     }
 
-    public CreateGroupChatScreen(Client client) {
+    public CreateGroupChatScreen(Client client, List<UserProfile> friendList) {
         this.client = client;
         chatroomsController = new CChatroomController(client);
+        friendController = new CFriendController(client);
+        this.friendList = friendList;
 
         setTitle("그룹 대화방 생성");
         setSize(400, 500);
@@ -54,6 +55,13 @@ public class CreateGroupChatScreen extends JFrame {
         // 친구 선택 영역
         friendListPanel = new JPanel();
         friendListPanel.setLayout(new BoxLayout(friendListPanel, BoxLayout.Y_AXIS));
+
+        for (UserProfile userProfile : friendList) {
+            JCheckBox checkBox = new JCheckBox(userProfile.getName());
+            checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+            friendCheckBoxes.add(checkBox);
+            friendListPanel.add(checkBox);
+        }
 
         JScrollPane scrollPane = new JScrollPane(friendListPanel);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -94,7 +102,6 @@ public class CreateGroupChatScreen extends JFrame {
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
                             groupchat.setVisible(true);
-                            groupchat.initiate();
                             CreateGroupChatScreen.this.dispose();
                         }
                     });
@@ -122,6 +129,12 @@ public class CreateGroupChatScreen extends JFrame {
                 for(var d : data.getData()){
                     CreateGroupChatScreen.this.addFriendList(d);
                 }
+                System.out.println("COMPL" + friendCheckBoxes.size());
+                
+                friendListPanel.revalidate();
+                friendListPanel.repaint();
+
+                revalidate();
                 repaint();
             }
         });
@@ -130,6 +143,6 @@ public class CreateGroupChatScreen extends JFrame {
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
-        if(b) initiate();
+        //if(b) initiate();
     }
 } 

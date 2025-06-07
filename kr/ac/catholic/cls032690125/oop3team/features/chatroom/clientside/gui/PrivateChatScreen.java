@@ -22,9 +22,9 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private JTextField messageField;
     private List<Message> messages;
     private void addMessage(Message message) {
-        messages.add(message);
+        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+","+message.getSent().toString()+"] "+message.getContent()).append("\n");
+        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -91,15 +91,24 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     }
 
     @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if(visible) initiate();
+    }
+
+    @Override
     public void initiate() {
         client.getChatReceiver().registerChatroom(controller);
+        System.out.println("PrivateChatScreen initiate");
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
                 StringBuilder str = new StringBuilder();
                 var msgs = Arrays.asList(data.getMessages());
+                System.out.println(data.getMessages().length);
                 for(Message message : msgs) {
-                    str.append("["+message.getSenderId()+","+message.getSent().toString()+"] "+message.getContent()).append("\n");
+                    System.out.println(message.getContent());
+                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
                 }
                 msgs.addAll(messages);
                 messages = msgs;
