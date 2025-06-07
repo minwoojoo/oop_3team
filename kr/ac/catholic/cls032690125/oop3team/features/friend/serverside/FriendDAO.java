@@ -133,4 +133,34 @@ public class FriendDAO {
         }
         return result;
     }
+
+    public boolean blockFriend(String userId, String friendId) {
+        String sql = "UPDATE friend SET is_blocked = 1 WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.setString(2, friendId);
+            pstmt.setString(3, friendId);
+            pstmt.setString(4, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteFriend(String userId, String friendId) {
+        String sql = "DELETE FROM friend WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.setString(2, friendId);
+            pstmt.setString(3, friendId);
+            pstmt.setString(4, userId);
+            return pstmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
