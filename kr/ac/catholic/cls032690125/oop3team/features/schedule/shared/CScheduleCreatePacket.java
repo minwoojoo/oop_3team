@@ -10,4 +10,6 @@ public class CScheduleCreatePacket extends ClientOrderBasePacket {
         super();
         this.schedule = schedule;
     }
+
+    public Schedule getSchedule() { return schedule; }
 }

@@ -69,5 +69,9 @@ CREATE TABLE IF NOT EXISTS FRIEND (
 -- SCHEDULE 테이블 생성
 CREATE TABLE IF NOT EXISTS SCHEDULE (
     schedule_id INT AUTO_INCREMENT PRIMARY KEY,
-
+    chatroom_id INT NOT NULL,
+    title VARCHAR(50),
+    schedule_date VARCHAR(14),
+    schedule_time VARCHAR(8),
+    memo TEXT
 )
