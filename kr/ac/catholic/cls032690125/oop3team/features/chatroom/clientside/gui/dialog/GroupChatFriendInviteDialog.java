@@ -83,6 +83,7 @@ public class GroupChatFriendInviteDialog extends JDialog {
 
         panel.add(inviteButton, BorderLayout.SOUTH);
         add(panel);
+        initiate();
     }
 
     @Override

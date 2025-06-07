@@ -121,6 +121,7 @@ public class ThreadListDialog extends JDialog {
         groupChatScreen.getController().getThread(parentId, false, new ClientInteractResponseSwing<SChatroomThreadListPacket>() {
             @Override
             protected void execute(SChatroomThreadListPacket data) {
+                System.out.println("열린 스레드 개수: " + data.getThread().size());
                 addThreadOpenedHeader();
                 for(var d : data.getThread()) addThreadOpened(d);
             }
@@ -131,6 +132,7 @@ public class ThreadListDialog extends JDialog {
         groupChatScreen.getController().getThread(parentId, true, new ClientInteractResponseSwing<SChatroomThreadListPacket>() {
             @Override
             protected void execute(SChatroomThreadListPacket data) {
+                System.out.println("클라이언트에서 받은 스레드 개수: " + (data.getThread() == null ? "null" : data.getThread().size()));
                 addThreadClosedHeader();
                 for(var d : data.getThread()) addThreadClosed(d);
             }

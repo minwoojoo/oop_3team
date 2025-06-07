@@ -16,7 +16,7 @@ public class Chatroom implements Serializable {
     private boolean isPrivate;
 
     private String title;
-    private LocalDateTime created;
+    private LocalDateTime created; 
 
     public int getChatroomId() {
         return chatroomId;
@@ -38,7 +38,7 @@ public class Chatroom implements Serializable {
         return title;
     }
 
-    public LocalDateTime getCreated() {
+    public LocalDateTime getCreated() { 
         return created;
     }
 
@@ -62,7 +62,7 @@ public class Chatroom implements Serializable {
         this.title = title;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(LocalDateTime created) { 
         this.created = created;
     }
 }
