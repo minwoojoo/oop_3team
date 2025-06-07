@@ -4,19 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/serverside/KeywordDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/serverside/SKeywordController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/CAddKeywordRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/CDeleteKeywordRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/CGetKeywordListRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/SAddKeywordResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/SDeleteKeywordResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/shared/SGetKeywordListResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Keyword.java" afterDir="false" />
+    <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/server/Server.java">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/chatroom/clientside/gui/GroupChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DB/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DB/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/gui/KeywordSettingsScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/gui/KeywordSettingsScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/serverside/SKeywordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/keyword/clientside/serverside/SKeywordController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -194,6 +187,7 @@
       <workItem from="1748917744003" duration="13153000" />
       <workItem from="1749184743633" duration="6829000" />
       <workItem from="1749262015575" duration="13625000" />
+      <workItem from="1749354280748" duration="1450000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />
@@ -515,7 +509,31 @@
       <option name="project" value="LOCAL" />
       <updated>1749280237140</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Keyword 기능 임시 저장&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
+      <option name="closed" value="true" />
+      <created>1749331918090</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1749331918090</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Keyword 기능 임시 저장&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
+      <option name="closed" value="true" />
+      <created>1749331926247</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1749331926247</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/server/Server.java">
+      <option name="closed" value="true" />
+      <created>1749331996879</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1749331996879</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -536,8 +554,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="remove lagacy database" />
-    <MESSAGE value="update runner" />
     <MESSAGE value="initiate" />
     <MESSAGE value="packet available" />
     <MESSAGE value="rebase 등" />
@@ -561,7 +577,9 @@
     <MESSAGE value="출퇴근기능 구현 완료&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
     <MESSAGE value="출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가" />
     <MESSAGE value="출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <MESSAGE value="Keyword 기능 임시 저장&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/server/Server.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceEditScreen.java&#10;#&#9;kr/ac/catholic/cls032690125/oop3team/server/Server.java" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

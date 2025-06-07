@@ -73,7 +73,7 @@ public class KeywordSettingsScreen extends JFrame {
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // 저장 버튼
+         //저장 버튼
 //        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 //        saveButton = new JButton("저장");
 //        saveButton.setEnabled(false);
@@ -114,7 +114,13 @@ public class KeywordSettingsScreen extends JFrame {
 
     private void addKeywordToServer() {
         String keyword = keywordField.getText().trim();
-        if (keyword.isEmpty() || keywords.contains(keyword)) {
+        if (keyword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "키워드를 입력하세요.", "입력 오류", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (keywords.contains(keyword)) {
+            JOptionPane.showMessageDialog(this, "이미 등록된 키워드입니다.", "중복 키워드", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -123,19 +129,21 @@ public class KeywordSettingsScreen extends JFrame {
         CAddKeywordRequest request = new CAddKeywordRequest(userId, chatroomId, keyword);
 
         client.request(request, packet -> {
-            if (packet instanceof SAddKeywordResponse res && res.isSuccess()) {
+            if (packet instanceof SAddKeywordResponse res) {
                 SwingUtilities.invokeLater(() -> {
-                    keywords.add(keyword);
-                    updateKeywordList();
-                    keywordField.setText("");
-                });
-            } else {
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(this, "추가 실패: " + ((SAddKeywordResponse) packet).getMessage());
+                    if (res.isSuccess()) {
+                        keywords.add(keyword);
+                        updateKeywordList();
+                        keywordField.setText("");
+                        JOptionPane.showMessageDialog(this, "키워드가 성공적으로 추가되었습니다!", "성공", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, res.getMessage(), "추가 실패", JOptionPane.ERROR_MESSAGE);
+                    }
                 });
             }
         });
     }
+
 
     private void deleteKeywordFromServer(String keyword) {
         String userId = client.getCurrentSession().getUserId();

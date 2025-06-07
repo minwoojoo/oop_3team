@@ -1,7 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared.*;
+import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 

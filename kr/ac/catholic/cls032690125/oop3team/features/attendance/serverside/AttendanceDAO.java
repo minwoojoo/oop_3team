@@ -1,4 +1,4 @@
-package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.serverside;
+package kr.ac.catholic.cls032690125.oop3team.features.attendance.serverside;
 
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;

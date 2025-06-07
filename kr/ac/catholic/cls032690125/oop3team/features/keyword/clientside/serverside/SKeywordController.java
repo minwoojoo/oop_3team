@@ -20,12 +20,25 @@ public class SKeywordController extends ServerRequestListener {
     @ServerRequestHandler(CAddKeywordRequest.class)
     public void handleAddKeywordRequest(ServerClientHandler handler, CAddKeywordRequest request) {
         try {
-            keywordDAO.addKeyword(request.getUserId(), request.getChatroomId(), request.getKeyword());
-            handler.send(new SAddKeywordResponse(request.getRequestId(), true, "키워드 추가 성공"));
+            String userId = request.getUserId();
+            int chatroomId = request.getChatroomId();
+            String keyword = request.getKeyword();
+
+            if (keywordDAO.keywordExists(userId, chatroomId, keyword)) {
+                handler.send(new SAddKeywordResponse(request.getRequestId(), false, "이미 등록된 키워드입니다."));
+            } else {
+                boolean added = keywordDAO.addKeyword(userId, chatroomId, keyword);
+                if (added) {
+                    handler.send(new SAddKeywordResponse(request.getRequestId(), true, "키워드 추가 성공"));
+                } else {
+                    handler.send(new SAddKeywordResponse(request.getRequestId(), false, "키워드 추가 실패"));
+                }
+            }
         } catch (Exception e) {
             handler.send(new SAddKeywordResponse(request.getRequestId(), false, "추가 실패: " + e.getMessage()));
         }
     }
+
 
     @ServerRequestHandler(CDeleteKeywordRequest.class)
     public void handleDeleteKeywordRequest(ServerClientHandler handler, CDeleteKeywordRequest request) {
