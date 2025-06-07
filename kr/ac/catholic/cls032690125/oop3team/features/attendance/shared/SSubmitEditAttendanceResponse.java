@@ -1,16 +1,14 @@
-package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.shared;
+package kr.ac.catholic.cls032690125.oop3team.features.attendance.shared;
 
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
-public class SCheckOutResponse extends ServerResponseBasePacket {
+public class SSubmitEditAttendanceResponse extends ServerResponseBasePacket {
     private boolean success;
     private String message;
 
-    public SCheckOutResponse() {
-        // required for serialization
-    }
+    public SSubmitEditAttendanceResponse() {}
 
-    public SCheckOutResponse(long requestId, boolean success, String message) {
+    public SSubmitEditAttendanceResponse(long requestId, boolean success, String message) {
         super(requestId);
         this.success = success;
         this.message = message;
@@ -18,15 +16,16 @@ public class SCheckOutResponse extends ServerResponseBasePacket {
 
     public boolean isSuccess() {
         return success;
-
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }

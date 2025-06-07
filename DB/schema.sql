@@ -84,3 +84,20 @@ CREATE TABLE IF NOT EXISTS FRIEND (
     CONSTRAINT fk_friend FOREIGN KEY (friend_id) REFERENCES user(user_id)
     );
 
+CREATE TABLE keyword (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id VARCHAR(20) NOT NULL,
+     chatroom_id INT NOT NULL,
+     keyword VARCHAR(100) NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+     CONSTRAINT fk_keyword_user FOREIGN KEY (user_id)
+     REFERENCES user(user_id)
+     ON DELETE CASCADE,
+
+     CONSTRAINT fk_keyword_chatroom FOREIGN KEY (chatroom_id)
+     REFERENCES chatroom(chatroom_id)
+     ON DELETE CASCADE,
+
+     CONSTRAINT uq_keyword UNIQUE (user_id, chatroom_id, keyword)
+);
