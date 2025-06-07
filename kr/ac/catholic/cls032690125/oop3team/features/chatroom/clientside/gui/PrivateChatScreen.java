@@ -94,8 +94,8 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible);
         if(visible) initiate();
+        super.setVisible(visible);
     }
 
     @Override
