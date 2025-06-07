@@ -1,6 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside;
 
-import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageBroadcastPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.MessageBuilder;
@@ -13,7 +13,6 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefie
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SChatroomController extends ServerRequestListener {

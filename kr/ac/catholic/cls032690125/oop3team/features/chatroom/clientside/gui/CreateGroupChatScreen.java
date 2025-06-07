@@ -96,7 +96,8 @@ public class CreateGroupChatScreen extends JFrame {
                     // 채팅방 생성 및 입장
                     List<String> participants = getSelectedFriends();
 
-                    chatroomsController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                    chatroomsController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null,
+                            false), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
                         @Override
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());

@@ -8,7 +8,9 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.Gro
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.PrivateChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SPrivateChatRoomResponsePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
@@ -105,7 +107,7 @@ public class FriendProfileScreen extends JFrame {
         buttonPanel.add(blockButton);
 
         chatButton.addActionListener(e -> {
-            // TODO: 1:1 채팅 기능 구현
+            System.out.println("button click///////////");
             onPrivateChatButtonClick();
         });
 
@@ -182,17 +184,16 @@ public class FriendProfileScreen extends JFrame {
     }
 
     private void onPrivateChatButtonClick() {
-        ArrayList<String> participants = new ArrayList<>();
-        participants.add(friend.getUserId());
 
-        cChatroomController.sendCreateChatroom(new CChatroomCreatePacket("1대1 대화방", myUserId, participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+        cChatroomController.requestPrivateChatroom(myUserId, friend.getUserId(), new ClientInteractResponseSwing<SPrivateChatRoomResponsePacket>() {
             @Override
-            protected void execute(SChatroomCreatePacket data) {
-                PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, data.getRoom(), friend);
+            protected void execute(SPrivateChatRoomResponsePacket data) {
+                Chatroom chatroom = data.getChatroom();
+                PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, chatroom);
                 privateChatScreen.setVisible(true);
+                privateChatScreen.initiate();
                 FriendProfileScreen.this.dispose();
             }
         });
-
     }
 } 

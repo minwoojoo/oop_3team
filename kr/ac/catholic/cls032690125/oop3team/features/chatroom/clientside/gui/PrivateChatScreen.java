@@ -21,6 +21,8 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField messageField;
     private List<Message> messages;
+    private List<String> members;
+
     private void addMessage(Message message) {
         //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
@@ -31,7 +33,7 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private Client client;
     private CChatroomIndividualController controller;
 
-    public PrivateChatScreen(Client client, Chatroom chatroom, UserProfile friend) {
+    public PrivateChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
         controller = new CChatroomIndividualController(client, chatroom, this);
 
@@ -92,13 +94,14 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible);
         if(visible) initiate();
+        super.setVisible(visible);
     }
 
     @Override
     public void initiate() {
         client.getChatReceiver().registerChatroom(controller);
+        fetchAndStoreMembers();
         System.out.println("PrivateChatScreen initiate");
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
@@ -118,8 +121,22 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
         });
     }
 
+    private void fetchAndStoreMembers() {
+        controller.getMemberList(new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+            @Override
+            protected void execute(SChatroomMemberListPacket data) {
+                setMembers(data.getMembers());
+            }
+        });
+
+    }
+
     @Override
     public void onChatMessage(Message message) {
         addMessage(message);
+    }
+
+    private void setMembers(List<String> members) {
+        this.members = members;
     }
 }

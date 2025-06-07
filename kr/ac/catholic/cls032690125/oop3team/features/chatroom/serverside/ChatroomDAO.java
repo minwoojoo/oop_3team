@@ -7,6 +7,7 @@ import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChatroomDAO extends StandardDAO {
@@ -186,13 +187,13 @@ public class ChatroomDAO extends StandardDAO {
     public ArrayList<Chatroom> findThreadsByParentId(int parentId, boolean isClosed) throws SQLException {
         String sql = "SELECT * FROM chatroom WHERE parentroom_id = ? AND closed = ? ORDER BY created_at DESC";
         ArrayList<Chatroom> threads = new ArrayList<>();
-        
+
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
             ps.setInt(1, parentId);
             ps.setBoolean(2, isClosed);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Chatroom thread = new Chatroom();
@@ -207,7 +208,7 @@ public class ChatroomDAO extends StandardDAO {
                 }
             }
         }
-        
+
         return threads;
     }
 

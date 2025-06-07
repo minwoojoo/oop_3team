@@ -37,4 +37,17 @@ public class CChatroomController extends StandardClientControl {
     public void requestThreadRoomClose(int threadId, String userId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
         client.request(new CChatroomThreadClosePacket(threadId, userId), callback);
     }
+
+    public void requestPrivateChatroom(String userAId, String userBId, ClientInteractResponse<SPrivateChatRoomResponsePacket> callback) {
+        CPrivateChatRoomRequestPacket cPrivateChatRoomRequestPacket = new CPrivateChatRoomRequestPacket(userAId, userBId);
+        client.request(cPrivateChatRoomRequestPacket, callback);
+    }
+
+    public void requestChatroomListByUserId(String userID, boolean isPrivate, ClientInteractResponse<SChatroomListPacket> callback) {
+        client.request(new CChatroomListLoadByUserPacket(userID, isPrivate), callback);
+    }
+
+    public void requestChatRoomByRoomId(int roomId, ClientInteractResponse<SChatroomByIdResponsePacket> callback) {
+        client.request(new CChatroomGetByIdPacket(roomId), callback);
+    }
 }
