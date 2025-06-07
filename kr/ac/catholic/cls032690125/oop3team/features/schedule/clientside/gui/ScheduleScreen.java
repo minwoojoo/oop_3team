@@ -1,6 +1,11 @@
 package kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui;
 
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.CScheduleController;
 import kr.ac.catholic.cls032690125.oop3team.models.Schedule;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +17,15 @@ public class ScheduleScreen extends JFrame {
     private List<Schedule> schedules = new ArrayList<>();
     private JPanel scheduleListPanel;
 
-    public ScheduleScreen(JFrame parent) {
+    private CScheduleController controller;
+    private Client client;
+    private CChatroomIndividualController chatcontroller;
+
+    public ScheduleScreen(JFrame parent, Client client, CChatroomIndividualController chatcontroller) {
+        this.client = client;
+        this.chatcontroller = chatcontroller;
+        controller = new CScheduleController(client);
+
         setTitle("일정 목록");
         setSize(400, 600);
         setLocationRelativeTo(parent);
@@ -32,7 +45,7 @@ public class ScheduleScreen extends JFrame {
         // 일정 목록 패널
         scheduleListPanel = new JPanel();
         scheduleListPanel.setLayout(new BoxLayout(scheduleListPanel, BoxLayout.Y_AXIS));
-        updateScheduleList();
+        //updateScheduleList();
 
         JScrollPane scrollPane = new JScrollPane(scheduleListPanel);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -76,5 +89,21 @@ public class ScheduleScreen extends JFrame {
 
         scheduleListPanel.revalidate();
         scheduleListPanel.repaint();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        initiate();
+        super.setVisible(b);
+    }
+
+    private void initiate() {
+        controller.requestSchedule(chatcontroller.getChatroom().getChatroomId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Schedule[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<Schedule[]> data) {
+                schedules = List.of(data.getData());
+                updateScheduleList();
+            }
+        });
     }
 }

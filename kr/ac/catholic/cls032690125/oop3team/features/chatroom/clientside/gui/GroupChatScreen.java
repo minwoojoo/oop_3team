@@ -2,7 +2,7 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
@@ -127,12 +127,12 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 일정 관련 메뉴 아이템
         JMenuItem addScheduleItem = new JMenuItem("일정 등록");
         addScheduleItem.addActionListener(e -> {
-            new AddScheduleScreen(this).setVisible(true);
+            new AddScheduleScreen(this, client, controller).setVisible(true);
         });
 
         JMenuItem viewScheduleItem = new JMenuItem("일정 보기");
         viewScheduleItem.addActionListener(e -> {
-            new ScheduleScreen(this).setVisible(true);
+            new ScheduleScreen(this, client, controller).setVisible(true);
         });
 
         // 우선 알림 키워드 설정 메뉴 아이템
@@ -176,23 +176,23 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         scheduleBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         scheduleBox.setBackground(Color.WHITE);
         
-        // 샘플 일정 데이터
-        JLabel scheduleTitle = new JLabel("주간 회의");
-        scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-        JLabel scheduleDateTime = new JLabel("2024-03-20 14:00");
-        scheduleDateTime.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        
-        JPanel scheduleInfo = new JPanel(new BorderLayout(5, 0));
-        scheduleInfo.add(scheduleTitle, BorderLayout.NORTH);
-        scheduleInfo.add(scheduleDateTime, BorderLayout.SOUTH);
-        
-        scheduleBox.add(scheduleInfo, BorderLayout.CENTER);
-        scheduleBox.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new ScheduleScreen(GroupChatScreen.this).setVisible(true);
-            }
-        });
+        // 샘플 일정 데이터 TODO
+//        JLabel scheduleTitle = new JLabel("주간 회의");
+//        scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+//        JLabel scheduleDateTime = new JLabel("2024-03-20 14:00");
+//        scheduleDateTime.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//
+//        JPanel scheduleInfo = new JPanel(new BorderLayout(5, 0));
+//        scheduleInfo.add(scheduleTitle, BorderLayout.NORTH);
+//        scheduleInfo.add(scheduleDateTime, BorderLayout.SOUTH);
+//
+//        scheduleBox.add(scheduleInfo, BorderLayout.CENTER);
+//        scheduleBox.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                new ScheduleScreen(GroupChatScreen.this, client, controller).setVisible(true);
+//            }
+//        });
         
         // 일정 박스를 별도의 패널에 추가
         JPanel schedulePanel = new JPanel(new BorderLayout());
