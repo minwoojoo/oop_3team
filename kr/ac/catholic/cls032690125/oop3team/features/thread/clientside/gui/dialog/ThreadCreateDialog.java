@@ -79,16 +79,15 @@ public class ThreadCreateDialog extends JDialog {
                 if (newThreadRoom != null) {
                     screen.addNewThread(newThreadRoom, title);
                     
-                    // 약간의 지연 후 ThreadChatScreen 열기
+                    // 약간의 지연 후 ThreadListDialog 열기
                     Timer timer = new Timer(500, e -> {
                         SwingUtilities.invokeLater(() -> {
-                            ThreadChatScreen threadScreen = new ThreadChatScreen(
-                                client, 
-                                newThreadRoom, 
-                                screen.getChatroom(), 
+                            new ThreadListDialog(
+                                screen,
+                                client,
+                                screen.getChatroom(),
                                 cChatroomController
-                            );
-                            threadScreen.setVisible(true);
+                            ).setVisible(true);
                             dispose(); // 다이얼로그 닫기
                         });
                     });
