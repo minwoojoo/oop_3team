@@ -9,6 +9,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatro
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.dialog.GroupChatFriendInviteDialog;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomLeavePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui.KeywordSettingsScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.ScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialog.ThreadCreateDialog;
@@ -16,6 +17,8 @@ import kr.ac.catholic.cls032690125.oop3team.features.thread.clientside.gui.dialo
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +27,8 @@ import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
@@ -32,16 +37,17 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private boolean notificationsEnabled = true;
 
     private List<String> members;
-    private void setMembers(List<String> members) {
+    private ArrayList<String> memberNames = new ArrayList<>();
+    public void setMembers(List<String> members) {
         this.members = members;
     }
     public List<String> getMembers() { return members; }
 
     private List<Message> messages;
     private void addMessage(Message message) {
-        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+        str.append("[" + senderName + "] " + message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -51,14 +57,18 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private Chatroom chatroom;
     private CChatroomIndividualController controller;
     public CChatroomIndividualController getController() { return controller; }
-    private CChatroomController chatroomsControl;
+    private final CChatroomController chatroomController;
     private List<ThreadInfo> threads = new ArrayList<>();
+
+    private JLabel memberLabel;
+
+    private Map<String, String> userIdToName = new HashMap<>();
 
     public GroupChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
         this.chatroom = chatroom;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
-        this.chatroomsControl = new CChatroomController(client);
+        this.chatroomController = new CChatroomController(client);
 
         this.members = new ArrayList<>();
         
@@ -73,7 +83,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 상단 앱명 표시
         JLabel appTitle = new JLabel("일톡스", SwingConstants.CENTER);
         appTitle.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        appTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        appTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         mainPanel.add(appTitle, BorderLayout.NORTH);
 
         // 상단 패널 (알림 설정, 친구 추가, 메뉴)
@@ -150,8 +160,28 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                 JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
-                dispose();
+                chatroomController.requestLeaveChatroom(
+                    chatroom.getChatroomId(),
+                    client.getCurrentSession().getUserId(),
+                    new ClientInteractResponseSwing<SChatroomLeavePacket>() {
+                        @Override
+                        protected void execute(SChatroomLeavePacket data) {
+                            try {
+                                SwingUtilities.invokeLater(() -> {
+                                    String myName = getUserNameById(client.getCurrentSession().getUserId());
+                                    addSystemMessage(myName + "님이 나갔습니다");
+                                    fetchAndStoreMembers();
+                                    JOptionPane.showMessageDialog(GroupChatScreen.this, data.getMessage());
+                                });
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                    
+                );
             }
+            dispose();
         });
 
         JMenuItem threadMenuItem = new JMenuItem("스레드");
@@ -169,7 +199,26 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         rightButtonPanel.add(menuBar);
 
         topPanel.add(rightButtonPanel, BorderLayout.EAST);
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+
+        // 멤버 목록 라벨 추가
+        memberLabel = new JLabel("멤버: ");
+        memberLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+
+        // 멤버 라벨을 감싸는 패널 생성
+        JPanel memberPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        memberPanel.setBackground(new Color(250, 250, 250)); // 밝은 배경
+        memberPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(180, 180, 180), 1, true), // 둥근 테두리
+            BorderFactory.createEmptyBorder(5, 10, 5, 10) // 내부 패딩
+        ));
+        memberPanel.add(memberLabel);
+
+        // topPanel과 memberPanel을 묶어서 상단에 배치
+        JPanel topWithMemberPanel = new JPanel();
+        topWithMemberPanel.setLayout(new BoxLayout(topWithMemberPanel, BoxLayout.Y_AXIS));
+        topWithMemberPanel.add(topPanel);
+        topWithMemberPanel.add(memberPanel);
+        mainPanel.add(topWithMemberPanel, BorderLayout.BEFORE_FIRST_LINE);
 
         // 상단 일정 박스 추가
         JPanel scheduleBox = new JPanel(new BorderLayout(5, 5));
@@ -251,8 +300,13 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     private void showThreadList() {
-        threadListDialog = new ThreadListDialog(client, this);
-        threadListDialog.setVisible(true);
+        ThreadListDialog dialog = new ThreadListDialog(
+            this,                // Frame parent
+            client,              // Client 객체
+            chatroom,            // 현재 그룹채팅방 Chatroom 객체 (부모방)
+            chatroomController   // 컨트롤러
+        );
+        dialog.setVisible(true);
     }
 
     @Override
@@ -271,12 +325,10 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
             protected void execute(SMessageLoadPacket data) {
                 StringBuilder str = new StringBuilder();
                 var msgs = Arrays.asList(data.getMessages());
-                System.out.println(data.getMessages().length);
                 for(Message message : msgs) {
-                    System.out.println(message.getContent());
-                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+                    String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+                    str.append("[" + senderName + "] " + message.getContent()).append("\n");
                 }
-                //msgs.addAll(messages);
                 messages = msgs;
                 str.append(chatArea.getText());
                 chatArea.setText(str.toString());
@@ -290,12 +342,55 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         addMessage(message);
     }
 
-    private void fetchAndStoreMembers() {
-        controller.getMemberList(
-                new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
-                    @Override
-                    protected void execute(SChatroomMemberListPacket data) { setMembers(data.getMembers()); }
+    private void updateMemberLabel() {
+        if (members == null || members.isEmpty()) {
+            memberLabel.setText("멤버: (없음)");
+            return;
+        }
+        String memberNames = String.join(", ", members);
+        memberLabel.setText("멤버: " + memberNames);
+    }
+
+    private void fetchFriendProfilesAndUpdateMemberLabel() {
+        CFriendController friendController = new CFriendController(client);
+        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+            @Override
+            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> response) {
+                userIdToName.clear();
+                if (response.getData() != null) {
+                    for (UserProfile profile : response.getData()) {
+                        userIdToName.put(profile.getUserId(), profile.getName());
+                    }
                 }
+                updateMemberLabelWithNames();
+            }
+        });
+    }
+
+    private void updateMemberLabelWithNames() {
+        if (memberNames == null || memberNames.isEmpty()) {
+            memberLabel.setText("멤버: (없음)");
+            return;
+        }
+        memberLabel.setText("멤버: " + String.join(", ", memberNames));
+    }
+
+    public void fetchAndStoreMembers() {
+        chatroomController.getMemberListWithNames(
+            chatroom.getChatroomId(),
+            new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                @Override
+                protected void execute(SChatroomMemberListPacket data) {
+                    setMembers(data.getMembers());
+                    setMemberNames(data.getMemberNames());
+                    // id→name 매핑
+                    userIdToName.clear();
+                    for (int i = 0; i < data.getMembers().size(); i++) {
+                        userIdToName.put(data.getMembers().get(i), data.getMemberNames().get(i));
+                    }
+                    updateMemberLabelWithNames();
+                }
+            }
         );
     }
 
@@ -318,6 +413,20 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     public void addNewThread(Chatroom newThreadRoom, String threadTitle) {
         threads.add(new ThreadInfo(threadTitle, true, newThreadRoom));
+    }
+
+    public void addSystemMessage(String msg) {
+        StringBuilder str = new StringBuilder(chatArea.getText());
+        str.append("[system] ").append(msg).append("\n");
+        chatArea.setText(str.toString());
+    }
+
+    public String getUserNameById(String userId) {
+        return userIdToName.getOrDefault(userId, userId);
+    }
+
+    public void setMemberNames(ArrayList<String> memberNames) {
+        this.memberNames = memberNames;
     }
 }
 
@@ -360,4 +469,5 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 //            });
 //
 //                    messagePanel.add(messageLabel, BorderLayout.WEST);
+//            messagePanel.add(bookmarkButton, BorderLayout.EAST);
 //            messagePanel.add(bookmarkButton, BorderLayout.EAST);

@@ -3,15 +3,21 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 
 public class SChatroomThreadClosePacket extends ServerResponseBasePacket {
-    private int threadId;
+    private final boolean success;
+    private final String errorMessage;
 
-    public SChatroomThreadClosePacket(long requestId,int threadId) {
+    public SChatroomThreadClosePacket(long requestId, boolean success, String errorMessage) {
         super(requestId);
-        this.threadId = threadId;
+        this.success = success;
+        this.errorMessage = errorMessage;
     }
 
-    public int getThreadId() {
-        return threadId;
+    public boolean isSuccess() {
+        return success;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 }
+

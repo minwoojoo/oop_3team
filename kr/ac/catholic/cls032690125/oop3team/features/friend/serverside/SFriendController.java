@@ -165,4 +165,19 @@ public class SFriendController extends ServerRequestListener {
             sch.send(response);
         }
     }
+
+    @ServerRequestHandler(CFriendCheckBlockedReq.class)
+    public void handleCheckBlocked(ServerClientHandler sch, CFriendCheckBlockedReq req) {
+        try {
+            boolean isBlocked = friendDAO.isBlocked(req.getUserId(), req.getFriendId());
+            ServerResponsePacketSimplefied<Boolean> response =
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), isBlocked);
+            sch.send(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ServerResponsePacketSimplefied<Boolean> response =
+                new ServerResponsePacketSimplefied<>(req.getRequestId(), false);
+            sch.send(response);
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
@@ -103,6 +102,7 @@ public class CreateGroupChatScreen extends JFrame {
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
                             groupchat.setVisible(true);
+                            groupchat.initiate();
                             CreateGroupChatScreen.this.dispose();
                         }
                     });
@@ -131,7 +131,7 @@ public class CreateGroupChatScreen extends JFrame {
                     CreateGroupChatScreen.this.addFriendList(d);
                 }
                 System.out.println("COMPL" + friendCheckBoxes.size());
-                
+
                 friendListPanel.revalidate();
                 friendListPanel.repaint();
 

@@ -30,14 +30,22 @@ public class CChatroomController extends StandardClientControl {
         client.request(cChatroomMemberListPacket, callback);
     }
 
-    public void requestThreadRoomList(int parentId, boolean isOpened, ClientInteractResponse<SChatroomThreadListPacket> callback) {
-        CChatroomThreadListPacket cChatroomThreadListPacket = new CChatroomThreadListPacket(parentId, isOpened);
-        client.request(cChatroomThreadListPacket, callback);
+    /**
+     * 채팅방 ID를 주면, 서버에 참가자 목록(id+이름) 요청을 보내고 콜백을 통해 id, name 리스트를 받는다.
+     * @param chatroomId 조회할 채팅방 ID
+     * @param callback   요청 완료 후 호출할 콜백 (id, name 리스트를 넘겨줌)
+     */
+    public void getMemberListWithNames(int chatroomId, ClientInteractResponse<SChatroomMemberListPacket> callback) {
+        CChatroomMemberListPacket cChatroomMemberListPacket = new CChatroomMemberListPacket(chatroomId);
+        client.request(cChatroomMemberListPacket, callback);
     }
 
-    public void requestThreadRoomClose(int threadId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
-        CChatroomThreadClosePacket cChatroomThreadClosePacket = new CChatroomThreadClosePacket(threadId);
-        client.request(cChatroomThreadClosePacket, callback);
+    public void requestThreadRoomList(int parentId, boolean isClosed, ClientInteractResponse<SChatroomThreadListPacket> callback) {
+        client.request(new CChatroomThreadListPacket(parentId, isClosed), callback);
+    }
+
+    public void requestThreadRoomClose(int threadId, String userId, ClientInteractResponse<SChatroomThreadClosePacket> callback) {
+        client.request(new CChatroomThreadClosePacket(threadId, userId), callback);
     }
 
     public void requestPrivateChatroom(String userAId, String userBId, ClientInteractResponse<SPrivateChatRoomResponsePacket> callback) {
@@ -51,5 +59,16 @@ public class CChatroomController extends StandardClientControl {
 
     public void requestChatRoomByRoomId(int roomId, ClientInteractResponse<SChatroomByIdResponsePacket> callback) {
         client.request(new CChatroomGetByIdPacket(roomId), callback);
+    }
+
+    public void requestLeaveChatroom(int chatroomId, String userId, ClientInteractResponse<SChatroomLeavePacket> callback) {
+        client.request(new CChatroomLeavePacket(chatroomId, userId), callback);
+    }
+
+ 
+    protected void execute(SChatroomMemberListPacket data) {
+        System.out.println("[클라] 패킷에서 받은 memberIds: " + data.getMembers());
+        System.out.println("[클라] 패킷에서 받은 memberNames: " + data.getMemberNames());
+        // ...
     }
 }

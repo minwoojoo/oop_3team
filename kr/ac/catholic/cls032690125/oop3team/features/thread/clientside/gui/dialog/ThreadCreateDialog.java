@@ -5,6 +5,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.ThreadChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
@@ -12,7 +13,6 @@ import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ThreadCreateDialog extends JDialog {
     private Client client;
@@ -67,18 +67,44 @@ public class ThreadCreateDialog extends JDialog {
 
     private void create(String title) {
         ArrayList<String> participants = new ArrayList<>(screen.getMembers());
-
         String ownerId = client.getCurrentSession().getUserId();
-
         Integer parentId = screen.getChatroom().getChatroomId();
 
         CChatroomCreatePacket cChatroomCreatePacket = new CChatroomCreatePacket(title, ownerId, participants, parentId, false);
+        
         cChatroomController.sendCreateChatroom(cChatroomCreatePacket, new ClientInteractResponseSwing<SChatroomCreatePacket>() {
             @Override
             protected void execute(SChatroomCreatePacket data) {
                 Chatroom newThreadRoom = data.getRoom();
                 if (newThreadRoom != null) {
                     screen.addNewThread(newThreadRoom, title);
+                    
+                    // 약간의 지연 후 ThreadListDialog 열기
+                    Timer timer = new Timer(500, e -> {
+                        SwingUtilities.invokeLater(() -> {
+                            new ThreadListDialog(
+                                screen,
+                                client,
+                                screen.getChatroom(),
+                                cChatroomController
+                            ).setVisible(true);
+                            dispose(); // 다이얼로그 닫기
+                        });
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                } else {
+                    // DB에는 저장되었지만 응답이 제대로 오지 않은 경우
+                    // 스레드 목록 다이얼로그를 새로 열어서 목록 갱신
+                    SwingUtilities.invokeLater(() -> {
+                        new ThreadListDialog(
+                            screen,
+                            client,
+                            screen.getChatroom(),
+                            cChatroomController
+                        ).setVisible(true);
+                        dispose(); // 다이얼로그 닫기
+                    });
                 }
             }
         });
