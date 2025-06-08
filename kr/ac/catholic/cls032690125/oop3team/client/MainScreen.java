@@ -368,7 +368,7 @@ public class MainScreen extends JFrame {
         });
 
         // 친구 목록 자동 새로고침 타이머 (20초마다)
-        Timer friendListTimer = new Timer(20 * 1000, new ActionListener() {
+        Timer friendListTimer = new Timer(5 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshFriendList();
             }
@@ -376,7 +376,7 @@ public class MainScreen extends JFrame {
         friendListTimer.start();
 
         // 대화방 목록 자동 새로고침 타이머 (20초마다)
-        Timer chatRoomListTimer = new Timer(20 * 1000, new ActionListener() {
+        Timer chatRoomListTimer = new Timer(5 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshChatRoomList();
             }
@@ -558,23 +558,33 @@ public class MainScreen extends JFrame {
 
     public void refreshChatRoomList() {
         System.out.println("▶ MainScreen: 대화방목록 새로고침");
-        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+        List<Chatroom> merged = new ArrayList<>();
+
+        chatRoomController.requestChatroomList(true, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
-                Chatroom[] groupRooms = data.getRooms();
+                if (data.getRooms() != null) {
+                    merged.addAll(Arrays.asList(data.getRooms()));
+                }
 
-                // currentRooms 에는 private+group 병합
-                List<Chatroom> merged = new ArrayList<>();
-                merged.addAll(privateRooms);
-                if (groupRooms != null) merged.addAll(Arrays.asList(groupRooms));
-                currentRooms = merged.toArray(new Chatroom[0]);
+                chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+                    @Override
+                    protected void execute(SChatroomListPacket data2) {
+                        if (data2.getRooms() != null) {
+                            merged.addAll(Arrays.asList(data2.getRooms()));
+                        }
 
-                updateChatRoomListUI(currentRooms);
+                        currentRooms = merged.toArray(new Chatroom[0]);
+                        updateChatRoomListUI(currentRooms);
+                    }
+                });
             }
         });
+
+
     }
 
-    private void updateChatRoomListUI(Chatroom[] rooms) {
+    public void updateChatRoomListUI(Chatroom[] rooms) {
         chatListPanel.removeAll();
         if (rooms == null || rooms.length == 0) {
             System.out.println("참여 중인 채팅방 없음");
@@ -583,7 +593,11 @@ public class MainScreen extends JFrame {
 
         for (Chatroom room : rooms) {
             int roomId = room.getChatroomId();
-            registerRoomForNotifications(room.getChatroomId());
+//            registerRoomForNotifications(room.getChatroomId());
+
+            if (!roomNotifications.containsKey(room.getChatroomId())) {
+                registerRoomForNotifications(room.getChatroomId());
+            }
 
             JPanel chatItemPanel = new JPanel(new BorderLayout());
             chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -657,8 +671,8 @@ public class MainScreen extends JFrame {
         toast.getContentPane().add(lbl);
         toast.pack();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screen.width - toast.getWidth())/2;
-        int y = (screen.height) / 5;  // 화면 위쪽 1/4 지점에 위치
+        int x = screen.width - toast.getWidth() - 20;
+        int y = 20;
         toast.setLocation(x, y);
         toast.setAlwaysOnTop(true);
         toast.setVisible(true);
@@ -673,7 +687,7 @@ public class MainScreen extends JFrame {
         for (Chatroom r : currentRooms) {
             if (r.getChatroomId() == roomId) return r.getTitle();
         }
-        return "알 수 없는 방";
+        return "1대1 채팅방";
     }
 
     public void addPrivateChatroom(Chatroom room) {
@@ -703,7 +717,7 @@ public class MainScreen extends JFrame {
      * 방을 처음 로드하거나 생성할 때 기본 on 상태로 등록.
      */
     private void registerRoomForNotifications(int roomId) {
-        roomNotifications.put(roomId, true);
+        roomNotifications.putIfAbsent(roomId, true);
     }
 
     public boolean isRoomNotificationEnabled(int roomId) {
