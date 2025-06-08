@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 public class ServerResponsePacketSimplefied<T extends Serializable> extends ServerResponseBasePacket {
     private T data;
+    private String message;
 
     /**
      * @param data 보낼 데이터
@@ -29,5 +30,12 @@ public class ServerResponsePacketSimplefied<T extends Serializable> extends Serv
         this.data = data;
     }
 
+    public ServerResponsePacketSimplefied(long requestID, T data, String message) {
+        super(requestID);
+        this.data = data;
+        this.message = message;
+    }
+
     public T getData() { return data; }
+    public String getMessage() { return message; }
 }

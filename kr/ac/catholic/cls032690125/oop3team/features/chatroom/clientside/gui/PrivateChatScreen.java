@@ -27,11 +27,18 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private Map<String, String> userIdToName = new HashMap<>();
 
     private void addMessage(Message message) {
-        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
         String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-        str.append("["+senderName+"] "+message.getContent()).append("\n");
+        String timeStr = formatMessageTime(message.getSent());
+        str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
         chatArea.setText(str.toString());
+    }
+
+    private String formatMessageTime(java.time.LocalDateTime dateTime) {
+        java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+        long timestamp = dateTime.atZone(zoneId).toInstant().toEpochMilli();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        return sdf.format(new java.util.Date(timestamp));
     }
 
     private Client client;
@@ -114,7 +121,8 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
                 StringBuilder str = new StringBuilder();
                 for(Message message : messages) {
                     String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-                    str.append("[" + senderName + "] " + message.getContent()).append("\n");
+                    String timeStr = formatMessageTime(message.getSent());
+                    str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
                 }
                 chatArea.setText(str.toString());
             }

@@ -19,6 +19,7 @@ import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
+import kr.ac.catholic.cls032690125.oop3team.features.memo.clientside.CMemoController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import javax.swing.ListCellRenderer;
 
 public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
@@ -48,10 +50,14 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     private List<Message> messages;
     private void addMessage(Message message) {
-        StringBuilder str = new StringBuilder(chatArea.getText());
-        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-        str.append("[" + senderName + "] " + message.getContent()).append("\n");
-        chatArea.setText(str.toString());
+        messageListModel.addElement(message);
+    }
+
+    private String formatMessageTime(java.time.LocalDateTime dateTime) {
+        java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+        long timestamp = dateTime.atZone(zoneId).toInstant().toEpochMilli();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        return sdf.format(new java.util.Date(timestamp));
     }
 
     private JDialog threadListDialog;
@@ -67,11 +73,35 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     private Map<String, String> userIdToName = new HashMap<>();
 
+    private JList<Message> messageList;
+    private DefaultListModel<Message> messageListModel;
+
+    private CMemoController memoController;
+
+    // 메시지 리스트에서 이름/시간을 예쁘게 보여주는 셀 렌더러
+    private class MessageCellRenderer extends JLabel implements ListCellRenderer<Message> {
+        private Map<String, String> userIdToName;
+        public MessageCellRenderer(Map<String, String> userIdToName) {
+            this.userIdToName = userIdToName;
+            setOpaque(true);
+        }
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Message> list, Message value, int index, boolean isSelected, boolean cellHasFocus) {
+            String senderName = userIdToName.getOrDefault(value.getSenderId(), value.getSenderId());
+            String timeStr = formatMessageTime(value.getSent());
+            setText("[" + senderName + "] " + value.getContent() + " (" + timeStr + ")");
+            setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+            setBackground(isSelected ? Color.LIGHT_GRAY : Color.WHITE);
+            return this;
+        }
+    }
+
     public GroupChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
         this.chatroom = chatroom;
         this.controller = new CChatroomIndividualController(client, chatroom, this);
         this.chatroomController = new CChatroomController(client);
+        this.memoController = new CMemoController(client);
 
         this.members = new ArrayList<>();
 
@@ -241,11 +271,35 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         mainPanel.add(schedulePanel, BorderLayout.CENTER);
 
         // 채팅 영역
-        chatArea = new JTextArea();
-        chatArea.setEditable(false);
-        chatArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-        chatArea.setBackground(new Color(240, 240, 240));
-        JScrollPane scrollPane = new JScrollPane(chatArea);
+        messageListModel = new DefaultListModel<>();
+        messageList = new JList<>(messageListModel);
+        messageList.setCellRenderer(new MessageCellRenderer(userIdToName));
+        messageList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = messageList.locationToIndex(e.getPoint());
+                if (index != -1) {
+                    Rectangle cellBounds = messageList.getCellBounds(index, index);
+                    if (cellBounds != null && cellBounds.contains(e.getPoint())) {
+                        // 셀 클릭: 기존 동작(팝업 등)
+                        Message selectedMsg = messageListModel.get(index);
+                        JPopupMenu popup = new JPopupMenu();
+                        JMenuItem memoItem = new JMenuItem("메모 추가");
+                        memoItem.addActionListener(ev -> showMemoDialog(selectedMsg));
+                        popup.add(memoItem);
+                        popup.show(messageList, e.getX(), e.getY());
+                    } else {
+                        // 셀 영역이 아닌 곳 클릭: 선택 해제
+                        messageList.clearSelection();
+                    }
+                } else {
+                    // 리스트에 항목이 없거나 완전히 빈 공간 클릭: 선택 해제
+                    messageList.clearSelection();
+                }
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(messageList);
+        // scrollPane.getViewport()의 MouseListener는 제거(불필요)
         schedulePanel.add(scrollPane, BorderLayout.CENTER);
 
         // 입력 영역
@@ -277,10 +331,11 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
             controller.sendMessage(message, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                 @Override
                 protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
-                    if(data.getData())
+                    if (data.getData()) {
                         inputField.setText("");
-                    else
+                    } else {
                         inputField.setText("오류가 발생했습니다"); //TODO do better
+                    }
                 }
             });
         }
@@ -315,15 +370,11 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
-                StringBuilder str = new StringBuilder();
-                var msgs = Arrays.asList(data.getMessages());
-                for(Message message : msgs) {
-                    String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-                    str.append("[" + senderName + "] " + message.getContent()).append("\n");
+                messages = Arrays.asList(data.getMessages());
+                messageListModel.clear();
+                for (Message m : messages) {
+                    messageListModel.addElement(m);
                 }
-                messages = msgs;
-                str.append(chatArea.getText());
-                chatArea.setText(str.toString());
             }
         });
         //TODO: 이전 채팅 불러오기, 스레드 , 메모, 맴버 불러오기 등
@@ -331,7 +382,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void onChatMessage(Message message) {
-        addMessage(message);
+        messageListModel.addElement(message);
     }
 
     private void updateMemberLabel() {
@@ -408,9 +459,15 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     public void addSystemMessage(String msg) {
-        StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("[system] ").append(msg).append("\n");
-        chatArea.setText(str.toString());
+        long messageId = 0L; // 시스템 메시지는 0 또는 -1 등 임시값 사용
+        int chatroomId = chatroom.getChatroomId(); // 현재 채팅방 ID
+        String senderId = "system"; // 시스템 메시지이므로 "system" 등으로 지정
+        String content = msg;
+        boolean isSystem = true;
+        java.time.LocalDateTime sent = java.time.LocalDateTime.now();
+
+        Message message = new Message(messageId, chatroomId, senderId, content, isSystem, sent);
+        messageListModel.addElement(message);
     }
 
     public String getUserNameById(String userId) {
@@ -419,6 +476,34 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     public void setMemberNames(ArrayList<String> memberNames) {
         this.memberNames = memberNames;
+    }
+
+    private void showMemoDialog(Message message) {
+        String defaultMemo = "";
+        String memo = JOptionPane.showInputDialog(
+            this,
+            "메모를 입력하세요\n[" + userIdToName.getOrDefault(message.getSenderId(), message.getSenderId()) + "] "
+            + message.getContent() + " (" + formatMessageTime(message.getSent()) + ")",
+            defaultMemo
+        );
+        if (memo != null && !memo.trim().isEmpty()) {
+            // CMemoController.saveMemo 호출
+            memoController.saveMemo(
+                client.getCurrentSession().getUserId(),
+                message.getMessageId(),
+                memo,
+                new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                    @Override
+                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        if (data.getData()) {
+                            JOptionPane.showMessageDialog(GroupChatScreen.this, "메모가 저장되었습니다.");
+                        } else {
+                            JOptionPane.showMessageDialog(GroupChatScreen.this, "메모 저장 실패");
+                        }
+                    }
+                }
+            );
+        }
     }
 }
 

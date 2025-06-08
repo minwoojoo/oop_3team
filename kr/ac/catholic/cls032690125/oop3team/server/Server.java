@@ -19,6 +19,7 @@ import kr.ac.catholic.cls032690125.oop3team.models.User;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.memo.serverside.SMemoController;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -42,7 +43,9 @@ public class Server {
     private final SChatroomController chatroomController;
     private final SFriendController friendController;
     private final SsettingController settingController;
+    private final SMemoController memoController;
     private final SScheduleController scheduleController;
+
     public ServerAuthController getAuthController() { return authController; }
     public SChatController getChatController() { return chatController; }
     public SChatroomController getChatroomController() { return chatroomController; }
@@ -69,6 +72,7 @@ public class Server {
             this.chatroomController = new SChatroomController(this);
             this.friendController = new SFriendController(this);
             this.settingController = new SsettingController(this);
+            this.memoController = new SMemoController(this);
             this.scheduleController = new SScheduleController(this);
             this.attendanceController = new SAttendanceController(this);
             this.keywordController = new SKeywordController(this);
@@ -78,6 +82,7 @@ public class Server {
             listeners.add(chatroomController);
             listeners.add(friendController);
             listeners.add(settingController);
+            listeners.add(memoController);
             listeners.add(scheduleController);
             listeners.add(attendanceController);
             listeners.add(keywordController);
@@ -138,3 +143,4 @@ public class Server {
 
 
 }
+

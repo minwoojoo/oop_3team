@@ -221,7 +221,7 @@ public class MainScreen extends JFrame {
         });
 
         memoButton.addActionListener(e -> {
-            new MemoListScreen(this).setVisible(true);
+            new MemoListScreen(this, client, userId).setVisible(true);
         });
 
         blockListButton.addActionListener(e -> {
