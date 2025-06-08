@@ -142,7 +142,9 @@ public class ChatroomDAO extends StandardDAO {
             // 4) participants 리스트(초대된 친구들)가 있으면 순회하면서 삽입
             if (participants != null) {
                 for (String userId : participants) {
-                    insertParticipants(conn, newChatroomId, userId);
+                    if (!userId.equals(ownerId)) {
+                        insertParticipants(conn, newChatroomId, userId);
+                    }
                 }
             }
 
@@ -181,6 +183,38 @@ public class ChatroomDAO extends StandardDAO {
         }
 
         return members;
+    }
+
+    /**
+     * 특정 chatroomId에 속한 모든 user_id와 이름을 반환.
+     * @param chatroomId 대상 채팅방 ID
+     * @return 해당 방의 참가자 user_id, name 목록 (없으면 빈 리스트)
+     */
+    public List<MemberInfo> getMemberIdNameList(int chatroomId) throws SQLException {
+        String sql = "SELECT cp.user_id, u.name FROM chatroom_participant cp LEFT JOIN user u ON cp.user_id = u.user_id WHERE cp.chatroom_id = ?";
+        List<MemberInfo> members = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, chatroomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String userId = rs.getString("user_id");
+                    String name = rs.getString("name");
+                    members.add(new MemberInfo(userId, name));
+                }
+            }
+        }
+        return members;
+    }
+
+    // 멤버 id, 이름을 담는 내부 클래스
+    public static class MemberInfo {
+        public final String userId;
+        public final String name;
+        public MemberInfo(String userId, String name) {
+            this.userId = userId;
+            this.name = name;
+        }
     }
 
     /**
@@ -252,6 +286,61 @@ public class ChatroomDAO extends StandardDAO {
             int affected = ps.executeUpdate();
             return affected > 0;
         }
+    }
+
+    /**
+     * 특정 사용자가 속한 대화방 목록을 가져옵니다.
+     * @param userId 사용자 ID
+     * @param isPrivate 비공개 대화방 여부
+     * @return 사용자가 속한 대화방 목록
+     */
+    public Chatroom[] loadUserChatrooms(String userId, boolean isPrivate) throws SQLException {
+        String sql = "SELECT c.* FROM chatroom c " +
+                     "INNER JOIN chatroom_participant cp ON c.chatroom_id = cp.chatroom_id " +
+                     "WHERE cp.user_id = ? AND c.is_private = ? AND c.parentroom_id IS NULL " +
+                     "ORDER BY c.created_at DESC";
+        List<Chatroom> list = new ArrayList<>();
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ps.setBoolean(2, isPrivate);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Chatroom room = new Chatroom();
+                room.setChatroomId(rs.getInt("chatroom_id"));
+                room.setParentroomId(rs.getInt("parentroom_id"));
+                room.setClosed(rs.getBoolean("closed"));
+                room.setPrivate(rs.getBoolean("is_private"));
+                room.setTitle(rs.getString("title"));
+                LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
+                room.setCreated(createdDateTime);
+                list.add(room);
+            }
+        }
+        return list.toArray(new Chatroom[0]);
+    }
+
+    public Chatroom findOrCreatePrivateChatroom(String userA, String userB) throws SQLException {
+        // 1. 두 userId가 모두 참가자인 is_private=1 채팅방이 있는지 SELECT
+        String sql = "SELECT c.* FROM chatroom c " +
+                     "JOIN chatroom_participant cp1 ON c.chatroom_id = cp1.chatroom_id " +
+                     "JOIN chatroom_participant cp2 ON c.chatroom_id = cp2.chatroom_id " +
+                     "WHERE c.is_private = 1 AND cp1.user_id = ? AND cp2.user_id = ?";
+        try (Connection conn = database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userA);
+            ps.setString(2, userB);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return findById(rs.getInt("chatroom_id"));
+                }
+            }
+        }
+        // 2. 없으면 새로 생성
+        List<String> participants = new ArrayList<>();
+        participants.add(userA);
+        participants.add(userB);
+        return createChatroomWithParticipants(userA + "와 " + userB + "의 1:1채팅", userA, participants, null, true);
     }
 
 }

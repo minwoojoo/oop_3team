@@ -37,6 +37,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     private boolean notificationsEnabled = true;
 
     private List<String> members;
+    private ArrayList<String> memberNames = new ArrayList<>();
     public void setMembers(List<String> members) {
         this.members = members;
     }
@@ -369,27 +370,24 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
 
     private void updateMemberLabelWithNames() {
-        if (members == null || members.isEmpty()) {
+        if (memberNames == null || memberNames.isEmpty()) {
             memberLabel.setText("멤버: (없음)");
             return;
         }
-        List<String> names = new ArrayList<>();
-        for (String userId : members) {
-            String name = userIdToName.getOrDefault(userId, userId);
-            names.add(name);
-        }
-        memberLabel.setText("멤버: " + String.join(", ", names));
+        memberLabel.setText("멤버: " + String.join(", ", memberNames));
     }
 
     public void fetchAndStoreMembers() {
-        controller.getMemberList(
-                new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
-                    @Override
-                    protected void execute(SChatroomMemberListPacket data) {
-                        setMembers(data.getMembers());
-                        fetchFriendProfilesAndUpdateMemberLabel();
-                    }
+        chatroomController.getMemberListWithNames(
+            chatroom.getChatroomId(),
+            new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                @Override
+                protected void execute(SChatroomMemberListPacket data) {
+                    setMembers(data.getMembers());
+                    setMemberNames(data.getMemberNames());
+                    updateMemberLabelWithNames();
                 }
+            }
         );
     }
 
@@ -422,6 +420,10 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     public String getUserNameById(String userId) {
         return userIdToName.getOrDefault(userId, userId);
+    }
+
+    public void setMemberNames(ArrayList<String> memberNames) {
+        this.memberNames = memberNames;
     }
 }
 

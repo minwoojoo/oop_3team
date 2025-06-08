@@ -31,15 +31,29 @@ public class SChatroomController extends ServerRequestListener {
     @ServerRequestHandler(CChatroomMemberListPacket.class)
     public void loadMemberList(ServerClientHandler sch, CChatroomMemberListPacket packet) {
         int roomId = packet.getChatroomId();
-        ArrayList<String> members = getMemberList(roomId);
-        // 정상 조회된 member 목록을 그대로 응답 패킷에 담아 전송
-        sch.send(new SChatroomMemberListPacket(packet.getRequestId(), roomId, members));
+        List<ChatroomDAO.MemberInfo> members = new ArrayList<>();
+        try {
+            members = chatroomDAO.getMemberIdNameList(roomId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // id, name 리스트로 분리
+        ArrayList<String> memberIds = new ArrayList<>();
+        ArrayList<String> memberNames = new ArrayList<>();
+        for (ChatroomDAO.MemberInfo m : members) {
+            memberIds.add(m.userId);
+            memberNames.add(m.name != null ? m.name : m.userId);
+        }
+        sch.send(new SChatroomMemberListPacket(packet.getRequestId(), roomId, memberIds, memberNames));
     }
 
     @ServerRequestHandler(CChatroomListLoadPacket.class)
     public void loadChatroomList(ServerClientHandler sch, CChatroomListLoadPacket packet) {
         try {
-            Chatroom[] rooms = chatroomDAO.loadAllChatrooms(packet.isPrivate());
+            // 현재 로그인한 사용자의 ID를 가져옴
+            String userId = sch.getSession().getUserId();
+            // 사용자가 속한 대화방만 불러옴
+            Chatroom[] rooms = chatroomDAO.loadUserChatrooms(userId, packet.isPrivate());
             sch.send(new SChatroomListPacket(
                     packet.getRequestId(),
                     rooms,
@@ -202,6 +216,19 @@ public class SChatroomController extends ServerRequestListener {
         } catch (SQLException e) {
             e.printStackTrace();
             sch.send(new SChatroomLeavePacket(false, "서버 오류: " + e.getMessage()));
+        }
+    }
+
+    @ServerRequestHandler(CPrivateChatRoomRequestPacket.class)
+    public void handlePrivateChatRoomRequest(ServerClientHandler sch, CPrivateChatRoomRequestPacket packet) {
+        String userA = packet.getUserA();
+        String userB = packet.getUserB();
+        try {
+            Chatroom room = chatroomDAO.findOrCreatePrivateChatroom(userA, userB);
+            sch.send(new SPrivateChatRoomResponsePacket(packet.getRequestId(), room));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            sch.send(new SPrivateChatRoomResponsePacket(packet.getRequestId(), null));
         }
     }
 }

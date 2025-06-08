@@ -106,16 +106,11 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
+                messages = new ArrayList<>(Arrays.asList(data.getMessages()));
                 StringBuilder str = new StringBuilder();
-                var msgs = Arrays.asList(data.getMessages());
-                System.out.println(data.getMessages().length);
-                for(Message message : msgs) {
-                    System.out.println(message.getContent());
+                for(Message message : messages) {
                     str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
                 }
-                msgs.addAll(messages);
-                messages = msgs;
-                str.append(chatArea.getText());
                 chatArea.setText(str.toString());
             }
         });
@@ -133,7 +128,10 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void onChatMessage(Message message) {
-        addMessage(message);
+        if (!messages.contains(message)) {
+            messages.add(message);
+            addMessage(message);
+        }
     }
 
     private void setMembers(List<String> members) {

@@ -93,4 +93,8 @@ public class CFriendController extends StandardClientControl {
             client.request(new CFriendDeleteReq(userId, friendId), response);
         } catch (Exception e) { e.printStackTrace(); }
     }
+
+    public void checkBlocked(String userId, String friendId, ClientInteractResponse<ServerResponsePacketSimplefied<Boolean>> callback) {
+        client.request(new CFriendCheckBlockedReq(userId, friendId), callback);
+    }
 }
