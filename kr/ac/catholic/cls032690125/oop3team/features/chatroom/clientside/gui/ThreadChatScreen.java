@@ -9,12 +9,15 @@ import kr.ac.catholic.cls032690125.oop3team.models.Message;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomThreadClosePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ThreadChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
@@ -25,6 +28,7 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
     private Chatroom parentChatroom;
     private Chatroom threadChatroom;
     private final CChatroomController chatroomController;
+    private Map<String, String> userIdToName = new HashMap<>();
 
     public ThreadChatScreen(Client client, Chatroom threadChatroom, Chatroom parentChatroom, CChatroomController chatroomController) {
         this.client = client;
@@ -122,22 +126,21 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
     @Override
     public void initiate() {
         client.getChatReceiver().registerChatroom(controller);
-        System.out.println("ThreadChatScreen initiate");
-        controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
-            @Override
-            protected void execute(SMessageLoadPacket data) {
-                StringBuilder str = new StringBuilder();
-                var msgs = Arrays.asList(data.getMessages());
-                System.out.println(data.getMessages().length);
-                for(Message message : msgs) {
-                    System.out.println(message.getContent());
-                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        fetchAndStoreMembersAndThen(() -> {
+            controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
+                @Override
+                protected void execute(SMessageLoadPacket data) {
+                    StringBuilder str = new StringBuilder();
+                    var msgs = Arrays.asList(data.getMessages());
+                    for(Message message : msgs) {
+                        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+                        str.append("["+senderName+"] "+message.getContent()).append("\n");
+                    }
+                    messages = msgs;
+                    str.append(chatArea.getText());
+                    chatArea.setText(str.toString());
                 }
-                msgs.addAll(messages);
-                messages = msgs;
-                str.append(chatArea.getText());
-                chatArea.setText(str.toString());
-            }
+            });
         });
     }
 
@@ -148,7 +151,8 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
 
     private void addMessage(Message message) {
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+        str.append("[" + senderName + "] " + message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -165,6 +169,22 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
                     } else {
                         JOptionPane.showMessageDialog(ThreadChatScreen.this, "스레드 닫기 실패: " + data.getErrorMessage());
                     }
+                }
+            }
+        );
+    }
+
+    private void fetchAndStoreMembersAndThen(Runnable after) {
+        chatroomController.getMemberListWithNames(
+            threadChatroom.getChatroomId(),
+            new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                @Override
+                protected void execute(SChatroomMemberListPacket data) {
+                    userIdToName.clear();
+                    for (int i = 0; i < data.getMembers().size(); i++) {
+                        userIdToName.put(data.getMembers().get(i), data.getMemberNames().get(i));
+                    }
+                    after.run();
                 }
             }
         );

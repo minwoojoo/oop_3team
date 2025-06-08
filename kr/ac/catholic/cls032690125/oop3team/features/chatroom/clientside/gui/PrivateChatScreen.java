@@ -16,17 +16,21 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField messageField;
     private List<Message> messages;
     private List<String> members;
+    private Map<String, String> userIdToName = new HashMap<>();
 
     private void addMessage(Message message) {
         //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+        str.append("["+senderName+"] "+message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -109,7 +113,8 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
                 messages = new ArrayList<>(Arrays.asList(data.getMessages()));
                 StringBuilder str = new StringBuilder();
                 for(Message message : messages) {
-                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+                    String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+                    str.append("[" + senderName + "] " + message.getContent()).append("\n");
                 }
                 chatArea.setText(str.toString());
             }
@@ -121,9 +126,13 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
             @Override
             protected void execute(SChatroomMemberListPacket data) {
                 setMembers(data.getMembers());
+                // id→name 매핑
+                userIdToName.clear();
+                for (int i = 0; i < data.getMembers().size(); i++) {
+                    userIdToName.put(data.getMembers().get(i), data.getMemberNames().get(i));
+                }
             }
         });
-
     }
 
     @Override

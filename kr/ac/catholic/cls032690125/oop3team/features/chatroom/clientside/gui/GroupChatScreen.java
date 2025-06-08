@@ -45,9 +45,9 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     private List<Message> messages;
     private void addMessage(Message message) {
-        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+        str.append("[" + senderName + "] " + message.getContent()).append("\n");
         chatArea.setText(str.toString());
     }
 
@@ -325,12 +325,10 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
             protected void execute(SMessageLoadPacket data) {
                 StringBuilder str = new StringBuilder();
                 var msgs = Arrays.asList(data.getMessages());
-                System.out.println(data.getMessages().length);
                 for(Message message : msgs) {
-                    System.out.println(message.getContent());
-                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+                    String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+                    str.append("[" + senderName + "] " + message.getContent()).append("\n");
                 }
-                //msgs.addAll(messages);
                 messages = msgs;
                 str.append(chatArea.getText());
                 chatArea.setText(str.toString());
@@ -385,6 +383,11 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                 protected void execute(SChatroomMemberListPacket data) {
                     setMembers(data.getMembers());
                     setMemberNames(data.getMemberNames());
+                    // id→name 매핑
+                    userIdToName.clear();
+                    for (int i = 0; i < data.getMembers().size(); i++) {
+                        userIdToName.put(data.getMembers().get(i), data.getMemberNames().get(i));
+                    }
                     updateMemberLabelWithNames();
                 }
             }

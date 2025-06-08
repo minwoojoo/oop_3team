@@ -20,6 +20,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FriendProfileScreen extends JFrame {
     private Client client;
@@ -29,6 +31,7 @@ public class FriendProfileScreen extends JFrame {
     private CFriendController friendController;
     private CChatroomController cChatroomController;
     private CFriendController cFriendController;
+    private Map<String, String> userIdToName = new HashMap<>();
 
 
     public FriendProfileScreen(Client client, String myUserId, UserProfile friend, MainScreen mainScreen) {
