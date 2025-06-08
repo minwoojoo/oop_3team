@@ -85,7 +85,13 @@ public class KeywordSettingsScreen extends JFrame {
 //        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
-        fetchKeywordsFromServer();
+
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) fetchKeywordsFromServer();
+        super.setVisible(visible);
     }
 
     private void fetchKeywordsFromServer() {
