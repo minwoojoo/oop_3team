@@ -134,7 +134,8 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
                     var msgs = Arrays.asList(data.getMessages());
                     for(Message message : msgs) {
                         String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-                        str.append("["+senderName+"] "+message.getContent()).append("\n");
+                        String timeStr = formatMessageTime(message.getSent());
+                        str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
                     }
                     messages = msgs;
                     str.append(chatArea.getText());
@@ -152,8 +153,16 @@ public class ThreadChatScreen extends JFrame implements ChatScreenBase {
     private void addMessage(Message message) {
         StringBuilder str = new StringBuilder(chatArea.getText());
         String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
-        str.append("[" + senderName + "] " + message.getContent()).append("\n");
+        String timeStr = formatMessageTime(message.getSent());
+        str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
         chatArea.setText(str.toString());
+    }
+
+    private String formatMessageTime(java.time.LocalDateTime dateTime) {
+        java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+        long timestamp = dateTime.atZone(zoneId).toInstant().toEpochMilli();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        return sdf.format(new java.util.Date(timestamp));
     }
 
     private void closeThread() {
