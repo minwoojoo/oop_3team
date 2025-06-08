@@ -1,6 +1,6 @@
-package kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.serverside;
+package kr.ac.catholic.cls032690125.oop3team.features.keyword.serverside;
 
-import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.shared.*;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Keyword;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
