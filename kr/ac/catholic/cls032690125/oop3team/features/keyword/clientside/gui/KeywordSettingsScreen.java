@@ -1,7 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
-import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.shared.*;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Keyword;
 
@@ -85,7 +85,13 @@ public class KeywordSettingsScreen extends JFrame {
 //        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
-        fetchKeywordsFromServer();
+
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) fetchKeywordsFromServer();
+        super.setVisible(visible);
     }
 
     private void fetchKeywordsFromServer() {
