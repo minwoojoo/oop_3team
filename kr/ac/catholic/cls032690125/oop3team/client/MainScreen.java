@@ -27,6 +27,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendin
 
 import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -299,7 +300,8 @@ public class MainScreen extends JFrame {
                 String preview = msg.getContent().length() > 30
                         ? msg.getContent().substring(0, 30) + "…"
                         : msg.getContent();
-                showToast("새로운 메시지 - [" + title + "] " + preview);
+                showToast("• [" + title + "] 새 메시지: “" + preview + "”");
+
             });
         });
         client.getKeywordReceiver().addHandler(msg -> {
@@ -367,7 +369,7 @@ public class MainScreen extends JFrame {
             }
         });
 
-        // 친구 목록 자동 새로고침 타이머 (20초마다)
+        // 친구 목록 자동 새로고침 타이머 (5초마다)
         Timer friendListTimer = new Timer(5 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshFriendList();
@@ -375,7 +377,7 @@ public class MainScreen extends JFrame {
         });
         friendListTimer.start();
 
-        // 대화방 목록 자동 새로고침 타이머 (20초마다)
+        // 대화방 목록 자동 새로고침 타이머 (5초마다)
         Timer chatRoomListTimer = new Timer(5 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshChatRoomList();
@@ -661,33 +663,74 @@ public class MainScreen extends JFrame {
 
     private void showToast(String message) {
         JWindow toast = new JWindow(this);
-        toast.setBackground(new Color(0,0,0,0));
-        JLabel lbl = new JLabel(message);
-        lbl.setOpaque(true);
-        lbl.setBackground(new Color(0,0,0,170));
-        lbl.setForeground(Color.WHITE);
-        lbl.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));  // 패딩 확대
-        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));  // 폰트 크기 확대
-        toast.getContentPane().add(lbl);
+        toast.setBackground(new Color(0, 0, 0, 0));
+
+        // 둥근 모서리 + 반투명 배경 패널
+        RoundedPanel panel = new RoundedPanel(20, new Color(255, 249, 196, 230));
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // 이모지와 메시지
+        JLabel lbl = new JLabel("일톡스 " + message);
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        lbl.setForeground(new Color(33, 33, 33));
+        panel.add(lbl, BorderLayout.CENTER);
+
+        toast.getContentPane().add(panel);
         toast.pack();
+
+        // 화면 오른쪽 상단에 위치
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = screen.width - toast.getWidth() - 20;
         int y = 20;
         toast.setLocation(x, y);
         toast.setAlwaysOnTop(true);
         toast.setVisible(true);
+
+        // 3초 후 자동 닫기
         new Timer(3000, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 toast.dispose();
             }
         }) {{ setRepeats(false); start(); }};
     }
 
+    // 둥근 배경을 그려주는 커스텀 JPanel
+    private static class RoundedPanel extends JPanel {
+        private final int cornerRadius;
+        private final Color backgroundColor;
+
+        public RoundedPanel(int radius, Color bgColor) {
+            super();
+            this.cornerRadius = radius;
+            this.backgroundColor = bgColor;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // 그림자 효과
+            g2.setColor(new Color(0, 0, 0, 50));
+            g2.fillRoundRect(3, 3, getWidth() - 6, getHeight() - 6, cornerRadius, cornerRadius);
+
+            // 배경
+            g2.setColor(backgroundColor);
+            g2.fillRoundRect(0, 0, getWidth() - 6, getHeight() - 6, cornerRadius, cornerRadius);
+
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
     private String getRoomTitle(int roomId) {
         for (Chatroom r : currentRooms) {
             if (r.getChatroomId() == roomId) return r.getTitle();
         }
-        return "1대1 채팅방";
+        return "스레드 알림";
     }
 
     public void addPrivateChatroom(Chatroom room) {
