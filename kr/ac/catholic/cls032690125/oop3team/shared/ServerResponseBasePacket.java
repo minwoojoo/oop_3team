@@ -1,5 +1,6 @@
 package kr.ac.catholic.cls032690125.oop3team.shared;
 
+
 import java.io.Serializable;
 
 public abstract class ServerResponseBasePacket implements Serializable {
@@ -21,5 +22,7 @@ public abstract class ServerResponseBasePacket implements Serializable {
         this.requestId = requestId;
     }
 
-    public long getRequestId() { return requestId; }
+    public long getRequestId() {
+        return requestId;
+    }
 }

@@ -12,12 +12,15 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.Pri
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.AddFriendScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.FriendProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.CGetKeywordListRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.SGetKeywordListResponse;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
@@ -299,6 +302,17 @@ public class MainScreen extends JFrame {
                 showToast("새로운 메시지 - [" + title + "] " + preview);
             });
         });
+        client.getKeywordReceiver().addHandler(msg -> {
+            SwingUtilities.invokeLater(() -> {
+                JLabel badge = badgeLabels.get(msg.getChatroomId());
+                if (badge != null) badge.setText("●");
+                String title = getRoomTitle(msg.getChatroomId());
+                String preview = msg.getContent().length() > 30
+                        ? msg.getContent().substring(0, 30) + "…"
+                        : msg.getContent();
+                showToast("키워드 메시지 - [" + title + "] " + preview);
+            });
+        });
 
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
@@ -528,7 +542,12 @@ public class MainScreen extends JFrame {
     public void initiate() {
         loadGroupChat();
 
-
+        client.request(new CGetKeywordListRequest(client.getCurrentSession().getUserId(), -1), new ClientInteractResponseSwing<SGetKeywordListResponse>() {
+            @Override
+            protected void execute(SGetKeywordListResponse data) {
+                client.getKeywordReceiver().addKeywords(data.getKeywords());
+            }
+        });
 
         this.setVisible(true);
     }

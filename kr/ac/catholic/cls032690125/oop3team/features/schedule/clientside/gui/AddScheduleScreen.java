@@ -1,4 +1,11 @@
-package kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui;
+package kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui;
+
+import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.CScheduleController;
+import kr.ac.catholic.cls032690125.oop3team.models.Schedule;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +16,15 @@ public class AddScheduleScreen extends JFrame {
     private JTextField timeField;
     private JTextArea memoArea;
 
-    public AddScheduleScreen(JFrame parent) {
+    private Client client;
+    private CChatroomIndividualController chatcontroller;
+    private CScheduleController controller;
+
+    public AddScheduleScreen(JFrame parent, Client client, CChatroomIndividualController chatcontroller) {
+        this.client = client;
+        this.chatcontroller = chatcontroller;
+        this.controller = new CScheduleController(client);
+
         setTitle("일정 등록");
         setSize(400, 500);
         setLocationRelativeTo(parent);
@@ -79,12 +94,23 @@ public class AddScheduleScreen extends JFrame {
                 return;
             }
 
-            // 샘플 저장 메시지
-            JOptionPane.showMessageDialog(this,
-                "일정이 등록되었습니다.",
-                "일정 등록",
-                JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            controller.sendSchedule(new Schedule(
+                    -1,
+                    chatcontroller.getChatroom().getChatroomId(),
+                    title,
+                    date,
+                    time,
+                    memoArea.getText().trim()
+            ), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                    JOptionPane.showMessageDialog(AddScheduleScreen.this,
+                            "일정이 등록되었습니다.",
+                            "일정 등록",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                }
+            });
         });
 
         cancelButton.addActionListener(e -> dispose());
