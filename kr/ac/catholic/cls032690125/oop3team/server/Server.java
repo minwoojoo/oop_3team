@@ -9,7 +9,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.auth.serverside.ServerAuthC
 import kr.ac.catholic.cls032690125.oop3team.features.chat.serverside.SChatController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.serverside.SChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.serverside.SFriendController;
-import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.serverside.SKeywordController;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.serverside.SKeywordController;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.serverside.UserProfileDAO;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.CUpdateUserProfileRequest;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.shared.SUpdateUserProfileResponse;

@@ -11,5 +11,5 @@ public class SMessageBroadcastPacket extends ServerResponseBasePacket {
         this.message = message;
     }
 
-    public Message getMessageData() { return message; }
+    public Message getMessage() { return message; }
 }
