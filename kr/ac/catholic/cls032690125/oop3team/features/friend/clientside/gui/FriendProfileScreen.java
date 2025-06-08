@@ -205,10 +205,20 @@ public class FriendProfileScreen extends JFrame {
                             JOptionPane.showMessageDialog(FriendProfileScreen.this, "1:1 채팅방 생성에 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
+                        mainScreen.addPrivateChatroom(chatroom);
+                        mainScreen.markChatRoomOpen(chatroom.getChatroomId());
+
                         PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, chatroom);
                         privateChatScreen.setVisible(true);
                         privateChatScreen.initiate();
                         FriendProfileScreen.this.dispose();
+
+                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                mainScreen.markChatRoomClosed(chatroom.getChatroomId());
+                            }
+                        });
                     }
                 });
             }

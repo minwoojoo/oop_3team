@@ -2,7 +2,7 @@ package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
-import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AddScheduleScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.schedule.clientside.gui.AddScheduleScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.clientside.gui.AttendanceScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.shared.SMessageLoadPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
@@ -25,6 +25,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +104,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         this.memoController = new CMemoController(client);
 
         this.members = new ArrayList<>();
-        
+
         setTitle("그룹 채팅 - " + chatroom.getTitle());
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -147,38 +150,28 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 메뉴바
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("메뉴");
-        
-        // 알림 설정 메뉴 아이템
-        JMenuItem notificationItem = new JMenuItem("알림 설정");
-        notificationItem.addActionListener(e -> {
-            notificationsEnabled = !notificationsEnabled;
-            JOptionPane.showMessageDialog(this,
-                notificationsEnabled ? "알림이 켜졌습니다." : "알림이 꺼졌습니다.",
-                "알림 설정",
-                JOptionPane.INFORMATION_MESSAGE);
-        });
 
         // 출퇴근 기록 메뉴 아이템
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
-            new AttendanceScreen(this).setVisible(true);
+            new AttendanceScreen(this,client,chatroom).setVisible(true);
         });
         
         // 일정 관련 메뉴 아이템
         JMenuItem addScheduleItem = new JMenuItem("일정 등록");
         addScheduleItem.addActionListener(e -> {
-            new AddScheduleScreen(this).setVisible(true);
+            new AddScheduleScreen(this, client, controller).setVisible(true);
         });
 
         JMenuItem viewScheduleItem = new JMenuItem("일정 보기");
         viewScheduleItem.addActionListener(e -> {
-            new ScheduleScreen(this).setVisible(true);
+            new ScheduleScreen(this, client, controller).setVisible(true);
         });
 
         // 우선 알림 키워드 설정 메뉴 아이템
         JMenuItem keywordSettingsItem = new JMenuItem("우선 알림 키워드 설정");
         keywordSettingsItem.addActionListener(e -> {
-            new KeywordSettingsScreen(this).setVisible(true);
+            new KeywordSettingsScreen(this,client,chatroom).setVisible(true);
         });
 
         // 나가기 메뉴 아이템
@@ -188,7 +181,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                 "정말로 대화방에서 나가시겠습니까?",
                 "대화방 나가기",
                 JOptionPane.YES_NO_OPTION);
-            
+
             if (result == JOptionPane.YES_OPTION) {
                 chatroomController.requestLeaveChatroom(
                     chatroom.getChatroomId(),
@@ -208,7 +201,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                             }
                         }
                     }
-                    
+
                 );
             }
             dispose();
@@ -216,8 +209,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
         JMenuItem threadMenuItem = new JMenuItem("스레드");
         threadMenuItem.addActionListener(e -> showThreadList());
-        
-        menu.add(notificationItem);
+
         menu.add(attendanceItem);
         menu.add(addScheduleItem);
         menu.add(viewScheduleItem);
@@ -255,23 +247,23 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         scheduleBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         scheduleBox.setBackground(Color.WHITE);
         
-        // 샘플 일정 데이터
-        JLabel scheduleTitle = new JLabel("주간 회의");
-        scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-        JLabel scheduleDateTime = new JLabel("2024-03-20 14:00");
-        scheduleDateTime.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        
-        JPanel scheduleInfo = new JPanel(new BorderLayout(5, 0));
-        scheduleInfo.add(scheduleTitle, BorderLayout.NORTH);
-        scheduleInfo.add(scheduleDateTime, BorderLayout.SOUTH);
-        
-        scheduleBox.add(scheduleInfo, BorderLayout.CENTER);
-        scheduleBox.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new ScheduleScreen(GroupChatScreen.this).setVisible(true);
-            }
-        });
+        // 샘플 일정 데이터 TODO
+//        JLabel scheduleTitle = new JLabel("주간 회의");
+//        scheduleTitle.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+//        JLabel scheduleDateTime = new JLabel("2024-03-20 14:00");
+//        scheduleDateTime.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+//
+//        JPanel scheduleInfo = new JPanel(new BorderLayout(5, 0));
+//        scheduleInfo.add(scheduleTitle, BorderLayout.NORTH);
+//        scheduleInfo.add(scheduleDateTime, BorderLayout.SOUTH);
+//
+//        scheduleBox.add(scheduleInfo, BorderLayout.CENTER);
+//        scheduleBox.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                new ScheduleScreen(GroupChatScreen.this, client, controller).setVisible(true);
+//            }
+//        });
         
         // 일정 박스를 별도의 패널에 추가
         JPanel schedulePanel = new JPanel(new BorderLayout());

@@ -1,0 +1,78 @@
+[33mb398f5d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/attendance-update[m[33m, [m[1;31morigin/feat/attendance-update[m[33m)[m HEAD@{0}: checkout: moving from feat/friend to feat/attendance-update
+[33mde385f0[m[33m ([m[1;31morigin/feat/friend[m[33m, [m[1;32mfeat/friend[m[33m)[m HEAD@{1}: reset: moving to origin/feat/friend
+[33mde385f0[m[33m ([m[1;31morigin/feat/friend[m[33m, [m[1;32mfeat/friend[m[33m)[m HEAD@{2}: checkout: moving from feat/friend to feat/friend
+[33mde385f0[m[33m ([m[1;31morigin/feat/friend[m[33m, [m[1;32mfeat/friend[m[33m)[m HEAD@{3}: checkout: moving from feat/chatroom to feat/friend
+[33m7ea320b[m[33m ([m[1;31morigin/feat/chatroom[m[33m, [m[1;32mfeat/chatroom[m[33m)[m HEAD@{4}: checkout: moving from feat/friend to feat/chatroom
+[33mde385f0[m[33m ([m[1;31morigin/feat/friend[m[33m, [m[1;32mfeat/friend[m[33m)[m HEAD@{5}: checkout: moving from feat/attendance-update to feat/friend
+[33mb398f5d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/attendance-update[m[33m, [m[1;31morigin/feat/attendance-update[m[33m)[m HEAD@{6}: commit (amend): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m8e31143[m HEAD@{7}: commit (amend): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m9928f8a[m HEAD@{8}: commit (merge): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m8fd13af[m HEAD@{9}: commit (amend): keyword 이미 존재 여부 확인
+[33mb03b80f[m HEAD@{10}: commit (amend): keyword 이미 존재 여부 확인
+[33m43c0f6d[m HEAD@{11}: commit (amend): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m4c24de3[m HEAD@{12}: commit (merge): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m1144021[m HEAD@{13}: commit (amend): Keyword 기능 임시 저장
+[33mf281bb5[m HEAD@{14}: commit (amend): Keyword 기능 임시 저장
+[33m16db538[m HEAD@{15}: checkout: moving from feat/keyword to feat/attendance-update
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{16}: checkout: moving from feat/attendance-update to feat/keyword
+[33m16db538[m HEAD@{17}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33m22bf50e[m HEAD@{18}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33m0bfe475[m HEAD@{19}: commit (merge): Merge remote-tracking branch 'origin/feat/attendance-update' into feat/attendance-update
+[33m64254c1[m HEAD@{20}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33mfd00afa[m HEAD@{21}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33m0f36511[m HEAD@{22}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33mcd216ac[m HEAD@{23}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33m400513f[m HEAD@{24}: commit (amend): 출퇴근 수정 요구할 때 햐당 날짜 출석 여부 학인 추가
+[33m9d465d2[m[33m ([m[1;32mfeat/attendance[m[33m)[m HEAD@{25}: checkout: moving from feat/attendance to feat/attendance-update
+[33m9d465d2[m[33m ([m[1;32mfeat/attendance[m[33m)[m HEAD@{26}: commit (amend): 출퇴근기능 구현 완료
+[33m3149fbc[m HEAD@{27}: commit (amend): 출퇴근기능 구현 완료
+[33m6f4a1ad[m HEAD@{28}: commit (amend): save
+[33mb0283fa[m HEAD@{29}: checkout: moving from dev to feat/attendance
+[33m1c90eec[m[33m ([m[1;32mdev[m[33m)[m HEAD@{30}: checkout: moving from feat/attendance to dev
+[33mb0283fa[m HEAD@{31}: commit (amend): save
+[33m1bbb9ce[m HEAD@{32}: checkout: moving from dev to feat/attendance
+[33m1c90eec[m[33m ([m[1;32mdev[m[33m)[m HEAD@{33}: checkout: moving from feat/attendance to dev
+[33m1bbb9ce[m HEAD@{34}: checkout: moving from dev to feat/attendance
+[33m1c90eec[m[33m ([m[1;32mdev[m[33m)[m HEAD@{35}: checkout: moving from feat/attendance to dev
+[33m1bbb9ce[m HEAD@{36}: commit (amend): save
+[33m9193ece[m HEAD@{37}: commit (merge): Hoàn tất merge sau khi resolve conflict
+[33mf2f4c27[m HEAD@{38}: checkout: moving from dev to feat/attendance
+[33m1c90eec[m[33m ([m[1;32mdev[m[33m)[m HEAD@{39}: commit (amend): 임시저장
+[33mf234357[m HEAD@{40}: checkout: moving from feat/attendance to dev
+[33mf2f4c27[m HEAD@{41}: reset: moving to f2f4c27
+[33mf2f4c27[m HEAD@{42}: reset: moving to HEAD
+[33mf2f4c27[m HEAD@{43}: commit (amend): 임시 저장
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{44}: checkout: moving from dev to feat/attendance
+[33mf234357[m HEAD@{45}: checkout: moving from feat/attendance to dev
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{46}: checkout: moving from dev to feat/attendance
+[33mf234357[m HEAD@{47}: commit (amend): 임시저장
+[33mb68864e[m HEAD@{48}: commit (amend): 임시저장
+[33m72cc44b[m HEAD@{49}: commit: 임시저장
+[33md8c7886[m HEAD@{50}: commit (amend): 임시저장
+[33m6b1b149[m HEAD@{51}: checkout: moving from feat/attendance to dev
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{52}: checkout: moving from dev to feat/attendance
+[33m6b1b149[m HEAD@{53}: commit (amend): 임시저장
+[33ma6a2d9b[m HEAD@{54}: checkout: moving from feat/attendance to dev
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{55}: checkout: moving from dev to feat/attendance
+[33ma6a2d9b[m HEAD@{56}: reset: moving to HEAD
+[33ma6a2d9b[m HEAD@{57}: commit (amend): 임시저장
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{58}: checkout: moving from feat/attendance to dev
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{59}: checkout: moving from dev to feat/attendance
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{60}: checkout: moving from feat/chatroom-patch to dev
+[33mdc0724d[m[33m ([m[1;32mfeat/chatroom-patch[m[33m)[m HEAD@{61}: checkout: moving from feat/attendance to feat/chatroom-patch
+[33me1b9feb[m[33m ([m[1;31morigin/feat/attendance[m[33m)[m HEAD@{62}: commit (amend): 임시 저장
+[33mad7ea84[m HEAD@{63}: commit (amend): 임시 저장
+[33m10a1c73[m HEAD@{64}: checkout: moving from feat/chatroom-patch to feat/attendance
+[33mdc0724d[m[33m ([m[1;32mfeat/chatroom-patch[m[33m)[m HEAD@{65}: checkout: moving from feat/attendance to feat/chatroom-patch
+[33m10a1c73[m HEAD@{66}: commit: 임시 저장
+[33me55aa20[m HEAD@{67}: checkout: moving from dev to feat/attendance
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{68}: checkout: moving from feat/attendance to dev
+[33me55aa20[m HEAD@{69}: commit (merge): Merge remote-tracking branch 'origin/feat/attendance' into feat/attendance
+[33mdf010ba[m HEAD@{70}: commit (amend): # Conflicts:
+[33m0ef4398[m HEAD@{71}: commit (amend): # Conflicts:
+[33m0a241ac[m HEAD@{72}: checkout: moving from feat/friend to feat/attendance
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{73}: checkout: moving from feat/attendance to feat/friend
+[33m0a241ac[m HEAD@{74}: reset: moving to 0a241ac
+[33m0a241ac[m HEAD@{75}: checkout: moving from feat/friend to feat/attendance
+[33mdf45f18[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/feat/keyword[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/keyword[m[33m)[m HEAD@{76}: checkout: moving from feat/attendance to feat/friend
+[33
