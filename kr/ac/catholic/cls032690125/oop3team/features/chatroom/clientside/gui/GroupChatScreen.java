@@ -120,16 +120,6 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 메뉴바
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("메뉴");
-        
-        // 알림 설정 메뉴 아이템
-        JMenuItem notificationItem = new JMenuItem("알림 설정");
-        notificationItem.addActionListener(e -> {
-            notificationsEnabled = !notificationsEnabled;
-            JOptionPane.showMessageDialog(this,
-                notificationsEnabled ? "알림이 켜졌습니다." : "알림이 꺼졌습니다.",
-                "알림 설정",
-                JOptionPane.INFORMATION_MESSAGE);
-        });
 
         // 출퇴근 기록 메뉴 아이템
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
@@ -189,8 +179,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
         JMenuItem threadMenuItem = new JMenuItem("스레드");
         threadMenuItem.addActionListener(e -> showThreadList());
-        
-        menu.add(notificationItem);
+
         menu.add(attendanceItem);
         menu.add(addScheduleItem);
         menu.add(viewScheduleItem);

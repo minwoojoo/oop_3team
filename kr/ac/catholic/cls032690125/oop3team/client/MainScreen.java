@@ -57,12 +57,16 @@ public class MainScreen extends JFrame {
     private List<UserProfile> friendProfiles = new ArrayList<>();
 
     // 새 메시지 배지 레이블 맵
-    private final Map<Integer, JLabel> badgeLabels = new HashMap<>();
+    private Map<Integer, JLabel> badgeLabels = new HashMap<>();
     // 최근 로드된 방 정보
     private Chatroom[] currentRooms = new Chatroom[0];
 
     // MainScreen 클래스 필드
-    private final Set<Integer> openChatRooms = new HashSet<>();
+    private Set<Integer> openChatRooms = new HashSet<>();
+    private final List<Chatroom> privateRooms = new ArrayList<>();
+
+    // 방별 알림 on/off 상태
+    private Map<Integer, Boolean> roomNotifications = new HashMap<>();
 
 
     public MainScreen(String userId, Client client) {
@@ -285,6 +289,10 @@ public class MainScreen extends JFrame {
                 if (openChatRooms.contains(roomId)) {
                     return;
                 }
+
+                // 방별 알림 플래그 체크
+                if (!isRoomNotificationEnabled(roomId)) return;
+
                 JLabel badge = badgeLabels.get(roomId);
                 if (badge != null) badge.setText("●");
                 String title = getRoomTitle(roomId);
@@ -553,21 +561,30 @@ public class MainScreen extends JFrame {
         chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
-                updateChatRoomListUI(data.getRooms());
+                Chatroom[] groupRooms = data.getRooms();
+
+                // currentRooms 에는 private+group 병합
+                List<Chatroom> merged = new ArrayList<>();
+                merged.addAll(privateRooms);
+                if (groupRooms != null) merged.addAll(Arrays.asList(groupRooms));
+                currentRooms = merged.toArray(new Chatroom[0]);
+
+                updateChatRoomListUI(currentRooms);
             }
         });
     }
 
     private void updateChatRoomListUI(Chatroom[] rooms) {
         chatListPanel.removeAll();
-        currentRooms = rooms;
-
         if (rooms == null || rooms.length == 0) {
             System.out.println("참여 중인 채팅방 없음");
             return;
         }
 
         for (Chatroom room : rooms) {
+            int roomId = room.getChatroomId();
+            registerRoomForNotifications(room.getChatroomId());
+
             JPanel chatItemPanel = new JPanel(new BorderLayout());
             chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -579,12 +596,33 @@ public class MainScreen extends JFrame {
             infoPanel.add(nameLabel);
             chatItemPanel.add(infoPanel, BorderLayout.CENTER);
 
+            // ➌ 방별 알림 토글 버튼
+            JToggleButton bell = new JToggleButton();
+            bell.setText(isRoomNotificationEnabled(roomId) ? "🔔" : "🔕");
+            bell.setSelected(isRoomNotificationEnabled(roomId));
+            bell.addActionListener(e -> {
+                boolean on = bell.isSelected();
+                setRoomNotification(roomId, on);
+                bell.setText(on ? "🔔" : "🔕");
+            });
+
+            chatItemPanel.add(bell, BorderLayout.EAST);
+
             // 클릭 이벤트 처리
             chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (room.isPrivate()) {
-                        new PrivateChatScreen(client, room)
+                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
+                        privateChatScreen
                                 .setVisible(true);
+                        openChatRooms.add(room.getChatroomId());
+                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                openChatRooms.remove(room.getChatroomId());
+                            }
+                        });
+
                     } else {
                         // 그룹 채팅
                         GroupChatScreen screen = new GroupChatScreen(client, room);
@@ -620,7 +658,7 @@ public class MainScreen extends JFrame {
         toast.pack();
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screen.width - toast.getWidth())/2;
-        int y = (screen.height) / 4;  // 화면 위쪽 1/4 지점에 위치
+        int y = (screen.height) / 5;  // 화면 위쪽 1/4 지점에 위치
         toast.setLocation(x, y);
         toast.setAlwaysOnTop(true);
         toast.setVisible(true);
@@ -637,4 +675,43 @@ public class MainScreen extends JFrame {
         }
         return "알 수 없는 방";
     }
+
+    public void addPrivateChatroom(Chatroom room) {
+        privateRooms.add(room);
+
+        // 2) 즉시 currentRooms 에도 붙여서 getRoomTitle() 에서 인식하게 함
+        List<Chatroom> now = new ArrayList<>();
+        // 새 방을 맨 앞에 넣어도 좋고, 맨 뒤에 넣어도 좋습니다.
+        now.add(room);
+        now.addAll(Arrays.asList(currentRooms));
+        currentRooms = now.toArray(new Chatroom[0]);
+
+        JLabel badge = new JLabel(" ");
+        badge.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        badge.setForeground(Color.RED);
+        badgeLabels.put(room.getChatroomId(), badge);
+    }
+
+    public void markChatRoomOpen(int roomId) {
+        openChatRooms.add(roomId);
+    }
+    public void markChatRoomClosed(int roomId) {
+        openChatRooms.remove(roomId);
+    }
+
+    /**
+     * 방을 처음 로드하거나 생성할 때 기본 on 상태로 등록.
+     */
+    private void registerRoomForNotifications(int roomId) {
+        roomNotifications.put(roomId, true);
+    }
+
+    public boolean isRoomNotificationEnabled(int roomId) {
+        return roomNotifications.getOrDefault(roomId, true);
+    }
+
+    public void setRoomNotification(int roomId, boolean enabled) {
+        roomNotifications.put(roomId, enabled);
+    }
+
 }
