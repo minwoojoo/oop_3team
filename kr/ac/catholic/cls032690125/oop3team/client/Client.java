@@ -46,6 +46,10 @@ public class Client {
 
     private Session currentSession = null;
     public Session getCurrentSession() { return currentSession; }
+
+    public void setCurrentSession(Session currentSession) {
+        this.currentSession = currentSession; }
+
     public void updateSession(Session currentSession) { this.currentSession = currentSession; }
 
     private MainScreen mainScreen;

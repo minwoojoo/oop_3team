@@ -24,6 +24,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,7 +74,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         this.chatroomController = new CChatroomController(client);
 
         this.members = new ArrayList<>();
-        
+
         setTitle("그룹 채팅 - " + chatroom.getTitle());
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -131,7 +134,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 출퇴근 기록 메뉴 아이템
         JMenuItem attendanceItem = new JMenuItem("출퇴근 기록");
         attendanceItem.addActionListener(e -> {
-            new AttendanceScreen(this).setVisible(true);
+            new AttendanceScreen(this,client,chatroom).setVisible(true);
         });
         
         // 일정 관련 메뉴 아이템
@@ -148,7 +151,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         // 우선 알림 키워드 설정 메뉴 아이템
         JMenuItem keywordSettingsItem = new JMenuItem("우선 알림 키워드 설정");
         keywordSettingsItem.addActionListener(e -> {
-            new KeywordSettingsScreen(this).setVisible(true);
+            new KeywordSettingsScreen(this,client,chatroom).setVisible(true);
         });
 
         // 나가기 메뉴 아이템
@@ -158,7 +161,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                 "정말로 대화방에서 나가시겠습니까?",
                 "대화방 나가기",
                 JOptionPane.YES_NO_OPTION);
-            
+
             if (result == JOptionPane.YES_OPTION) {
                 chatroomController.requestLeaveChatroom(
                     chatroom.getChatroomId(),
@@ -178,7 +181,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
                             }
                         }
                     }
-                    
+
                 );
             }
             dispose();

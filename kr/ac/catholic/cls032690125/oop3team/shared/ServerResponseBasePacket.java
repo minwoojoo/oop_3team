@@ -1,11 +1,18 @@
 package kr.ac.catholic.cls032690125.oop3team.shared;
 
+import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
+
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class ServerResponseBasePacket implements Serializable {
     private static final long serialVersionUID = 45772000L;
 
     private long requestId; // -1일 경우 메시지 등 broadcast
+
+    private boolean success;
+    private String message;
+    private List<Attendance> records;
 
     /**
      * @apiNote 잠시만요! 이건 브로드캐스팅용 패킷을 만들때 씁니다! 클라이언트의 요청을 처리할 떄는 super(long) 함수를 사용하세요!
@@ -21,5 +28,18 @@ public abstract class ServerResponseBasePacket implements Serializable {
         this.requestId = requestId;
     }
 
-    public long getRequestId() { return requestId; }
+    public long getRequestId() {
+        return requestId;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+    public List<Attendance> getRecords() {
+        return records;
+    }
 }
