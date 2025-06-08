@@ -68,3 +68,15 @@ CREATE TABLE IF NOT EXISTS FRIEND (
     CONSTRAINT fk_friend FOREIGN KEY (friend_id) REFERENCES user(user_id)
 );
 
+-- MEMO(메모/북마크) 테이블 생성
+CREATE TABLE IF NOT EXISTS MEMO (
+    memo_id    INT AUTO_INCREMENT PRIMARY KEY,         -- 메모 고유 ID (PK)
+    user_id    VARCHAR(20) NOT NULL,                   -- 사용자 ID (FK)
+    message_id BIGINT NOT NULL,                        -- 북마크한 메시지 ID (FK)
+    memo_text  TEXT,                                   -- 사용자가 입력한 메모 내용
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- 생성일
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 수정일
+    FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (message_id) REFERENCES MESSAGES(message_id) ON DELETE CASCADE
+);
+
