@@ -47,13 +47,15 @@ public class KeywordDAO extends StandardDAO {
     }
 
     public List<Keyword> getKeywords(String userId,int chatroomId) throws Exception {
-        String sql = "SELECT * FROM keyword WHERE user_id = ? AND chatroom_id = ?";
+        String sql = chatroomId == -1 ?
+                "SELECT * FROM keyword WHERE user_id = ?"
+                : "SELECT * FROM keyword WHERE user_id = ? AND chatroom_id = ?";
 
         List<Keyword> keywords = new ArrayList<>();
         try (Connection conn = database.getConnection()){
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userId);
-            ps.setInt(2, chatroomId);
+            if(chatroomId != -1) ps.setInt(2, chatroomId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Keyword kw = new Keyword(
