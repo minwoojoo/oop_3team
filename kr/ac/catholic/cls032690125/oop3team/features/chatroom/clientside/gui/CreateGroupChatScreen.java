@@ -1,6 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui;
 
 import kr.ac.catholic.cls032690125.oop3team.client.Client;
+import kr.ac.catholic.cls032690125.oop3team.client.MainScreen;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
@@ -30,7 +31,7 @@ public class CreateGroupChatScreen extends JFrame {
         friendListPanel.add(checkBox);
     }
 
-    public CreateGroupChatScreen(Client client, List<UserProfile> friendList) {
+    public CreateGroupChatScreen(Client client, List<UserProfile> friendList, MainScreen mainScreen) {
         this.client = client;
         chatroomsController = new CChatroomController(client);
         friendController = new CFriendController(client);
@@ -104,6 +105,9 @@ public class CreateGroupChatScreen extends JFrame {
                             groupchat.setVisible(true);
                             groupchat.initiate();
                             CreateGroupChatScreen.this.dispose();
+
+                            mainScreen.markChatRoomOpen(data.getRoom().getChatroomId());
+                            mainScreen.registerRoomForNotifications(data.getRoom().getChatroomId());
                         }
                     });
                 }
