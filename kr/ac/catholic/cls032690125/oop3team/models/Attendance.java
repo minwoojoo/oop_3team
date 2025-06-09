@@ -9,15 +9,17 @@ public class Attendance implements Serializable {
     private Timestamp checkInTime;
     private Timestamp checkOutTime;
     private int workTimeTotal;
+    private String username;
 
     public Attendance() {};
 
-    public Attendance(int id, String userId, Timestamp checkInTime, Timestamp checkOutTime, int workTimeTotal) {
+    public Attendance(int id, String userId, Timestamp checkInTime, Timestamp checkOutTime, int workTimeTotal,String username) {
         this.id = id;
         this.userId = userId;
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
         this.workTimeTotal = workTimeTotal;
+        this.username = username;
     }
 
     public int getId() {
@@ -38,6 +40,10 @@ public class Attendance implements Serializable {
 
     public int getWorkTimeTotal() {
         return workTimeTotal;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setId(int id) {

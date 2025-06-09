@@ -47,7 +47,8 @@ public class AttendanceScreen extends JFrame {
         // 출근 버튼 클릭 처리
         checkInButton.addActionListener(e -> {
             String userId = client.getCurrentSession().getUserId();
-            CCheckInRequest packet = new CCheckInRequest(userId);
+            int chatroomId = chatroom.getChatroomId();
+            CCheckInRequest packet = new CCheckInRequest(userId, chatroomId);
 
             client.request(packet, response -> {
                 if (response instanceof SCheckInResponse checkInResponse) {
@@ -67,7 +68,8 @@ public class AttendanceScreen extends JFrame {
         // 퇴근 버튼 클릭 처리
         checkOutButton.addActionListener(e -> {
             String userId = client.getCurrentSession().getUserId();
-            CCheckOutRequest packet = new CCheckOutRequest(userId);
+            int chatroomId = chatroom.getChatroomId();
+            CCheckOutRequest packet = new CCheckOutRequest(userId, chatroomId);
 
             client.request(packet, response -> {
                 if (response instanceof SCheckOutResponse checkOutResponse) {
@@ -102,8 +104,8 @@ public class AttendanceScreen extends JFrame {
 
     // 출퇴근 기록 목록을 서버에서 받아와서 갱신
     private void updateRecordList() {
-        String userId = client.getCurrentSession().getUserId();
-        client.request(new CGetAttendanceListRequest(userId), response -> {
+        int chatroomId = chatroom.getChatroomId();
+        client.request(new CGetAttendanceListRequest(chatroomId), response -> {
             if (response instanceof SGetAttendanceListResponse res && res.isSuccess()) {
                 List<Attendance> records = res.getRecords();
                 if (records == null) records = List.of();
@@ -122,10 +124,16 @@ public class AttendanceScreen extends JFrame {
                                 JPanel card = new JPanel(new BorderLayout(5, 5));
                                 card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
                                 card.setBackground(Color.WHITE);
-                                card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+                                card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
 
-                                JPanel info = new JPanel(new GridLayout(2, 2, 5, 5));
+                                JPanel info = new JPanel(new GridBagLayout());
+                                GridBagConstraints gbc = new GridBagConstraints();
 
+                                gbc.fill = GridBagConstraints.HORIZONTAL;
+                                gbc.weightx = 1.0;
+                                gbc.insets = new Insets(5, 20, 5, 20); // Padding
+
+                                //time format
                                 String dateStr = record.getCheckInTime() != null ?
                                         record.getCheckInTime().toLocalDateTime().format(formatter) : "정보 없음";
                                 String checkInStr = record.getCheckInTime() != null ?
@@ -136,10 +144,42 @@ public class AttendanceScreen extends JFrame {
                                 int totalMin = record.getWorkTimeTotal();
                                 String workTime = (totalMin / 60 > 0 ? (totalMin / 60) + "시간 " : "") + (totalMin % 60) + "분";
 
-                                info.add(new JLabel("날짜: " + dateStr));
-                                info.add(new JLabel("총 근무: " + workTime));
-                                info.add(new JLabel("출근: " + checkInStr));
-                                info.add(new JLabel("퇴근: " + checkOutStr));
+                                // 사용자: username (centered)
+                                JLabel nameLabel = new JLabel("사용자: " + record.getUsername()+" 님");
+                                nameLabel.setFont(new Font("SansSerif", Font.BOLD, 20));
+                                nameLabel.setForeground(new Color(0, 102, 204)); // Xanh dương đậm
+
+                                gbc.gridx = 0;
+                                gbc.gridy = 0;
+                                gbc.gridwidth = 2;
+                                gbc.anchor = GridBagConstraints.CENTER;
+                                info.add(nameLabel, gbc);
+
+
+                                // 날짜 (left)
+                                gbc.gridx = 0;
+                                gbc.gridy = 1;
+                                gbc.gridwidth = 1;
+                                gbc.anchor = GridBagConstraints.WEST;
+                                info.add(new JLabel("📅 날짜: " + dateStr), gbc);
+
+                                // 출근 (right)
+                                gbc.gridx = 1;
+                                gbc.gridy = 1;
+                                gbc.anchor = GridBagConstraints.EAST;
+                                info.add(new JLabel("🕘 출근: " + checkInStr), gbc);
+
+                                // 퇴근 (left)
+                                gbc.gridx = 0;
+                                gbc.gridy = 2;
+                                gbc.anchor = GridBagConstraints.WEST;
+                                info.add(new JLabel("🕔 퇴근: " + checkOutStr), gbc);
+
+                                // 총 근무 (right)
+                                gbc.gridx = 1;
+                                gbc.gridy = 2;
+                                gbc.anchor = GridBagConstraints.EAST;
+                                info.add(new JLabel("⏱️ 총 근무: " + workTime), gbc);
 
                                 card.add(info, BorderLayout.CENTER);
                                 recordListPanel.add(card);
