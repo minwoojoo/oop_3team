@@ -68,11 +68,11 @@ public class CreateGroupChatScreen extends JFrame {
 
         // 하단 버튼 영역
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton nextButton = new JButton("다음");
+        JButton nextButton = new JButton("생성");
         buttonPanel.add(nextButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // 다음 버튼 이벤트 처리
+        // 생성 버튼 이벤트 처리
         nextButton.addActionListener(e -> {
             int selectedCount = 0;
             for (JCheckBox checkBox : friendCheckBoxes) {

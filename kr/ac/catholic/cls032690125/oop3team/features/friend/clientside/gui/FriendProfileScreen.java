@@ -159,26 +159,42 @@ public class FriendProfileScreen extends JFrame {
             );
             
             if (result == JOptionPane.YES_OPTION) {
-                friendController.blockFriend(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                // 차단 여부 먼저 확인
+                friendController.checkBlocked(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                     @Override
                     protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
                         if (data.getData() != null && data.getData()) {
                             JOptionPane.showMessageDialog(
                                 FriendProfileScreen.this,
-                                "친구가 차단되었습니다.",
-                                "차단 완료",
-                                JOptionPane.INFORMATION_MESSAGE
+                                "이미 차단한 친구입니다.",
+                                "알림",
+                                JOptionPane.WARNING_MESSAGE
                             );
-                            mainScreen.refreshFriendList(); // 친구 목록 새로고침
-                            dispose(); // 프로필 화면 닫기
-                        } else {
-                            JOptionPane.showMessageDialog(
-                                FriendProfileScreen.this,
-                                "친구 차단에 실패했습니다.",
-                                "오류",
-                                JOptionPane.ERROR_MESSAGE
-                            );
+                            return;
                         }
+                        // 차단이 안 되어 있으면 차단 진행
+                        friendController.blockFriend(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                            @Override
+                            protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                                if (data.getData() != null && data.getData()) {
+                                    JOptionPane.showMessageDialog(
+                                        FriendProfileScreen.this,
+                                        "친구가 차단되었습니다.",
+                                        "차단 완료",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    mainScreen.refreshFriendList(); // 친구 목록 새로고침
+                                    dispose(); // 프로필 화면 닫기
+                                } else {
+                                    JOptionPane.showMessageDialog(
+                                        FriendProfileScreen.this,
+                                        "친구 차단에 실패했습니다.",
+                                        "오류",
+                                        JOptionPane.ERROR_MESSAGE
+                                    );
+                                }
+                            }
+                        });
                     }
                 });
             }
