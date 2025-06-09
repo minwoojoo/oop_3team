@@ -316,7 +316,7 @@ public class MainScreen extends JFrame {
                 String preview = msg.getContent().length() > 30
                         ? msg.getContent().substring(0, 30) + "…"
                         : msg.getContent();
-                showToast("키워드 메시지 - [" + title + "] " + preview);
+                showKeywordToast("키워드 메시지 - [" + title + "] " + preview);
             });
         });
         client.getKeywordReceiver().updateKeywords();
@@ -703,6 +703,41 @@ public class MainScreen extends JFrame {
         // 화면 오른쪽 상단에 위치
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = screen.width - toast.getWidth() - 20;
+        int y = 20;
+        toast.setLocation(x, y);
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+
+        // 3초 후 자동 닫기
+        new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toast.dispose();
+            }
+        }) {{ setRepeats(false); start(); }};
+    }
+
+    private void showKeywordToast(String message) {
+        JWindow toast = new JWindow(this);
+        toast.setBackground(new Color(0, 0, 0, 0));
+
+        // 둥근 모서리 + 반투명 붉은 배경 패널
+        RoundedPanel panel = new RoundedPanel(20, new Color(255, 205, 210, 230));  // #FFCDD2, alpha=230
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // 이모지와 메시지
+        JLabel lbl = new JLabel("일톡스 " + message);
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        lbl.setForeground(new Color(33, 33, 33));
+        panel.add(lbl, BorderLayout.CENTER);
+
+        toast.getContentPane().add(panel);
+        toast.pack();
+
+        // 화면 오른쪽 상단에 위치
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = 20;
         int y = 20;
         toast.setLocation(x, y);
         toast.setAlwaysOnTop(true);
