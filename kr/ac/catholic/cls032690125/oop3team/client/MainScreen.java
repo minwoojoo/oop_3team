@@ -24,6 +24,7 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -628,17 +629,46 @@ public class MainScreen extends JFrame {
             chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (room.isPrivate()) {
-                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
-                        privateChatScreen
-                                .setVisible(true);
-                        openChatRooms.add(room.getChatroomId());
-                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                        // 1:1 대화방인 경우 차단 여부 확인
+                        chatRoomController.requestMemberList(room.getChatroomId(), new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
                             @Override
-                            public void windowClosed(WindowEvent e) {
-                                openChatRooms.remove(room.getChatroomId());
+                            protected void execute(SChatroomMemberListPacket data) {
+                                // 다른 참여자의 ID 찾기
+                                String otherUserId = null;
+                                for (String memberId : data.getMembers()) {
+                                    if (!memberId.equals(userId)) {
+                                        otherUserId = memberId;
+                                        break;
+                                    }
+                                }
+                                
+                                if (otherUserId == null) {
+                                    JOptionPane.showMessageDialog(MainScreen.this, "대화 상대를 찾을 수 없습니다.");
+                                    return;
+                                }
+
+                                // 차단 여부 확인
+                                cFriendController.checkBlocked(userId, otherUserId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                                    @Override
+                                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                                        if (data.getData() != null && data.getData()) {
+                                            JOptionPane.showMessageDialog(MainScreen.this, "차단된 친구입니다.");
+                                            return;
+                                        }
+                                        
+                                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
+                                        privateChatScreen.setVisible(true);
+                                        openChatRooms.add(room.getChatroomId());
+                                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                                            @Override
+                                            public void windowClosed(WindowEvent e) {
+                                                openChatRooms.remove(room.getChatroomId());
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
-
                     } else {
                         // 그룹 채팅
                         GroupChatScreen screen = new GroupChatScreen(client, room);
