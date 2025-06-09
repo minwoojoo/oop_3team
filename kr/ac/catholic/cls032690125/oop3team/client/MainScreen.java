@@ -307,6 +307,10 @@ public class MainScreen extends JFrame {
         });
         client.getKeywordReceiver().addHandler(msg -> {
             SwingUtilities.invokeLater(() -> {
+                if (openChatRooms.contains(msg.getChatroomId())) {
+                    return;
+                }
+
                 JLabel badge = badgeLabels.get(msg.getChatroomId());
                 if (badge != null) badge.setText("●");
                 String title = getRoomTitle(msg.getChatroomId());
