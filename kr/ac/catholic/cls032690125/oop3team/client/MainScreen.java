@@ -24,6 +24,7 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -102,15 +103,12 @@ public class MainScreen extends JFrame {
 
         // 친구 탭
         JPanel friendPanel = new JPanel(new BorderLayout());
-        
-        // 상단: 친구 추가 버튼과 검색바
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JButton addFriendButton = new JButton("➕ 친구 추가");
-        JTextField searchField = new JTextField();
-        
-        topPanel.add(addFriendButton, BorderLayout.WEST);
-        topPanel.add(searchField, BorderLayout.CENTER);
-        friendPanel.add(topPanel, BorderLayout.NORTH);
+
+        // 상단: 친구 추가 버튼
+        JButton addFriendButton = new JButton("+ 친구 추가");
+        addFriendButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        addFriendButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
+        friendPanel.add(addFriendButton, BorderLayout.NORTH);
 
         // 중앙: 친구 리스트
         friendListPanel = new JPanel();
@@ -185,7 +183,9 @@ public class MainScreen extends JFrame {
         JPanel chatPanel = new JPanel(new BorderLayout());
         
         // 상단: 그룹 대화방 생성 버튼
-        JButton createGroupButton = new JButton("➕ 그룹 대화방 생성");
+        JButton createGroupButton = new JButton("+ 그룹 대화방 생성");
+        createGroupButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        createGroupButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
@@ -628,14 +628,44 @@ public class MainScreen extends JFrame {
             chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (room.isPrivate()) {
-                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
-                        privateChatScreen
-                                .setVisible(true);
-                        openChatRooms.add(room.getChatroomId());
-                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                        // 1:1 대화방인 경우 차단 여부 확인Add commentMore actions
+                        chatRoomController.requestMemberList(room.getChatroomId(), new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
                             @Override
-                            public void windowClosed(WindowEvent e) {
-                                openChatRooms.remove(room.getChatroomId());
+                            protected void execute(SChatroomMemberListPacket data) {
+                                // 다른 참여자의 ID 찾기
+                                String otherUserId = null;
+                                for (String memberId : data.getMembers()) {
+                                    if (!memberId.equals(userId)) {
+                                        otherUserId = memberId;
+                                        break;
+                                    }
+                                }
+
+                                if (otherUserId == null) {
+                                    JOptionPane.showMessageDialog(MainScreen.this, "대화 상대를 찾을 수 없습니다.");
+                                    return;
+                                }
+
+                                // 차단 여부 확인
+                                cFriendController.checkBlocked(userId, otherUserId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                                    @Override
+                                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                                        if (data.getData() != null && data.getData()) {
+                                            JOptionPane.showMessageDialog(MainScreen.this, "차단된 친구입니다.");
+                                            return;
+                                        }
+
+                                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
+                                        privateChatScreen.setVisible(true);
+                                        openChatRooms.add(room.getChatroomId());
+                                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                                            @Override
+                                            public void windowClosed(WindowEvent e) {
+                                                openChatRooms.remove(room.getChatroomId());
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
 
