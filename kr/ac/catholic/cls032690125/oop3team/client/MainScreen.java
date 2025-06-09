@@ -70,6 +70,9 @@ public class MainScreen extends JFrame {
     // 방별 알림 on/off 상태
     private Map<Integer, Boolean> roomNotifications = new HashMap<>();
 
+    private List<JWindow> keywordToastWindows = new ArrayList<>();
+    private List<JWindow> chatToastWindows = new ArrayList<>();
+
 
     public MainScreen(String userId, Client client) {
         this.userId = userId;
@@ -374,16 +377,16 @@ public class MainScreen extends JFrame {
             }
         });
 
-        // 친구 목록 자동 새로고침 타이머 (5초마다)
-        Timer friendListTimer = new Timer(5 * 1000, new ActionListener() {
+        // 친구 목록 자동 새로고침 타이머 (3초마다)
+        Timer friendListTimer = new Timer(3 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshFriendList();
             }
         });
         friendListTimer.start();
 
-        // 대화방 목록 자동 새로고침 타이머 (5초마다)
-        Timer chatRoomListTimer = new Timer(5 * 1000, new ActionListener() {
+        // 대화방 목록 자동 새로고침 타이머 (3초마다)
+        Timer chatRoomListTimer = new Timer(3 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshChatRoomList();
             }
@@ -700,6 +703,9 @@ public class MainScreen extends JFrame {
         toast.getContentPane().add(panel);
         toast.pack();
 
+        chatToastWindows.add(toast);
+        repositionChatToasts();
+
         // 화면 오른쪽 상단에 위치
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = screen.width - toast.getWidth() - 20;
@@ -713,10 +719,22 @@ public class MainScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toast.dispose();
+                chatToastWindows.remove(toast);
+                repositionChatToasts();
             }
         }) {{ setRepeats(false); start(); }};
     }
-
+    private void repositionChatToasts() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int margin = 20;
+        int gap = 10;
+        for (int i = 0; i < chatToastWindows.size(); i++) {
+            JWindow w = chatToastWindows.get(i);
+            int x = screen.width - w.getWidth() - margin;
+            int y = margin + i * (w.getHeight() + gap);
+            w.setLocation(x, y);
+        }
+    }
     private void showKeywordToast(String message) {
         JWindow toast = new JWindow(this);
         toast.setBackground(new Color(0, 0, 0, 0));
@@ -735,6 +753,9 @@ public class MainScreen extends JFrame {
         toast.getContentPane().add(panel);
         toast.pack();
 
+        keywordToastWindows.add(toast);
+        repositionToasts();
+
         // 화면 오른쪽 상단에 위치
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = 20;
@@ -743,15 +764,27 @@ public class MainScreen extends JFrame {
         toast.setAlwaysOnTop(true);
         toast.setVisible(true);
 
-        // 3초 후 자동 닫기
-        new Timer(3000, new ActionListener() {
+        // 4초 후 자동 닫기
+        new Timer(4000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toast.dispose();
+                keywordToastWindows.remove(toast);
+                repositionToasts();
             }
         }) {{ setRepeats(false); start(); }};
     }
+    private void repositionToasts() {
+        int x = 20;
+        int startY = 20;
+        int gap = 10;
 
+        for (int i = 0; i < keywordToastWindows.size(); i++) {
+            JWindow w = keywordToastWindows.get(i);
+            int y = startY + i * (w.getHeight() + gap);
+            w.setLocation(x, y);
+        }
+    }
     // 둥근 배경을 그려주는 커스텀 JPanel
     private static class RoundedPanel extends JPanel {
         private final int cornerRadius;
