@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="137aba0b-8b74-454c-a3af-0e7436cffb7d" name="변경" comment="keyword 이미 존재 여부 확인&#10;&#10;Signed-off-by: nguyen0220 &lt;teemee202@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/team3_messageProgram.iml" beforeDir="false" afterPath="$PROJECT_DIR$/team3_messageProgram.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/clientside/gui/AttendanceScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/serverside/AttendanceDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/serverside/AttendanceDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/serverside/SAttendanceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/serverside/SAttendanceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CCheckInRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CCheckInRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CCheckOutRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CCheckOutRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CGetAttendanceListRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/features/attendance/shared/CGetAttendanceListRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Attendance.java" beforeDir="false" afterPath="$PROJECT_DIR$/kr/ac/catholic/cls032690125/oop3team/models/Attendance.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +191,7 @@
       <workItem from="1749262015575" duration="13625000" />
       <workItem from="1749354280748" duration="1450000" />
       <workItem from="1749360740197" duration="137000" />
-      <workItem from="1749476880806" duration="2608000" />
+      <workItem from="1749476880806" duration="11365000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />

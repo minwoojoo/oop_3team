@@ -11,30 +11,32 @@ import java.util.List;
 
 public class AttendanceDAO extends StandardDAO {
 
-    public AttendanceDAO(Server server){
+    public AttendanceDAO(Server server) {
         super(server);
     }
 
     //  출근
-    public void checkIn(String userId) throws SQLException {
-        String sql = "INSERT INTO attendance (user_id, check_in_time) VALUES (?, NOW())";
+    public void checkIn(String userId, int chatroomId) throws SQLException {
+        String sql = "INSERT INTO attendance (user_id,chatroom_id, check_in_time) VALUES (?, ?, NOW())";
 
         try (PreparedStatement stmt = database.getConnection().prepareStatement(sql)) {
             stmt.setString(1, userId);
+            stmt.setInt(2, chatroomId);
             stmt.execute();
         }
     }
 
     //    퇴근 및 근무시간 계산
-    public void checkOut(String userId) throws SQLException {
+    public void checkOut(String userId, int chatroomId) throws SQLException {
         String checkSql = """
                     SELECT id FROM attendance 
-                    WHERE user_id = ? AND check_out_time IS NULL
+                    WHERE user_id = ? AND chatroom_id = ? AND check_out_time IS NULL
                     ORDER BY check_in_time DESC
                     LIMIT 1
                 """;
         try (PreparedStatement checkStmt = database.getConnection().prepareStatement(checkSql)) {
             checkStmt.setString(1, userId);
+            checkStmt.setInt(2, chatroomId);
             ResultSet rs = checkStmt.executeQuery();
             if (!rs.next()) {
                 throw new SQLException("먼저 출근버튼을 눌러주세요.");
@@ -45,12 +47,13 @@ public class AttendanceDAO extends StandardDAO {
                     UPDATE attendance
                     SET check_out_time = NOW(),
                         work_time_total = TIMESTAMPDIFF(MINUTE, check_in_time, NOW())
-                    WHERE user_id = ? AND check_out_time IS NULL
+                    WHERE user_id = ? AND chatroom_id = ? AND check_out_time IS NULL
                     ORDER BY check_in_time DESC
                     LIMIT 1
                 """;
         try (PreparedStatement stmt = database.getConnection().prepareStatement(updateSql)) {
             stmt.setString(1, userId);
+            stmt.setInt(2, chatroomId);
             stmt.executeUpdate();
         }
 
@@ -58,12 +61,17 @@ public class AttendanceDAO extends StandardDAO {
     }
 
 
-    public List<Attendance> getAttendanceByUserId(String userId) throws SQLException {
+    public List<Attendance> getAttendanceByChatroomId(int chatroomId) throws SQLException {
         List<Attendance> attendanceList = new ArrayList<>();
-        String sql = "SELECT * FROM attendance WHERE user_id = ? ORDER BY check_in_time DESC";
-
+        String sql = """
+                SELECT a.*, u.name
+                FROM attendance a
+                JOIN user u ON a.user_id = u.user_id
+                WHERE a.chatroom_id = ?
+                ORDER BY a.check_in_time DESC
+                """;
         try (PreparedStatement stmt = database.getConnection().prepareStatement(sql)) {
-            stmt.setString(1, userId);
+            stmt.setInt(1, chatroomId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Attendance attendance = new Attendance(
@@ -71,7 +79,8 @@ public class AttendanceDAO extends StandardDAO {
                         rs.getString("user_id"),
                         rs.getTimestamp("check_in_time"),
                         rs.getTimestamp("check_out_time"),
-                        rs.getInt("work_time_total")
+                        rs.getInt("work_time_total"),
+                        rs.getString("name")
                 );
                 attendanceList.add(attendance);
             }
@@ -81,11 +90,11 @@ public class AttendanceDAO extends StandardDAO {
 
     public boolean hasAttendanceOnDate(String userId, String date) throws SQLException {
         String sql = """
-        SELECT COUNT(*) FROM attendance 
-        WHERE user_id = ? 
-          AND check_in_time >= ? 
-          AND check_in_time < ?
-    """;
+                    SELECT COUNT(*) FROM attendance 
+                    WHERE user_id = ? 
+                      AND check_in_time >= ? 
+                      AND check_in_time < ?
+                """;
 
         LocalDate localDate = LocalDate.parse(date);  // Ensure "yyyy-MM-dd" format
         Timestamp startOfDay = Timestamp.valueOf(localDate.atStartOfDay());
@@ -106,14 +115,13 @@ public class AttendanceDAO extends StandardDAO {
     }
 
 
-
     public void submitEditRequest(String userId, String date, String checkIn, String checkOut, String reason)
             throws SQLException {
         String sql = """
-        INSERT INTO AttendanceEditRequest 
-        (user_id, attendance_date, requested_check_in, requested_check_out, reason) 
-        VALUES (?, ?, ?, ?, ?)
-    """;
+                    INSERT INTO AttendanceEditRequest 
+                    (user_id, attendance_date, requested_check_in, requested_check_out, reason) 
+                    VALUES (?, ?, ?, ?, ?)
+                """;
         try (Connection conn = database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, userId);

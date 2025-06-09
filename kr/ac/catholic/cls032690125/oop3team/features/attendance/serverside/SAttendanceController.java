@@ -20,7 +20,7 @@ public class SAttendanceController extends ServerRequestListener {
     @ServerRequestHandler(CCheckInRequest.class)
     public void checkIn(ServerClientHandler handler, CCheckInRequest request) {
         try {
-            attendanceDAO.checkIn(request.getUserId());
+            attendanceDAO.checkIn(request.getUserId(),request.getChatroomId());
             handler.send(new SCheckInResponse(request.getRequestId(), true, "출근 완료"));
         } catch (Exception e) {
             handler.send(new SCheckInResponse(request.getRequestId(), false, e.getMessage()));
@@ -30,7 +30,7 @@ public class SAttendanceController extends ServerRequestListener {
     @ServerRequestHandler(CCheckOutRequest.class)
     public void checkOut(ServerClientHandler handler, CCheckOutRequest req) {
         try {
-            attendanceDAO.checkOut(req.getUserId());
+            attendanceDAO.checkOut(req.getUserId(),req.getChatroomId());
             handler.send(new SCheckOutResponse( req.getRequestId(),true,"퇴근 완료"));
         }catch (Exception e){
             handler.send(new SCheckOutResponse( req.getRequestId(),false, e.getMessage()));
@@ -56,7 +56,7 @@ public class SAttendanceController extends ServerRequestListener {
     @ServerRequestHandler(CGetAttendanceListRequest.class)
     public void getAttendanceList(ServerClientHandler handler, CGetAttendanceListRequest request) {
         try {
-            List<Attendance> records = attendanceDAO.getAttendanceByUserId(request.getUserId());
+            List<Attendance> records = attendanceDAO.getAttendanceByChatroomId(request.getChatroomId());
             handler.send(new SGetAttendanceListResponse(
                     request.getRequestId(),
                     true,
