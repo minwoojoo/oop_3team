@@ -80,6 +80,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Client.executor&quot;: &quot;Run&quot;,
@@ -91,7 +92,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/friend&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/chatroom&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/주민우/mysql-connector/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -201,7 +202,8 @@
       <workItem from="1749354280748" duration="1450000" />
       <workItem from="1749360740197" duration="137000" />
       <workItem from="1749480051267" duration="39000" />
-      <workItem from="1749484052208" duration="10365000" />
+      <workItem from="1749480116568" duration="295000" />
+      <workItem from="1749483537879" duration="421000" />
     </task>
     <task id="LOCAL-00001" summary="rebase: 패키지 명 추가, 소스 코드 이동">
       <option name="closed" value="true" />
