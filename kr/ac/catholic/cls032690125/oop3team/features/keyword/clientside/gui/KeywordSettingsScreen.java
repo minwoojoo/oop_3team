@@ -142,6 +142,7 @@ public class KeywordSettingsScreen extends JFrame {
                         updateKeywordList();
                         keywordField.setText("");
                         JOptionPane.showMessageDialog(this, "키워드가 성공적으로 추가되었습니다!", "성공", JOptionPane.INFORMATION_MESSAGE);
+                        client.getKeywordReceiver().updateKeywords();
                     } else {
                         JOptionPane.showMessageDialog(this, res.getMessage(), "추가 실패", JOptionPane.ERROR_MESSAGE);
                     }
@@ -161,6 +162,7 @@ public class KeywordSettingsScreen extends JFrame {
                 SwingUtilities.invokeLater(() -> {
                     keywords.remove(keyword);
                     updateKeywordList();
+                    client.getKeywordReceiver().updateKeywords();
                 });
             } else {
                 SwingUtilities.invokeLater(() -> {

@@ -274,7 +274,7 @@ public class MainScreen extends JFrame {
             cFriendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
                 @Override
                 protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()));
+                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()), MainScreen.this);
                     createGroupScreen.setVisible(true);
                 }
             });
@@ -300,21 +300,26 @@ public class MainScreen extends JFrame {
                 String preview = msg.getContent().length() > 30
                         ? msg.getContent().substring(0, 30) + "…"
                         : msg.getContent();
-                showToast("• [" + title + "] 새 메시지: “" + preview + "”");
+                showToast("• [" + title + "] 새 메시지: " + preview);
 
             });
         });
         client.getKeywordReceiver().addHandler(msg -> {
             SwingUtilities.invokeLater(() -> {
+                if (openChatRooms.contains(msg.getChatroomId())) {
+                    return;
+                }
+
                 JLabel badge = badgeLabels.get(msg.getChatroomId());
                 if (badge != null) badge.setText("●");
                 String title = getRoomTitle(msg.getChatroomId());
                 String preview = msg.getContent().length() > 30
                         ? msg.getContent().substring(0, 30) + "…"
                         : msg.getContent();
-                showToast("키워드 메시지 - [" + title + "] " + preview);
+                showKeywordToast("키워드 메시지 - [" + title + "] " + preview);
             });
         });
+        client.getKeywordReceiver().updateKeywords();
 
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
@@ -541,19 +546,6 @@ public class MainScreen extends JFrame {
         return times;
     }
 
-    public void initiate() {
-        loadGroupChat();
-
-        client.request(new CGetKeywordListRequest(client.getCurrentSession().getUserId(), -1), new ClientInteractResponseSwing<SGetKeywordListResponse>() {
-            @Override
-            protected void execute(SGetKeywordListResponse data) {
-                client.getKeywordReceiver().addKeywords(data.getKeywords());
-            }
-        });
-
-        this.setVisible(true);
-    }
-
     private void loadGroupChat() {
         refreshChatRoomList();
     }
@@ -628,7 +620,7 @@ public class MainScreen extends JFrame {
             chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (room.isPrivate()) {
-                        // 1:1 대화방인 경우 차단 여부 확인Add commentMore actions
+                        // 1:1 대화방인 경우 차단 여부 확인
                         chatRoomController.requestMemberList(room.getChatroomId(), new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
                             @Override
                             protected void execute(SChatroomMemberListPacket data) {
@@ -668,7 +660,6 @@ public class MainScreen extends JFrame {
                                 });
                             }
                         });
-
                     } else {
                         // 그룹 채팅
                         GroupChatScreen screen = new GroupChatScreen(client, room);
@@ -712,6 +703,41 @@ public class MainScreen extends JFrame {
         // 화면 오른쪽 상단에 위치
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = screen.width - toast.getWidth() - 20;
+        int y = 20;
+        toast.setLocation(x, y);
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+
+        // 3초 후 자동 닫기
+        new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toast.dispose();
+            }
+        }) {{ setRepeats(false); start(); }};
+    }
+
+    private void showKeywordToast(String message) {
+        JWindow toast = new JWindow(this);
+        toast.setBackground(new Color(0, 0, 0, 0));
+
+        // 둥근 모서리 + 반투명 붉은 배경 패널
+        RoundedPanel panel = new RoundedPanel(20, new Color(255, 205, 210, 230));  // #FFCDD2, alpha=230
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // 이모지와 메시지
+        JLabel lbl = new JLabel("일톡스 " + message);
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        lbl.setForeground(new Color(33, 33, 33));
+        panel.add(lbl, BorderLayout.CENTER);
+
+        toast.getContentPane().add(panel);
+        toast.pack();
+
+        // 화면 오른쪽 상단에 위치
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = 20;
         int y = 20;
         toast.setLocation(x, y);
         toast.setAlwaysOnTop(true);
@@ -789,7 +815,7 @@ public class MainScreen extends JFrame {
     /**
      * 방을 처음 로드하거나 생성할 때 기본 on 상태로 등록.
      */
-    private void registerRoomForNotifications(int roomId) {
+    public void registerRoomForNotifications(int roomId) {
         roomNotifications.putIfAbsent(roomId, true);
     }
 
