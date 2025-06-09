@@ -316,6 +316,7 @@ public class MainScreen extends JFrame {
                 showToast("키워드 메시지 - [" + title + "] " + preview);
             });
         });
+        client.getKeywordReceiver().updateKeywords();
 
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
@@ -540,19 +541,6 @@ public class MainScreen extends JFrame {
         }
         
         return times;
-    }
-
-    public void initiate() {
-        loadGroupChat();
-
-        client.request(new CGetKeywordListRequest(client.getCurrentSession().getUserId(), -1), new ClientInteractResponseSwing<SGetKeywordListResponse>() {
-            @Override
-            protected void execute(SGetKeywordListResponse data) {
-                client.getKeywordReceiver().addKeywords(data.getKeywords());
-            }
-        });
-
-        this.setVisible(true);
     }
 
     private void loadGroupChat() {
