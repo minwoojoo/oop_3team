@@ -48,7 +48,7 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
     }
     public List<String> getMembers() { return members; }
 
-    private List<Message> messages;
+    private ArrayList<Message> messages = new ArrayList<>();
     private void addMessage(Message message) {
         messageListModel.addElement(message);
     }
@@ -370,7 +370,8 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
-                messages = Arrays.asList(data.getMessages());
+                messages.clear();
+                messages.addAll(Arrays.asList(data.getMessages()));
                 messageListModel.clear();
                 for (Message m : messages) {
                     messageListModel.addElement(m);
@@ -382,7 +383,11 @@ public class GroupChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void onChatMessage(Message message) {
-        messageListModel.addElement(message);
+        // 이미 있는 메시지는 추가하지 않음
+        if (!messages.contains(message)) {
+            messages.add(message);
+            messageListModel.addElement(message);
+        }
     }
 
     private void updateMemberLabel() {
