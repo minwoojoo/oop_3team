@@ -274,7 +274,7 @@ public class MainScreen extends JFrame {
             cFriendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
                 @Override
                 protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()));
+                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()), MainScreen.this);
                     createGroupScreen.setVisible(true);
                 }
             });
@@ -780,7 +780,7 @@ public class MainScreen extends JFrame {
     /**
      * 방을 처음 로드하거나 생성할 때 기본 on 상태로 등록.
      */
-    private void registerRoomForNotifications(int roomId) {
+    public void registerRoomForNotifications(int roomId) {
         roomNotifications.putIfAbsent(roomId, true);
     }
 
