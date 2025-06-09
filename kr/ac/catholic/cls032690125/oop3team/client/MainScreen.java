@@ -104,14 +104,11 @@ public class MainScreen extends JFrame {
         // 친구 탭
         JPanel friendPanel = new JPanel(new BorderLayout());
         
-        // 상단: 친구 추가 버튼과 검색바
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JButton addFriendButton = new JButton("➕ 친구 추가");
-        JTextField searchField = new JTextField();
-        
-        topPanel.add(addFriendButton, BorderLayout.WEST);
-        topPanel.add(searchField, BorderLayout.CENTER);
-        friendPanel.add(topPanel, BorderLayout.NORTH);
+        // 상단: 친구 추가 버튼 (topPanel 없이 바로 추가)
+        JButton addFriendButton = new JButton("+ 친구 추가");
+        addFriendButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        addFriendButton.setPreferredSize(new Dimension(0, 30)); // 높이 40으로 통일
+        friendPanel.add(addFriendButton, BorderLayout.NORTH);
 
         // 중앙: 친구 리스트
         friendListPanel = new JPanel();
@@ -186,7 +183,9 @@ public class MainScreen extends JFrame {
         JPanel chatPanel = new JPanel(new BorderLayout());
         
         // 상단: 그룹 대화방 생성 버튼
-        JButton createGroupButton = new JButton("➕ 그룹 대화방 생성");
+        JButton createGroupButton = new JButton("+ 그룹 대화방 생성");
+        createGroupButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        createGroupButton.setPreferredSize(new Dimension(0, 30)); // 높이 40으로 통일
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
@@ -301,7 +300,7 @@ public class MainScreen extends JFrame {
                 String preview = msg.getContent().length() > 30
                         ? msg.getContent().substring(0, 30) + "…"
                         : msg.getContent();
-                showToast("• [" + title + "] 새 메시지: “" + preview + "”");
+                showToast("• [" + title + "] 새 메시지: " + preview);
 
             });
         });
