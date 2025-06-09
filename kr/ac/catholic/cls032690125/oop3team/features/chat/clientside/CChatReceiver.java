@@ -8,7 +8,9 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatro
 import kr.ac.catholic.cls032690125.oop3team.models.Message;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CChatReceiver extends ClientResponseListener {
@@ -44,7 +46,7 @@ public class CChatReceiver extends ClientResponseListener {
         }
     }
 
-    private List<CChatroomIndividualController> watchlist = new ArrayList<>();
+    private Set<CChatroomIndividualController> watchlist = new HashSet<>();
 
     /**
      * 채팅방 GUI가 생성되면 이 함수를 호출하세요
