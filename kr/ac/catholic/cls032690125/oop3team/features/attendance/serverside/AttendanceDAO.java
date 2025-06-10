@@ -1,6 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.serverside;
 
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
+import kr.ac.catholic.cls032690125.oop3team.models.AttendanceEditRequest;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 
@@ -130,6 +131,68 @@ public class AttendanceDAO extends StandardDAO {
             stmt.setTime(4, java.sql.Time.valueOf(checkOut + ":00"));
             stmt.setString(5, reason);
             stmt.executeUpdate();
+        }
+    }
+
+    public List<AttendanceEditRequest> getEditRequestsByUser(String userId) throws SQLException {
+        List<AttendanceEditRequest> requests = new ArrayList<>();
+        String sql = "SELECT * FROM AttendanceEditRequest WHERE user_id = ? ORDER BY requested_at DESC";
+
+        try (Connection conn = database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                AttendanceEditRequest r = new AttendanceEditRequest(
+                        rs.getLong("id"),
+                        rs.getString("user_id"),
+                        rs.getTimestamp("attendance_date"),
+                        rs.getString("requested_check_in"),
+                        rs.getString("requested_check_out"),
+                        rs.getString("reason"),
+                        rs.getTimestamp("requested_at"),
+                        rs.getString("status")
+                );
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+
+    public void updateEditRequestStatus(long requestId, String newStatus) throws SQLException {
+        String sql = "UPDATE AttendanceEditRequest SET status = ? WHERE id = ?";
+
+        try (Connection conn = database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newStatus);
+            stmt.setLong(2, requestId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void approveEditRequest(long editRequestId, String managerId, boolean approved, String rejectReason) throws SQLException {
+        String status = approved ? "APPROVED" : "REJECTED";
+
+        String sql = """
+                    UPDATE AttendanceEditRequest
+                    SET status = ?, 
+                        manager_id = ?, 
+                        approved_at = NOW(), 
+                        reject_reason = ?
+                    WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = database.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setString(2, managerId);
+            stmt.setString(3, rejectReason);
+            stmt.setLong(4, editRequestId);
+
+            int affected = stmt.executeUpdate();
+            if (affected == 0) {
+                throw new SQLException("해당 요청 ID를 찾을 수 없습니다: " + editRequestId);
+            }
         }
     }
 

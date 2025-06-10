@@ -2,11 +2,13 @@ package kr.ac.catholic.cls032690125.oop3team.features.attendance.serverside;
 
 import kr.ac.catholic.cls032690125.oop3team.features.attendance.shared.*;
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
+import kr.ac.catholic.cls032690125.oop3team.models.AttendanceEditRequest;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.ServerClientHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestHandler;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.ServerRequestListener;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class SAttendanceController extends ServerRequestListener {
@@ -81,6 +83,19 @@ public class SAttendanceController extends ServerRequestListener {
             handler.send(new SCheckIfAlreadyCheckedInResponse(request.getRequestId(), true, exists));
         } catch (Exception e) {
             handler.send(new SCheckIfAlreadyCheckedInResponse(request.getRequestId(), false, false));
+        }
+    }
+
+    @ServerRequestHandler(CGetAttendanceEditRequestList.class)
+    public void getAttendanceEditRequestList(ServerClientHandler handler, CGetAttendanceEditRequestList request) {
+        long requestId = request.getRequestId();
+        try {
+            List<AttendanceEditRequest> editRequests = attendanceDAO.getEditRequestsByUser(request.getUserId());
+            System.out.println("수정 요청 목록 요청 수신: " + request.getRequestId());
+
+            handler.send(new SGetAttendanceEditRequestList(requestId,true,"success", editRequests));
+        } catch (SQLException e) {
+            handler.send(new SGetAttendanceEditRequestList(requestId,false,"error",null));
         }
     }
 
