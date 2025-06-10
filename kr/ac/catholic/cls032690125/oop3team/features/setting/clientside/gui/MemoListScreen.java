@@ -59,38 +59,45 @@ public class MemoListScreen extends JFrame {
     private void updateMemoList() {
         memoListPanel.removeAll();
         
-        for (ChatMemo memo : memos) {
-            JPanel memoCard = new JPanel(new BorderLayout(5, 5));
-            memoCard.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            memoCard.setBackground(Color.WHITE);
-            memoCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+        if (memos == null || memos.isEmpty()) {
+            JLabel emptyLabel = new JLabel("저장된 메모가 없습니다", SwingConstants.CENTER);
+            emptyLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+            emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            memoListPanel.setLayout(new BoxLayout(memoListPanel, BoxLayout.Y_AXIS));
+            memoListPanel.add(Box.createVerticalGlue());
+            memoListPanel.add(emptyLabel);
+            memoListPanel.add(Box.createVerticalGlue());
+        } else {
+            for (ChatMemo memo : memos) {
+                JPanel memoCard = new JPanel(new BorderLayout(5, 5));
+                memoCard.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+                memoCard.setBackground(Color.WHITE);
+                memoCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 
-            // 메모 정보 패널
-            JPanel infoPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-            
-            JLabel dateLabel = new JLabel("메모 날짜: " + memo.getTimestamp());
-            dateLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
-            
-            JLabel contentLabel = new JLabel("메모 내용: " + memo.getChatContent());
-            contentLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-            
-            infoPanel.add(dateLabel);
-            infoPanel.add(contentLabel);
+                // 메모 정보 패널
+                JPanel infoPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+                
+                JLabel dateLabel = new JLabel("메모 날짜: " + memo.getTimestamp());
+                dateLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+                
+                JLabel contentLabel = new JLabel("메모 내용: " + memo.getChatContent());
+                contentLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+                
+                infoPanel.add(dateLabel);
+                infoPanel.add(contentLabel);
 
-            
+                // 버튼 패널
+                JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                JButton viewButton = new JButton("상세보기");
+                viewButton.addActionListener(e -> showMemoDetail(memo));
+                buttonPanel.add(viewButton);
 
-            // 버튼 패널
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            JButton viewButton = new JButton("상세보기");
-            viewButton.addActionListener(e -> showMemoDetail(memo));
-            buttonPanel.add(viewButton);
-
-            memoCard.add(infoPanel, BorderLayout.CENTER);
-            // memoCard.add(memoPanel, BorderLayout.SOUTH); // 목록에서는 주석 처리
-            memoCard.add(buttonPanel, BorderLayout.EAST);
-            
-            memoListPanel.add(memoCard);
-            memoListPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                memoCard.add(infoPanel, BorderLayout.CENTER);
+                memoCard.add(buttonPanel, BorderLayout.EAST);
+                
+                memoListPanel.add(memoCard);
+                memoListPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            }
         }
 
         memoListPanel.revalidate();

@@ -68,6 +68,10 @@ public class LoginScreen extends JFrame {
         loginBtn.addActionListener(e -> {
             String userId = idField.getText();
             String pass = new String(passField.getPassword());
+            if (userId.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(LoginScreen.this, "아이디와 비밀번호를 입력해야 합니다.");
+                return;
+            }
             authController.sendLogin(userId, pass, new ClientInteractResponseSwing<>(){
                 @Override
                 protected void execute(SLoginResponse data) {
@@ -94,7 +98,7 @@ public class LoginScreen extends JFrame {
                         new MainScreen(userId, client).setVisible(true);
                         dispose();
                     } else {
-                        JOptionPane.showMessageDialog(LoginScreen.this, "로그인 실패!");
+                        JOptionPane.showMessageDialog(LoginScreen.this, "아이디 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.");
                     }
                 }
             });

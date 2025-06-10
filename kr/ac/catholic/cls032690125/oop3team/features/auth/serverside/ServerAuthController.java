@@ -82,6 +82,11 @@ public class ServerAuthController extends ServerRequestListener {
         }
     }
 
+    @ServerRequestHandler(CIdDuplicateCheckRequest.class)
+    public void checkIdDuplicate(ServerClientHandler sch, CIdDuplicateCheckRequest req) {
+        boolean isDuplicate = authDAO.isIdDuplicate(req.getUserId());
+        sch.send(new ServerResponsePacketSimplefied<>(req.getRequestId(), isDuplicate));
+    }
 
     // 로그인 성공 시 세션 생성
     public Session createSession(String userId) {

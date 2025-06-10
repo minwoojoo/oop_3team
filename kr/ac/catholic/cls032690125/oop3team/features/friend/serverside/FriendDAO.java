@@ -182,4 +182,19 @@ public class FriendDAO {
         }
         return false;
     }
+
+    public boolean isPendingRequest(String userId, String friendId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM friend WHERE user_id = ? AND friend_id = ? AND is_pending = 1";
+        try (Connection conn = database.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.setString(2, friendId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
 }

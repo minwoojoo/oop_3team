@@ -56,35 +56,45 @@ public class ScheduleScreen extends JFrame {
     private void updateScheduleList() {
         scheduleListPanel.removeAll();
 
-        for (Schedule schedule : schedules) {
-            JPanel scheduleCard = new JPanel(new BorderLayout(5, 5));
-            scheduleCard.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-            scheduleCard.setBackground(Color.WHITE);
-            scheduleCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-            scheduleCard.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        if (schedules == null || schedules.isEmpty()) {
+            JLabel emptyLabel = new JLabel("등록된 일정이 없습니다", SwingConstants.CENTER);
+            emptyLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+            emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            scheduleListPanel.setLayout(new BoxLayout(scheduleListPanel, BoxLayout.Y_AXIS));
+            scheduleListPanel.add(Box.createVerticalGlue());
+            scheduleListPanel.add(emptyLabel);
+            scheduleListPanel.add(Box.createVerticalGlue());
+        } else {
+            for (Schedule schedule : schedules) {
+                JPanel scheduleCard = new JPanel(new BorderLayout(5, 5));
+                scheduleCard.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+                scheduleCard.setBackground(Color.WHITE);
+                scheduleCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+                scheduleCard.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-            // 일정 정보 패널
-            JPanel infoPanel = new JPanel(new BorderLayout(5, 5));
+                // 일정 정보 패널
+                JPanel infoPanel = new JPanel(new BorderLayout(5, 5));
 
-            JLabel titleLabel = new JLabel(schedule.getTitle());
-            titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+                JLabel titleLabel = new JLabel(schedule.getTitle());
+                titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 
-            JLabel datetimeLabel = new JLabel(schedule.getDate() + " " + schedule.getTime());
-            datetimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+                JLabel datetimeLabel = new JLabel(schedule.getDate() + " " + schedule.getTime());
+                datetimeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 
-            infoPanel.add(titleLabel, BorderLayout.NORTH);
-            infoPanel.add(datetimeLabel, BorderLayout.SOUTH);
+                infoPanel.add(titleLabel, BorderLayout.NORTH);
+                infoPanel.add(datetimeLabel, BorderLayout.SOUTH);
 
-            scheduleCard.add(infoPanel, BorderLayout.CENTER);
-            scheduleCard.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    new ScheduleDetailScreen(schedule).setVisible(true);
-                }
-            });
+                scheduleCard.add(infoPanel, BorderLayout.CENTER);
+                scheduleCard.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        new ScheduleDetailScreen(schedule).setVisible(true);
+                    }
+                });
 
-            scheduleListPanel.add(scheduleCard);
-            scheduleListPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                scheduleListPanel.add(scheduleCard);
+                scheduleListPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            }
         }
 
         scheduleListPanel.revalidate();
