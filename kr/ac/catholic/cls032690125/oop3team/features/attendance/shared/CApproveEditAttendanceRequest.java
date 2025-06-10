@@ -4,42 +4,27 @@ import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 
 public class CApproveEditAttendanceRequest extends ClientOrderBasePacket {
     private long editRequestId;
-    private String managerId;   // ID của người phê duyệt (trường phòng)
-    private boolean approved;   // true = đồng ý, false = từ chối
+    private boolean approved;
 
-
-    public CApproveEditAttendanceRequest(long requestId, long editRequestId, String managerId, boolean approved) {
+    public CApproveEditAttendanceRequest(long requestId, long editRequestId, boolean approved) {
         super(requestId);
         this.editRequestId = editRequestId;
-        this.managerId = managerId;
         this.approved = approved;
-
     }
-
-    // getter / setter
 
     public long getEditRequestId() {
         return editRequestId;
-    }
-
-    public void setEditRequestId(long editRequestId) {
-        this.editRequestId = editRequestId;
-    }
-
-    public String getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(String managerId) {
-        this.managerId = managerId;
     }
 
     public boolean isApproved() {
         return approved;
     }
 
+    public void setEditRequestId(long editRequestId) {
+        this.editRequestId = editRequestId;
+    }
+
     public void setApproved(boolean approved) {
         this.approved = approved;
     }
-
 }

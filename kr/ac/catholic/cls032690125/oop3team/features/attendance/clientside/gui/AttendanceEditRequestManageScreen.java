@@ -103,10 +103,9 @@ public class AttendanceEditRequestManageScreen extends JFrame {
 
     private void handleDecision(long editRequestId, boolean approved) {
         long requestId = System.currentTimeMillis();
-        String managerId = client.getCurrentSession().getUserId();
 
         CApproveEditAttendanceRequest packet = new CApproveEditAttendanceRequest(
-                requestId, editRequestId, managerId, approved
+                requestId, editRequestId,approved
         );
 
         client.request(packet, response -> {

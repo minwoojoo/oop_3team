@@ -134,13 +134,13 @@ public class AttendanceDAO extends StandardDAO {
         }
     }
 
-    public List<AttendanceEditRequest> getEditRequestsByUser(String userId) throws SQLException {
+    public List<AttendanceEditRequest> getEditRequests() throws SQLException {
         List<AttendanceEditRequest> requests = new ArrayList<>();
-        String sql = "SELECT * FROM AttendanceEditRequest WHERE user_id = ? ORDER BY requested_at DESC";
+        String sql = "SELECT * FROM AttendanceEditRequest ORDER BY requested_at DESC";
 
         try (Connection conn = database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, userId);
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 AttendanceEditRequest r = new AttendanceEditRequest(
@@ -159,35 +159,18 @@ public class AttendanceDAO extends StandardDAO {
         return requests;
     }
 
-
-    public void updateEditRequestStatus(long requestId, String newStatus) throws SQLException {
-        String sql = "UPDATE AttendanceEditRequest SET status = ? WHERE id = ?";
-
-        try (Connection conn = database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, newStatus);
-            stmt.setLong(2, requestId);
-            stmt.executeUpdate();
-        }
-    }
-
-    public void approveEditRequest(long editRequestId, String managerId, boolean approved, String rejectReason) throws SQLException {
-        String status = approved ? "APPROVED" : "REJECTED";
+    public void approveEditRequest(long editRequestId, boolean approved) throws SQLException {
+        String status = approved ? "승인" : "거절";
 
         String sql = """
-                    UPDATE AttendanceEditRequest
-                    SET status = ?, 
-                        manager_id = ?, 
-                        approved_at = NOW(), 
-                        reject_reason = ?
-                    WHERE id = ?
-                """;
+                UPDATE AttendanceEditRequest
+                SET status = ?
+                WHERE id = ?
+            """;
 
         try (PreparedStatement stmt = database.getConnection().prepareStatement(sql)) {
             stmt.setString(1, status);
-            stmt.setString(2, managerId);
-            stmt.setString(3, rejectReason);
-            stmt.setLong(4, editRequestId);
+            stmt.setLong(2, editRequestId);
 
             int affected = stmt.executeUpdate();
             if (affected == 0) {
@@ -195,5 +178,4 @@ public class AttendanceDAO extends StandardDAO {
             }
         }
     }
-
 }
