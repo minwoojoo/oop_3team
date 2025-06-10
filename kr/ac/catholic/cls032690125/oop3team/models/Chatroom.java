@@ -78,6 +78,7 @@ public class Chatroom implements Serializable {
     }
 
     public boolean isManager(String userId) {
-        return ownerId != null && ownerId.equals(userId);
+        return ownerId != null && ownerId.toLowerCase().equals(userId.toLowerCase());
     }
+
 }
