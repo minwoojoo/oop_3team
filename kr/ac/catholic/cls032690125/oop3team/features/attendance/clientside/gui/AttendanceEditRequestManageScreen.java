@@ -6,6 +6,7 @@ import kr.ac.catholic.cls032690125.oop3team.models.AttendanceEditRequest;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class AttendanceEditRequestManageScreen extends JFrame {
@@ -55,6 +56,7 @@ public class AttendanceEditRequestManageScreen extends JFrame {
         listPanel.removeAll();
 
         for (AttendanceEditRequest req : requests) {
+            SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd");
             System.out.println("Request id=" + req.getId() + ", userId=" + req.getUserId() +
                     ", date=" + req.getAttendanceDate() +
                     ", checkIn=" + req.getRequestedCheckIn() +
@@ -67,9 +69,10 @@ public class AttendanceEditRequestManageScreen extends JFrame {
             card.setBackground(Color.WHITE);
             card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 
+            String formattedDate = dateTimeFormat.format(req.getAttendanceDate());
             String info = String.format(
                     "<html><b>유저:</b> %s<br><b>날짜:</b> %s<br><b>출근:</b> %s<br><b>퇴근:</b> %s<br><b>사유:</b> %s<br><b>상태:</b> %s</html>",
-                    req.getUserId(), req.getAttendanceDate(), req.getRequestedCheckIn(),
+                    req.getUserId(), formattedDate, req.getRequestedCheckIn(),
                     req.getRequestedCheckOut(), req.getReason(), req.getStatus()
             );
 
@@ -80,14 +83,16 @@ public class AttendanceEditRequestManageScreen extends JFrame {
             JButton approveBtn = new JButton("승인");
             JButton rejectBtn = new JButton("거절");
 
-            approveBtn.addActionListener(e -> handleDecision(req.getId(), true));
+            approveBtn.addActionListener(e -> {
+                handleDecision(req.getId(), true, approveBtn, rejectBtn);
+            });
+
             rejectBtn.addActionListener(e -> {
                 int confirm = JOptionPane.showConfirmDialog(this, "정말로 거절하시겠습니까?", "거절 확인", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    handleDecision(req.getId(), false);
+                    handleDecision(req.getId(), false, approveBtn, rejectBtn);
                 }
             });
-
 
             btnPanel.add(approveBtn);
             btnPanel.add(rejectBtn);
@@ -101,21 +106,31 @@ public class AttendanceEditRequestManageScreen extends JFrame {
         listPanel.repaint();
     }
 
-    private void handleDecision(long editRequestId, boolean approved) {
+    private void handleDecision(long editRequestId, boolean approved, JButton approveBtn, JButton rejectBtn) {
         long requestId = System.currentTimeMillis();
 
         CApproveEditAttendanceRequest packet = new CApproveEditAttendanceRequest(
-                requestId, editRequestId,approved
+                requestId, editRequestId, approved
         );
 
         client.request(packet, response -> {
             if (response instanceof SApproveEditAttendanceResponse res && res.isSuccess()) {
                 SwingUtilities.invokeLater(() -> {
+                    if (approved) {
+                        approveBtn.setBackground(Color.GREEN);
+                        approveBtn.setForeground(Color.WHITE);
+                    } else {
+                        rejectBtn.setBackground(Color.RED);
+                        rejectBtn.setForeground(Color.WHITE);
+                    }
+
+                    approveBtn.setEnabled(false);
+                    rejectBtn.setEnabled(false);
+
                     JOptionPane.showMessageDialog(this, "처리 완료");
-                    loadRequests();
                 });
             } else {
-                JOptionPane.showMessageDialog(this, "처리 실패: ");
+                JOptionPane.showMessageDialog(this, "처리 실패: " + ((SApproveEditAttendanceResponse) response).getMessage());
             }
         });
     }
