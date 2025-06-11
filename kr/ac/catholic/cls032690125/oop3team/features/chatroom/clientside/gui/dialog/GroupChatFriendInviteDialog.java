@@ -8,6 +8,7 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomIn
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,7 @@ public class GroupChatFriendInviteDialog extends JDialog {
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private void addFriends(UserProfile userProfile) {
         if(screen.getMembers().contains(userProfile.getUserId())) return;
+        if(friendList.stream().anyMatch(f -> f.getUserId().equals(userProfile.getUserId()))) return;
         friendList.add(userProfile);
         JCheckBox checkBox = new JCheckBox(userProfile.getName());
         checkBox.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -70,6 +72,12 @@ public class GroupChatFriendInviteDialog extends JDialog {
                 controller.inviteMember(new CChatroomInvitePacket(controller.getChatroom().getChatroomId(), invs), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                     @Override
                     protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                        // 초대된 친구마다 시스템 메시지 추가
+                        for (String invitedUserId : invs) {
+                            String name = screen.getUserNameById(invitedUserId);
+                            screen.addSystemMessage(name + "님이 들어왔습니다");
+                        }
+                        screen.fetchAndStoreMembers(); // 멤버 목록 즉시 갱신
                         GroupChatFriendInviteDialog.this.dispose();
                     }
                 });
@@ -83,23 +91,40 @@ public class GroupChatFriendInviteDialog extends JDialog {
 
         panel.add(inviteButton, BorderLayout.SOUTH);
         add(panel);
+        initiate();
     }
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible);
         if (visible) { initiate(); }
+        super.setVisible(visible);
     }
 
     private void initiate() {
-        friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
-            @Override
-            protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                for(var f : data.getData()) {
-                    addFriends(f);
+        // 1. 대화방 멤버 목록을 먼저 최신화
+        screen.getController().getMemberList(
+            new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                @Override
+                protected void execute(SChatroomMemberListPacket memberData) {
+                    screen.setMembers(memberData.getMembers());
+                    // 2. 멤버 최신화 후 친구 목록 불러오기
+                    friendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
+                        @Override
+                        protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
+                            friendList.clear();
+                            checkBoxes.clear();
+                            friendListPanel.removeAll();
+                            for(var f : data.getData()) {
+                                addFriends(f);
+                            }
+                            friendListPanel.revalidate();
+                            friendListPanel.repaint();
+                            revalidate();
+                            repaint();
+                        }
+                    });
                 }
-                repaint();
             }
-        });
+        );
     }
 }

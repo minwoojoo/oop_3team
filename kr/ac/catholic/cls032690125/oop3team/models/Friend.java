@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Friend implements Serializable {
+    private static final long serialVersionUID = 45772006L;
+
     private int key;
     private String userid;
     private String friendid;

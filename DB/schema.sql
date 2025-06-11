@@ -13,6 +13,31 @@ CREATE TABLE IF NOT EXISTS USER (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(20) NOT NULL,
+    check_in_time DATETIME,
+    check_out_time DATETIME,
+    work_time_total INT,
+    FOREIGN KEY (user_id) REFERENCES `user`(user_id) ON DELETE CASCADE
+);
+
+ALTER TABLE attendance
+ADD COLUMN chatroom_id INT,
+ADD FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE SET NULL;
+
+CREATE TABLE IF NOT EXISTS AttendanceEditRequest (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id VARCHAR(20) NOT NULL,
+    attendance_date DATE NOT NULL,
+    requested_check_in TIME,
+    requested_check_out TIME,
+    reason TEXT NOT NULL,
+    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    FOREIGN KEY (user_id) REFERENCES `user`(user_id) ON DELETE CASCADE
+);
+
 -- SESSION 테이블 생성
 CREATE TABLE IF NOT EXISTS SESSION (
     session_id VARCHAR(128) PRIMARY KEY,
@@ -23,7 +48,7 @@ CREATE TABLE IF NOT EXISTS SESSION (
     FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE
 );
 
--- MESSAGE 테이블 생성
+-- MESSAGES 테이블 생성
 CREATE TABLE IF NOT EXISTS MESSAGES (
     message_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     chatroom_id INT NOT NULL,
@@ -40,11 +65,13 @@ CREATE TABLE IF NOT EXISTS CHATROOM (
     closed        BOOLEAN       DEFAULT FALSE,
     is_private    BOOLEAN       DEFAULT FALSE,
     title         VARCHAR(255)  NOT NULL,
-    created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
-
-    FOREIGN KEY (parentroom_id) REFERENCES CHATROOM(chatroom_id)
+    created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+    leader_id     VARCHAR(50)  DEFAULT NULL,
+    FOREIGN KEY (parentroom_id) REFERENCES CHATROOM(chatroom_id),
+    FOREIGN KEY (leader_id) REFERENCES USER(user_id)
 );
 
+-- CHATROOM_PARTICIPANT 테이블 생성
 CREATE TABLE IF NOT EXISTS CHATROOM_PARTICIPANT(
     chatroom_id INT NOT NULL,
     user_id VARCHAR(20) NOT NULL,
@@ -52,7 +79,7 @@ CREATE TABLE IF NOT EXISTS CHATROOM_PARTICIPANT(
     PRIMARY KEY (chatroom_id, user_id),
     FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE
-)
+);
 
 -- FRIEND 테이블 생성
 CREATE TABLE IF NOT EXISTS FRIEND (
@@ -66,3 +93,47 @@ CREATE TABLE IF NOT EXISTS FRIEND (
     CONSTRAINT fk_friend FOREIGN KEY (friend_id) REFERENCES user(user_id)
 );
 
+-- MEMO(메모/북마크) 테이블 생성
+CREATE TABLE IF NOT EXISTS MEMO (
+    memo_id    INT AUTO_INCREMENT PRIMARY KEY,         -- 메모 고유 ID (PK)
+    user_id    VARCHAR(20) NOT NULL,                   -- 사용자 ID (FK)
+    message_id BIGINT NOT NULL,                        -- 북마크한 메시지 ID (FK)
+    memo_text  TEXT,                                   -- 사용자가 입력한 메모 내용
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- 생성일
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 수정일
+    FOREIGN KEY (user_id) REFERENCES USER(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (message_id) REFERENCES MESSAGES(message_id) ON DELETE CASCADE
+);
+
+-- SCHEDULE 테이블 생성
+CREATE TABLE IF NOT EXISTS SCHEDULE (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    chatroom_id INT NOT NULL,
+    title VARCHAR(50),
+    schedule_date VARCHAR(14),
+    schedule_time VARCHAR(8),
+    memo TEXT
+)
+
+-- KEYWORD 테이블 생성
+CREATE TABLE KEYWORD (
+     id INT AUTO_INCREMENT PRIMARY KEY,
+     user_id VARCHAR(20) NOT NULL,
+     chatroom_id INT NOT NULL,
+     keyword VARCHAR(100) NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+     CONSTRAINT fk_keyword_user FOREIGN KEY (user_id)
+     REFERENCES user(user_id)
+     ON DELETE CASCADE,
+
+     CONSTRAINT fk_keyword_chatroom FOREIGN KEY (chatroom_id)
+     REFERENCES chatroom(chatroom_id)
+     ON DELETE CASCADE,
+
+     CONSTRAINT uq_keyword UNIQUE (user_id, chatroom_id, keyword)
+);
+
+ALTER TABLE attendance
+    ADD COLUMN chatroom_id INT,
+ADD FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE SET NULL;

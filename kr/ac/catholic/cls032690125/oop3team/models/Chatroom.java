@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Chatroom implements Serializable {
+    private static final long serialVersionUID = 45772008L;
+
     // 스레드일 경우 이곳에 스레드 id
     private int chatroomId;
 
@@ -17,6 +19,9 @@ public class Chatroom implements Serializable {
 
     private String title;
     private LocalDateTime created;
+
+    private String ownerId;
+
 
     public int getChatroomId() {
         return chatroomId;
@@ -36,6 +41,10 @@ public class Chatroom implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
     }
 
     public LocalDateTime getCreated() {
@@ -65,4 +74,13 @@ public class Chatroom implements Serializable {
     public void setCreated(LocalDateTime created) {
         this.created = created;
     }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean isManager(String userId) {
+        return ownerId != null && ownerId.toLowerCase().equals(userId.toLowerCase());
+    }
+
 }

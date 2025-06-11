@@ -4,30 +4,38 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractRespons
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.CAuthController;
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chat.clientside.CChatReceiver;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomController;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.CreateGroupChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.GroupChatScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.PrivateChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomListPacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.AddFriendScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.gui.FriendProfileScreen;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.CGetKeywordListRequest;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.shared.SGetKeywordListResponse;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.BlockListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.MemoListScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.setting.clientside.gui.ProfileScreen;
 import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
+import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.shared.SFriendPendingRes;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomMemberListPacket;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,14 +52,32 @@ public class MainScreen extends JFrame {
 
     private CChatroomController chatRoomController;
     private CAuthController authController;
+    private CChatReceiver chatReceiver;
     private JPanel chatListPanel;
     private CFriendController cFriendController;
     private JPanel friendListPanel;
     private List<UserProfile> friendProfiles = new ArrayList<>();
 
+    // 새 메시지 배지 레이블 맵
+    private Map<Integer, JLabel> badgeLabels = new HashMap<>();
+    // 최근 로드된 방 정보
+    private Chatroom[] currentRooms = new Chatroom[0];
+
+    // MainScreen 클래스 필드
+    private Set<Integer> openChatRooms = new HashSet<>();
+    private final List<Chatroom> privateRooms = new ArrayList<>();
+
+    // 방별 알림 on/off 상태
+    private Map<Integer, Boolean> roomNotifications = new HashMap<>();
+
+    private List<JWindow> keywordToastWindows = new ArrayList<>();
+    private List<JWindow> chatToastWindows = new ArrayList<>();
+
+
     public MainScreen(String userId, Client client) {
         this.userId = userId;
         this.client = client;
+        chatReceiver = client.getChatReceiver();
         chatRoomController = new CChatroomController(client);
         authController = new CAuthController(client);
         cFriendController = new CFriendController(client);
@@ -80,15 +106,12 @@ public class MainScreen extends JFrame {
 
         // 친구 탭
         JPanel friendPanel = new JPanel(new BorderLayout());
-        
-        // 상단: 친구 추가 버튼과 검색바
-        JPanel topPanel = new JPanel(new BorderLayout());
-        JButton addFriendButton = new JButton("➕ 친구 추가");
-        JTextField searchField = new JTextField();
-        
-        topPanel.add(addFriendButton, BorderLayout.WEST);
-        topPanel.add(searchField, BorderLayout.CENTER);
-        friendPanel.add(topPanel, BorderLayout.NORTH);
+
+        // 상단: 친구 추가 버튼
+        JButton addFriendButton = new JButton("+ 친구 추가");
+        addFriendButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        addFriendButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
+        friendPanel.add(addFriendButton, BorderLayout.NORTH);
 
         // 중앙: 친구 리스트
         friendListPanel = new JPanel();
@@ -163,7 +186,9 @@ public class MainScreen extends JFrame {
         JPanel chatPanel = new JPanel(new BorderLayout());
         
         // 상단: 그룹 대화방 생성 버튼
-        JButton createGroupButton = new JButton("➕ 그룹 대화방 생성");
+        JButton createGroupButton = new JButton("+ 그룹 대화방 생성");
+        createGroupButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        createGroupButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
@@ -200,7 +225,7 @@ public class MainScreen extends JFrame {
         });
 
         memoButton.addActionListener(e -> {
-            new MemoListScreen(this).setVisible(true);
+            new MemoListScreen(this, client, userId).setVisible(true);
         });
 
         blockListButton.addActionListener(e -> {
@@ -252,7 +277,7 @@ public class MainScreen extends JFrame {
             cFriendController.getFriendList(client.getCurrentSession().getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
                 @Override
                 protected void execute(ServerResponsePacketSimplefied<UserProfile[]> data) {
-                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()));
+                    CreateGroupChatScreen createGroupScreen = new CreateGroupChatScreen(client, List.of(data.getData()), MainScreen.this);
                     createGroupScreen.setVisible(true);
                 }
             });
@@ -261,6 +286,43 @@ public class MainScreen extends JFrame {
         });
 
         add(mainPanel);
+
+        // 전역 새 메시지 리스너 등록
+        chatReceiver.addNewMessageListener((roomId, msg) -> {
+            SwingUtilities.invokeLater(() -> {
+                if (openChatRooms.contains(roomId)) {
+                    return;
+                }
+
+                // 방별 알림 플래그 체크
+                if (!isRoomNotificationEnabled(roomId)) return;
+
+                JLabel badge = badgeLabels.get(roomId);
+                if (badge != null) badge.setText("●");
+                String title = getRoomTitle(roomId);
+                String preview = msg.getContent().length() > 30
+                        ? msg.getContent().substring(0, 30) + "…"
+                        : msg.getContent();
+                showToast("• [" + title + "] 새 메시지: " + preview);
+
+            });
+        });
+        client.getKeywordReceiver().addHandler(msg -> {
+            SwingUtilities.invokeLater(() -> {
+                if (openChatRooms.contains(msg.getChatroomId())) {
+                    return;
+                }
+
+                JLabel badge = badgeLabels.get(msg.getChatroomId());
+                if (badge != null) badge.setText("●");
+                String title = getRoomTitle(msg.getChatroomId());
+                String preview = msg.getContent().length() > 30
+                        ? msg.getContent().substring(0, 30) + "…"
+                        : msg.getContent();
+                showKeywordToast("키워드 메시지 - [" + title + "] " + preview);
+            });
+        });
+        client.getKeywordReceiver().updateKeywords();
 
         // 세션 만료 체크 타이머 (1분마다 체크)
         sessionTimer = new Timer(60 * 1000, new ActionListener() {
@@ -315,13 +377,21 @@ public class MainScreen extends JFrame {
             }
         });
 
-        // 친구 목록 자동 새로고침 타이머 (20초마다)
-        Timer friendListTimer = new Timer(20 * 1000, new ActionListener() {
+        // 친구 목록 자동 새로고침 타이머 (3초마다)
+        Timer friendListTimer = new Timer(3 * 1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 refreshFriendList();
             }
         });
         friendListTimer.start();
+
+        // 대화방 목록 자동 새로고침 타이머 (3초마다)
+        Timer chatRoomListTimer = new Timer(3 * 1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refreshChatRoomList();
+            }
+        });
+        chatRoomListTimer.start();
     }
 
     private static List<String> generateRandomFriendNames() {
@@ -420,7 +490,6 @@ public class MainScreen extends JFrame {
     }
 
     public void refreshFriendList() {
-        System.out.println("▶ MainScreen: getFriendList 호출 직전");
         cFriendController.getFriendList(userId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<UserProfile[]>>() {
             @Override
             protected void execute(ServerResponsePacketSimplefied<UserProfile[]> response) {
@@ -480,60 +549,315 @@ public class MainScreen extends JFrame {
         return times;
     }
 
-    public void initiate() {
-        loadGroupChat();
-
-
-
-        this.setVisible(true);
+    private void loadGroupChat() {
+        refreshChatRoomList();
     }
 
-    private void loadGroupChat() {
-        chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+    public void refreshChatRoomList() {
+        System.out.println("▶ MainScreen: 대화방목록 새로고침");
+        List<Chatroom> merged = new ArrayList<>();
+
+        chatRoomController.requestChatroomList(true, new ClientInteractResponseSwing<SChatroomListPacket>() {
             @Override
             protected void execute(SChatroomListPacket data) {
-                Chatroom[] rooms = data.getRooms();
-                if (rooms == null || rooms.length == 0) {
-                    System.out.println("참여 중인 채팅방 없음");
-                    return;
+                if (data.getRooms() != null) {
+                    merged.addAll(Arrays.asList(data.getRooms()));
                 }
 
-                for (int i = 0; i < data.getRooms().length; i++) {
-                    Chatroom room = data.getRooms()[i];
-
-                    JPanel chatItemPanel = new JPanel(new BorderLayout());
-                    chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-                    // 대화방 정보
-                    JPanel infoPanel = new JPanel(new GridLayout(2, 1));
-                    JLabel nameLabel = new JLabel(room.getTitle());
-                    nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-//                    JLabel messageLabel = new JLabel();
-//                    messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-//                    messageLabel.setForeground(Color.GRAY);
-
-                    infoPanel.add(nameLabel);
-//                    infoPanel.add(messageLabel);
-
-                    // 시간 표시
-//                    JLabel timeLabel = new JLabel();
-//                    timeLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 10));
-//                    timeLabel.setForeground(Color.GRAY);
-
-                    chatItemPanel.add(infoPanel, BorderLayout.CENTER);
-//                    chatItemPanel.add(timeLabel, BorderLayout.EAST);
-
-                    // 클릭 이벤트 처리
-                    chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                            GroupChatScreen chatScreen = new GroupChatScreen(client, room);
-                            chatScreen.setVisible(true);
+                chatRoomController.requestChatroomList(false, new ClientInteractResponseSwing<SChatroomListPacket>() {
+                    @Override
+                    protected void execute(SChatroomListPacket data2) {
+                        if (data2.getRooms() != null) {
+                            merged.addAll(Arrays.asList(data2.getRooms()));
                         }
-                    });
 
-                    chatListPanel.add(chatItemPanel);
-                }
+                        currentRooms = merged.toArray(new Chatroom[0]);
+                        updateChatRoomListUI(currentRooms);
+                    }
+                });
             }
         });
+
+
     }
+
+    public void updateChatRoomListUI(Chatroom[] rooms) {
+        chatListPanel.removeAll();
+        if (rooms == null || rooms.length == 0) {
+            System.out.println("참여 중인 채팅방 없음");
+            return;
+        }
+
+        for (Chatroom room : rooms) {
+            int roomId = room.getChatroomId();
+//            registerRoomForNotifications(room.getChatroomId());
+
+            if (!roomNotifications.containsKey(room.getChatroomId())) {
+                registerRoomForNotifications(room.getChatroomId());
+            }
+
+            JPanel chatItemPanel = new JPanel(new BorderLayout());
+            chatItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            // 대화방 정보
+            JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+            JLabel nameLabel = new JLabel(room.getTitle());
+            nameLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+
+            infoPanel.add(nameLabel);
+            chatItemPanel.add(infoPanel, BorderLayout.CENTER);
+
+            // ➌ 방별 알림 토글 버튼
+            JToggleButton bell = new JToggleButton();
+            bell.setText(isRoomNotificationEnabled(roomId) ? "🔔" : "🔕");
+            bell.setSelected(isRoomNotificationEnabled(roomId));
+            bell.addActionListener(e -> {
+                boolean on = bell.isSelected();
+                setRoomNotification(roomId, on);
+                bell.setText(on ? "🔔" : "🔕");
+            });
+
+            chatItemPanel.add(bell, BorderLayout.EAST);
+
+            // 클릭 이벤트 처리
+            chatItemPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    if (room.isPrivate()) {
+                        // 1:1 대화방인 경우 차단 여부 확인
+                        chatRoomController.requestMemberList(room.getChatroomId(), new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+                            @Override
+                            protected void execute(SChatroomMemberListPacket data) {
+                                // 다른 참여자의 ID 찾기
+                                String otherUserId = null;
+                                for (String memberId : data.getMembers()) {
+                                    if (!memberId.equals(userId)) {
+                                        otherUserId = memberId;
+                                        break;
+                                    }
+                                }
+
+                                if (otherUserId == null) {
+                                    JOptionPane.showMessageDialog(MainScreen.this, "대화 상대를 찾을 수 없습니다.");
+                                    return;
+                                }
+
+                                // 차단 여부 확인
+                                cFriendController.checkBlocked(userId, otherUserId, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                                    @Override
+                                    protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                                        if (data.getData() != null && data.getData()) {
+                                            JOptionPane.showMessageDialog(MainScreen.this, "차단된 친구입니다.");
+                                            return;
+                                        }
+
+                                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
+                                        privateChatScreen.setVisible(true);
+                                        openChatRooms.add(room.getChatroomId());
+                                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                                            @Override
+                                            public void windowClosed(WindowEvent e) {
+                                                openChatRooms.remove(room.getChatroomId());
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        // 그룹 채팅
+                        GroupChatScreen screen = new GroupChatScreen(client, room);
+                        screen.setVisible(true);
+                        openChatRooms.add(room.getChatroomId());
+                        screen.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                openChatRooms.remove(room.getChatroomId());
+                            }
+                        });
+                    }
+                }
+            });
+
+            chatListPanel.add(chatItemPanel);
+        }
+
+        chatListPanel.revalidate();
+        chatListPanel.repaint();
+    }
+
+    private void showToast(String message) {
+        JWindow toast = new JWindow(this);
+        toast.setBackground(new Color(0, 0, 0, 0));
+
+        // 둥근 모서리 + 반투명 배경 패널
+        RoundedPanel panel = new RoundedPanel(20, new Color(255, 249, 196, 230));
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // 이모지와 메시지
+        JLabel lbl = new JLabel("일톡스 " + message);
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        lbl.setForeground(new Color(33, 33, 33));
+        panel.add(lbl, BorderLayout.CENTER);
+
+        toast.getContentPane().add(panel);
+        toast.pack();
+
+        chatToastWindows.add(toast);
+        repositionChatToasts();
+
+        // 화면 오른쪽 상단에 위치
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = screen.width - toast.getWidth() - 20;
+        int y = 20;
+        toast.setLocation(x, y);
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+
+        // 3초 후 자동 닫기
+        new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toast.dispose();
+                chatToastWindows.remove(toast);
+                repositionChatToasts();
+            }
+        }) {{ setRepeats(false); start(); }};
+    }
+    private void repositionChatToasts() {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int margin = 20;
+        int gap = 10;
+        for (int i = 0; i < chatToastWindows.size(); i++) {
+            JWindow w = chatToastWindows.get(i);
+            int x = screen.width - w.getWidth() - margin;
+            int y = margin + i * (w.getHeight() + gap);
+            w.setLocation(x, y);
+        }
+    }
+    private void showKeywordToast(String message) {
+        JWindow toast = new JWindow(this);
+        toast.setBackground(new Color(0, 0, 0, 0));
+
+        // 둥근 모서리 + 반투명 붉은 배경 패널
+        RoundedPanel panel = new RoundedPanel(20, new Color(255, 205, 210, 230));  // #FFCDD2, alpha=230
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+
+        // 이모지와 메시지
+        JLabel lbl = new JLabel("일톡스 " + message);
+        lbl.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        lbl.setForeground(new Color(33, 33, 33));
+        panel.add(lbl, BorderLayout.CENTER);
+
+        toast.getContentPane().add(panel);
+        toast.pack();
+
+        keywordToastWindows.add(toast);
+        repositionToasts();
+
+        // 화면 오른쪽 상단에 위치
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = 20;
+        int y = 20;
+        toast.setLocation(x, y);
+        toast.setAlwaysOnTop(true);
+        toast.setVisible(true);
+
+        // 4초 후 자동 닫기
+        new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toast.dispose();
+                keywordToastWindows.remove(toast);
+                repositionToasts();
+            }
+        }) {{ setRepeats(false); start(); }};
+    }
+    private void repositionToasts() {
+        int x = 20;
+        int startY = 20;
+        int gap = 10;
+
+        for (int i = 0; i < keywordToastWindows.size(); i++) {
+            JWindow w = keywordToastWindows.get(i);
+            int y = startY + i * (w.getHeight() + gap);
+            w.setLocation(x, y);
+        }
+    }
+    // 둥근 배경을 그려주는 커스텀 JPanel
+    private static class RoundedPanel extends JPanel {
+        private final int cornerRadius;
+        private final Color backgroundColor;
+
+        public RoundedPanel(int radius, Color bgColor) {
+            super();
+            this.cornerRadius = radius;
+            this.backgroundColor = bgColor;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // 그림자 효과
+            g2.setColor(new Color(0, 0, 0, 50));
+            g2.fillRoundRect(3, 3, getWidth() - 6, getHeight() - 6, cornerRadius, cornerRadius);
+
+            // 배경
+            g2.setColor(backgroundColor);
+            g2.fillRoundRect(0, 0, getWidth() - 6, getHeight() - 6, cornerRadius, cornerRadius);
+
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    private String getRoomTitle(int roomId) {
+        for (Chatroom r : currentRooms) {
+            if (r.getChatroomId() == roomId) return r.getTitle();
+        }
+        return "스레드 알림";
+    }
+
+    public void addPrivateChatroom(Chatroom room) {
+        privateRooms.add(room);
+
+        // 2) 즉시 currentRooms 에도 붙여서 getRoomTitle() 에서 인식하게 함
+        List<Chatroom> now = new ArrayList<>();
+        // 새 방을 맨 앞에 넣어도 좋고, 맨 뒤에 넣어도 좋습니다.
+        now.add(room);
+        now.addAll(Arrays.asList(currentRooms));
+        currentRooms = now.toArray(new Chatroom[0]);
+
+        JLabel badge = new JLabel(" ");
+        badge.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        badge.setForeground(Color.RED);
+        badgeLabels.put(room.getChatroomId(), badge);
+    }
+
+    public void markChatRoomOpen(int roomId) {
+        openChatRooms.add(roomId);
+    }
+    public void markChatRoomClosed(int roomId) {
+        openChatRooms.remove(roomId);
+    }
+
+    /**
+     * 방을 처음 로드하거나 생성할 때 기본 on 상태로 등록.
+     */
+    public void registerRoomForNotifications(int roomId) {
+        roomNotifications.putIfAbsent(roomId, true);
+    }
+
+    public boolean isRoomNotificationEnabled(int roomId) {
+        return roomNotifications.getOrDefault(roomId, true);
+    }
+
+    public void setRoomNotification(int roomId, boolean enabled) {
+        roomNotifications.put(roomId, enabled);
+    }
+
 }

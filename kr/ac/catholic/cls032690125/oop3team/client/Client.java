@@ -6,6 +6,7 @@ import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientResponseListene
 import kr.ac.catholic.cls032690125.oop3team.features.auth.clientside.gui.LoginScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chat.clientside.CChatReceiver;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.CChatroomIndividualController;
+import kr.ac.catholic.cls032690125.oop3team.features.keyword.clientside.CKeywordReceiver;
 import kr.ac.catholic.cls032690125.oop3team.models.Session;
 import kr.ac.catholic.cls032690125.oop3team.shared.ClientOrderBasePacket;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponseBasePacket;
@@ -38,7 +39,9 @@ public class Client {
 
     private final ClientInteractor interactor = new ClientInteractor(this);
     private final CChatReceiver chatReceiver = new CChatReceiver(this);
+    private final CKeywordReceiver keywordReceiver = new CKeywordReceiver(this);
     public CChatReceiver getChatReceiver() { return chatReceiver; }
+    public CKeywordReceiver getKeywordReceiver() { return keywordReceiver; }
 
     private BlockingQueue<ClientOrderBasePacket> sendQueue = new LinkedBlockingQueue<>();
 
@@ -46,6 +49,10 @@ public class Client {
 
     private Session currentSession = null;
     public Session getCurrentSession() { return currentSession; }
+
+    public void setCurrentSession(Session currentSession) {
+        this.currentSession = currentSession; }
+
     public void updateSession(Session currentSession) { this.currentSession = currentSession; }
 
     private MainScreen mainScreen;
@@ -54,6 +61,7 @@ public class Client {
         this.properties = properties;
         listeners.add(interactor);
         listeners.add(chatReceiver);
+        listeners.add(keywordReceiver);
     }
 
 

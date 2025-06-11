@@ -8,7 +8,9 @@ import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.Gro
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.clientside.gui.PrivateChatScreen;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.CChatroomCreatePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SChatroomCreatePacket;
+import kr.ac.catholic.cls032690125.oop3team.features.chatroom.shared.SPrivateChatRoomResponsePacket;
 import kr.ac.catholic.cls032690125.oop3team.features.friend.clientside.CFriendController;
+import kr.ac.catholic.cls032690125.oop3team.models.Chatroom;
 import kr.ac.catholic.cls032690125.oop3team.models.responses.UserProfile;
 import kr.ac.catholic.cls032690125.oop3team.shared.ServerResponsePacketSimplefied;
 import kr.ac.catholic.cls032690125.oop3team.client.structs.ClientInteractResponseSwing;
@@ -18,6 +20,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FriendProfileScreen extends JFrame {
     private Client client;
@@ -26,6 +30,8 @@ public class FriendProfileScreen extends JFrame {
     private MainScreen mainScreen;
     private CFriendController friendController;
     private CChatroomController cChatroomController;
+    private CFriendController cFriendController;
+    private Map<String, String> userIdToName = new HashMap<>();
 
 
     public FriendProfileScreen(Client client, String myUserId, UserProfile friend, MainScreen mainScreen) {
@@ -35,6 +41,7 @@ public class FriendProfileScreen extends JFrame {
         this.mainScreen = mainScreen;
         this.friendController = new CFriendController(client);
         this.cChatroomController = new CChatroomController(client);
+        this.cFriendController = new CFriendController(client);
 
         setTitle(friend.getName() + "님의 프로필");
         setSize(400, 300);
@@ -105,7 +112,7 @@ public class FriendProfileScreen extends JFrame {
         buttonPanel.add(blockButton);
 
         chatButton.addActionListener(e -> {
-            // TODO: 1:1 채팅 기능 구현
+            System.out.println("button click///////////");
             onPrivateChatButtonClick();
         });
 
@@ -152,26 +159,42 @@ public class FriendProfileScreen extends JFrame {
             );
             
             if (result == JOptionPane.YES_OPTION) {
-                friendController.blockFriend(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                // 차단 여부 먼저 확인
+                friendController.checkBlocked(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
                     @Override
                     protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
                         if (data.getData() != null && data.getData()) {
                             JOptionPane.showMessageDialog(
                                 FriendProfileScreen.this,
-                                "친구가 차단되었습니다.",
-                                "차단 완료",
-                                JOptionPane.INFORMATION_MESSAGE
+                                "이미 차단한 친구입니다.",
+                                "알림",
+                                JOptionPane.WARNING_MESSAGE
                             );
-                            mainScreen.refreshFriendList(); // 친구 목록 새로고침
-                            dispose(); // 프로필 화면 닫기
-                        } else {
-                            JOptionPane.showMessageDialog(
-                                FriendProfileScreen.this,
-                                "친구 차단에 실패했습니다.",
-                                "오류",
-                                JOptionPane.ERROR_MESSAGE
-                            );
+                            return;
                         }
+                        // 차단이 안 되어 있으면 차단 진행
+                        friendController.blockFriend(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                            @Override
+                            protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                                if (data.getData() != null && data.getData()) {
+                                    JOptionPane.showMessageDialog(
+                                        FriendProfileScreen.this,
+                                        "친구가 차단되었습니다.",
+                                        "차단 완료",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                    mainScreen.refreshFriendList(); // 친구 목록 새로고침
+                                    dispose(); // 프로필 화면 닫기
+                                } else {
+                                    JOptionPane.showMessageDialog(
+                                        FriendProfileScreen.this,
+                                        "친구 차단에 실패했습니다.",
+                                        "오류",
+                                        JOptionPane.ERROR_MESSAGE
+                                    );
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -182,17 +205,39 @@ public class FriendProfileScreen extends JFrame {
     }
 
     private void onPrivateChatButtonClick() {
-        ArrayList<String> participants = new ArrayList<>();
-        participants.add(friend.getUserId());
-
-        cChatroomController.sendCreateChatroom(new CChatroomCreatePacket("1대1 대화방", myUserId, participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+        cFriendController.checkBlocked(myUserId, friend.getUserId(), new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
             @Override
-            protected void execute(SChatroomCreatePacket data) {
-                PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, data.getRoom(), friend);
-                privateChatScreen.setVisible(true);
-                FriendProfileScreen.this.dispose();
+            protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                if (data.getData() != null && data.getData()) {
+                    JOptionPane.showMessageDialog(FriendProfileScreen.this, "차단된 친구입니다.", "알림", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                // 차단이 아니면 기존 1:1 채팅방 로직 실행
+                cChatroomController.requestPrivateChatroom(myUserId, friend.getUserId(), new ClientInteractResponseSwing<SPrivateChatRoomResponsePacket>() {
+                    @Override
+                    protected void execute(SPrivateChatRoomResponsePacket data) {
+                        Chatroom chatroom = data.getChatroom();
+                        if (chatroom == null) {
+                            JOptionPane.showMessageDialog(FriendProfileScreen.this, "1:1 채팅방 생성에 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        mainScreen.addPrivateChatroom(chatroom);
+                        mainScreen.markChatRoomOpen(chatroom.getChatroomId());
+
+                        PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, chatroom);
+                        privateChatScreen.setVisible(true);
+                        privateChatScreen.initiate();
+                        FriendProfileScreen.this.dispose();
+
+                        privateChatScreen.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                mainScreen.markChatRoomClosed(chatroom.getChatroomId());
+                            }
+                        });
+                    }
+                });
             }
         });
-
     }
 } 

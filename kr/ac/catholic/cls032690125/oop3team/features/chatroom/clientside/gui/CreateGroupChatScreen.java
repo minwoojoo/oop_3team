@@ -31,7 +31,7 @@ public class CreateGroupChatScreen extends JFrame {
         friendListPanel.add(checkBox);
     }
 
-    public CreateGroupChatScreen(Client client, List<UserProfile> friendList) {
+    public CreateGroupChatScreen(Client client, List<UserProfile> friendList, MainScreen mainScreen) {
         this.client = client;
         chatroomsController = new CChatroomController(client);
         friendController = new CFriendController(client);
@@ -68,11 +68,11 @@ public class CreateGroupChatScreen extends JFrame {
 
         // 하단 버튼 영역
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton nextButton = new JButton("다음");
+        JButton nextButton = new JButton("생성");
         buttonPanel.add(nextButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // 다음 버튼 이벤트 처리
+        // 생성 버튼 이벤트 처리
         nextButton.addActionListener(e -> {
             int selectedCount = 0;
             for (JCheckBox checkBox : friendCheckBoxes) {
@@ -97,12 +97,17 @@ public class CreateGroupChatScreen extends JFrame {
                     // 채팅방 생성 및 입장
                     List<String> participants = getSelectedFriends();
 
-                    chatroomsController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
+                    chatroomsController.sendCreateChatroom(new CChatroomCreatePacket(groupName, client.getCurrentSession().getUserId(), (ArrayList<String>) participants, null,
+                            false), new ClientInteractResponseSwing<SChatroomCreatePacket>() {
                         @Override
                         protected void execute(SChatroomCreatePacket data) {
                             GroupChatScreen groupchat = new GroupChatScreen(client, data.getRoom());
                             groupchat.setVisible(true);
+                            groupchat.initiate();
                             CreateGroupChatScreen.this.dispose();
+
+                            mainScreen.markChatRoomOpen(data.getRoom().getChatroomId());
+                            mainScreen.registerRoomForNotifications(data.getRoom().getChatroomId());
                         }
                     });
                 }
@@ -130,7 +135,7 @@ public class CreateGroupChatScreen extends JFrame {
                     CreateGroupChatScreen.this.addFriendList(d);
                 }
                 System.out.println("COMPL" + friendCheckBoxes.size());
-                
+
                 friendListPanel.revalidate();
                 friendListPanel.repaint();
 

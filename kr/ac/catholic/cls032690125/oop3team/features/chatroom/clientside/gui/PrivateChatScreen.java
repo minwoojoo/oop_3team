@@ -16,22 +16,35 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class PrivateChatScreen extends JFrame implements ChatScreenBase {
     private JTextArea chatArea;
     private JTextField messageField;
     private List<Message> messages;
+    private List<String> members;
+    private Map<String, String> userIdToName = new HashMap<>();
+
     private void addMessage(Message message) {
-        //messages.add(message);
         StringBuilder str = new StringBuilder(chatArea.getText());
-        str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+        String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+        String timeStr = formatMessageTime(message.getSent());
+        str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
         chatArea.setText(str.toString());
+    }
+
+    private String formatMessageTime(java.time.LocalDateTime dateTime) {
+        java.time.ZoneId zoneId = java.time.ZoneId.systemDefault();
+        long timestamp = dateTime.atZone(zoneId).toInstant().toEpochMilli();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        return sdf.format(new java.util.Date(timestamp));
     }
 
     private Client client;
     private CChatroomIndividualController controller;
 
-    public PrivateChatScreen(Client client, Chatroom chatroom, UserProfile friend) {
+    public PrivateChatScreen(Client client, Chatroom chatroom) {
         this.client = client;
         controller = new CChatroomIndividualController(client, chatroom, this);
 
@@ -92,34 +105,53 @@ public class PrivateChatScreen extends JFrame implements ChatScreenBase {
 
     @Override
     public void setVisible(boolean visible) {
-        super.setVisible(visible);
         if(visible) initiate();
+        super.setVisible(visible);
     }
 
     @Override
     public void initiate() {
         client.getChatReceiver().registerChatroom(controller);
+        fetchAndStoreMembers();
         System.out.println("PrivateChatScreen initiate");
         controller.initiateMessage(1000000, new ClientInteractResponseSwing<SMessageLoadPacket>() {
             @Override
             protected void execute(SMessageLoadPacket data) {
+                messages = new ArrayList<>(Arrays.asList(data.getMessages()));
                 StringBuilder str = new StringBuilder();
-                var msgs = Arrays.asList(data.getMessages());
-                System.out.println(data.getMessages().length);
-                for(Message message : msgs) {
-                    System.out.println(message.getContent());
-                    str.append("["+message.getSenderId()+"] "+message.getContent()).append("\n");
+                for(Message message : messages) {
+                    String senderName = userIdToName.getOrDefault(message.getSenderId(), message.getSenderId());
+                    String timeStr = formatMessageTime(message.getSent());
+                    str.append("[" + senderName + "] " + message.getContent() + " (" + timeStr + ")").append("\n");
                 }
-                msgs.addAll(messages);
-                messages = msgs;
-                str.append(chatArea.getText());
                 chatArea.setText(str.toString());
+            }
+        });
+    }
+
+    private void fetchAndStoreMembers() {
+        controller.getMemberList(new ClientInteractResponseSwing<SChatroomMemberListPacket>() {
+            @Override
+            protected void execute(SChatroomMemberListPacket data) {
+                setMembers(data.getMembers());
+                // id→name 매핑
+                userIdToName.clear();
+                for (int i = 0; i < data.getMembers().size(); i++) {
+                    userIdToName.put(data.getMembers().get(i), data.getMemberNames().get(i));
+                }
             }
         });
     }
 
     @Override
     public void onChatMessage(Message message) {
-        addMessage(message);
+        if (!messages.contains(message)) {
+            messages.add(message);
+            addMessage(message);
+        }
+    }
+
+    private void setMembers(List<String> members) {
+        this.members = members;
     }
 }
