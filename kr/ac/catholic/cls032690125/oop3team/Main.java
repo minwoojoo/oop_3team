@@ -24,6 +24,9 @@ public class Main {
                 Server server = new Server(properties);
                 server.start();
                 break;
+            default:
+                System.out.println("ERR: ENV NOT SERVED");
+                break;
         }
     }
 } 

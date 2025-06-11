@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Message implements Serializable {
+    private static final long serialVersionUID = 45772004L;
+
     private long messageId; // Serverside에서 지정함
     private int chatroomId;
 

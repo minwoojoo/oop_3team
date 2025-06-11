@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Chatroom implements Serializable {
+    private static final long serialVersionUID = 45772008L;
+
     // 스레드일 경우 이곳에 스레드 id
     private int chatroomId;
 

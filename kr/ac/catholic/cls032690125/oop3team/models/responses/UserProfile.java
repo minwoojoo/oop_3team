@@ -1,6 +1,8 @@
 package kr.ac.catholic.cls032690125.oop3team.models.responses;
 
 public class UserProfile implements java.io.Serializable {
+    private static final long serialVersionUID = 45772011L;
+
     private final String userId;
     private final String name;
     private final boolean isOnline;

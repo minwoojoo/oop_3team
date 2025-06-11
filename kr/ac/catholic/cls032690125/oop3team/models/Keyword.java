@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Keyword implements Serializable {
+    private static final long serialVersionUID = 45772005L;
+
     private int id;
     private String userId;
     private int chatRoomId;
