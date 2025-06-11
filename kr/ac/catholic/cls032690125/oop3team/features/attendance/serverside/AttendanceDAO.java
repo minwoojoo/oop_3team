@@ -1,6 +1,7 @@
 package kr.ac.catholic.cls032690125.oop3team.features.attendance.serverside;
 
 import kr.ac.catholic.cls032690125.oop3team.models.Attendance;
+import kr.ac.catholic.cls032690125.oop3team.models.AttendanceEditRequest;
 import kr.ac.catholic.cls032690125.oop3team.server.Server;
 import kr.ac.catholic.cls032690125.oop3team.server.structs.StandardDAO;
 
@@ -141,4 +142,48 @@ public class AttendanceDAO extends StandardDAO {
         }
     }
 
+    public List<AttendanceEditRequest> getEditRequests() throws SQLException {
+        List<AttendanceEditRequest> requests = new ArrayList<>();
+        String sql = "SELECT * FROM AttendanceEditRequest ORDER BY requested_at DESC";
+
+        try (Connection conn = database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                AttendanceEditRequest r = new AttendanceEditRequest(
+                        rs.getLong("id"),
+                        rs.getString("user_id"),
+                        rs.getTimestamp("attendance_date"),
+                        rs.getString("requested_check_in"),
+                        rs.getString("requested_check_out"),
+                        rs.getString("reason"),
+                        rs.getTimestamp("requested_at"),
+                        rs.getString("status")
+                );
+                requests.add(r);
+            }
+        }
+        return requests;
+    }
+
+    public void approveEditRequest(long editRequestId, boolean approved) throws SQLException {
+        String status = approved ? "승인" : "거절";
+
+        String sql = """
+                UPDATE AttendanceEditRequest
+                SET status = ?
+                WHERE id = ?
+            """;
+
+        try (PreparedStatement stmt = database.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setLong(2, editRequestId);
+
+            int affected = stmt.executeUpdate();
+            if (affected == 0) {
+                throw new SQLException("해당 요청 ID를 찾을 수 없습니다: " + editRequestId);
+            }
+        }
+    }
 }

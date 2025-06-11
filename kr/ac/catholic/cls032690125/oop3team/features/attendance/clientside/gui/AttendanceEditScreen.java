@@ -43,7 +43,7 @@ public class AttendanceEditScreen extends JFrame {
         JLabel checkOutLabel = new JLabel("퇴근 시간 (HH:mm): ");
         JTextField checkOutField = new JTextField("18:00");
 
-        JLabel reasonLabel = new JLabel("수정 사유: ");
+        JLabel reasonLabel = new JLabel("수정 사유: (이름 입력 포함) ");
         JTextArea reasonArea = new JTextArea(3, 20);
         reasonArea.setLineWrap(true);
         JScrollPane reasonScroll = new JScrollPane(reasonArea);
