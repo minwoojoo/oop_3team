@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Attendance implements Serializable {
+    private static final long serialVersionUID = 45772010L;
+
     private int id;
     private String userId;
     private Timestamp checkInTime;

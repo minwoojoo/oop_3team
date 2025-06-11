@@ -3,6 +3,8 @@ package kr.ac.catholic.cls032690125.oop3team.models;
 import java.io.Serializable;
 
 public class Schedule implements Serializable {
+    private static final long serialVersionUID = 45772003L;
+
     private int scheduleId;
     private int chatroomId;
 
