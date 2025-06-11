@@ -70,7 +70,13 @@ public class SFriendController extends ServerRequestListener {
     @ServerRequestHandler(CFriendInviteReq.class)
     public void inviteFriend(ServerClientHandler sch, CFriendInviteReq req) {
         try {
-            // 이미 친구인지 확인
+            // 1. 이미 친구 요청 보낸 상태인지 먼저 확인
+            if (friendDAO.isPendingRequest(req.getFromUserId(), req.getToUserId())) {
+                SFriendInviteRes response = new SFriendInviteRes(req.getRequestId(), false, "이미 친구 추가 요청을 보낸 상태입니다.");
+                sch.send(response);
+                return;
+            }
+            // 2. 이미 친구인지 확인
             if (friendDAO.isFriend(req.getFromUserId(), req.getToUserId())) {
                 SFriendInviteRes response = new SFriendInviteRes(req.getRequestId(), false, "이미 추가된 친구입니다.");
                 sch.send(response);

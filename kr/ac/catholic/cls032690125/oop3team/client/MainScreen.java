@@ -106,11 +106,11 @@ public class MainScreen extends JFrame {
 
         // 친구 탭
         JPanel friendPanel = new JPanel(new BorderLayout());
-        
-        // 상단: 친구 추가 버튼 (topPanel 없이 바로 추가)
+
+        // 상단: 친구 추가 버튼
         JButton addFriendButton = new JButton("+ 친구 추가");
         addFriendButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        addFriendButton.setPreferredSize(new Dimension(0, 30)); // 높이 40으로 통일
+        addFriendButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
         friendPanel.add(addFriendButton, BorderLayout.NORTH);
 
         // 중앙: 친구 리스트
@@ -188,7 +188,7 @@ public class MainScreen extends JFrame {
         // 상단: 그룹 대화방 생성 버튼
         JButton createGroupButton = new JButton("+ 그룹 대화방 생성");
         createGroupButton.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        createGroupButton.setPreferredSize(new Dimension(0, 30)); // 높이 40으로 통일
+        createGroupButton.setPreferredSize(new Dimension(0, 25)); // 높이 25으로 통일
         chatPanel.add(createGroupButton, BorderLayout.NORTH);
 
         // 중앙: 대화방 리스트
@@ -635,7 +635,7 @@ public class MainScreen extends JFrame {
                                         break;
                                     }
                                 }
-                                
+
                                 if (otherUserId == null) {
                                     JOptionPane.showMessageDialog(MainScreen.this, "대화 상대를 찾을 수 없습니다.");
                                     return;
@@ -649,7 +649,7 @@ public class MainScreen extends JFrame {
                                             JOptionPane.showMessageDialog(MainScreen.this, "차단된 친구입니다.");
                                             return;
                                         }
-                                        
+
                                         PrivateChatScreen privateChatScreen = new PrivateChatScreen(client, room);
                                         privateChatScreen.setVisible(true);
                                         openChatRooms.add(room.getChatroomId());

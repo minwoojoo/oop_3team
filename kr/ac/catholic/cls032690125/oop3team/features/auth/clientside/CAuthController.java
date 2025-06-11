@@ -34,4 +34,8 @@ public class CAuthController extends StandardClientControl {
     public void sendLogout(ClientInteractResponse<ServerResponsePacketSimplefied<Boolean>> callback) {
         client.request(new CLogoutRequest(), callback);
     }
+
+    public void checkIdDuplicate(String id, ClientInteractResponse<ServerResponsePacketSimplefied<Boolean>> callback) {
+        client.request(new CIdDuplicateCheckRequest(id), callback);
+    }
 }

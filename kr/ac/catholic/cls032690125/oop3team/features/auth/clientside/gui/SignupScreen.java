@@ -38,9 +38,9 @@ public class SignupScreen extends JFrame {
         gbc.gridx = 1;
         JTextField idField = new JTextField(15);
         panel.add(idField, gbc);
-//        gbc.gridx = 2;
-//        JButton checkIdBtn = new JButton("중복확인");
-//        panel.add(checkIdBtn, gbc);
+        gbc.gridx = 2;
+        JButton checkIdBtn = new JButton("중복확인");
+        panel.add(checkIdBtn, gbc);
 
         // 비밀번호
         gbc.gridx = 0; gbc.gridy = 2;
@@ -69,26 +69,26 @@ public class SignupScreen extends JFrame {
         add(panel);
 
         // 중복확인 버튼
-//        checkIdBtn.addActionListener(e -> {
-//            String id = idField.getText();
-//            if (id.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "아이디를 입력하세요.");
-//                return;
-//            }
-//
-//            try {
-//                if (false){//client.isIdDuplicate(id)) {
-//                    JOptionPane.showMessageDialog(this, "이미 사용 중인 아이디입니다.");
-//                    isIdChecked = false;
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "사용 가능한 아이디입니다.");
-//                    isIdChecked = true;
-//                }
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//                JOptionPane.showMessageDialog(this, "서버 연결 오류!");
-//            }
-//        });
+        checkIdBtn.addActionListener(e -> {
+            String id = idField.getText();
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "아이디를 입력하세요.");
+                isIdChecked = false;
+                return;
+            }
+            authController.checkIdDuplicate(id, new ClientInteractResponseSwing<ServerResponsePacketSimplefied<Boolean>>() {
+                @Override
+                protected void execute(ServerResponsePacketSimplefied<Boolean> data) {
+                    if (data.getData()) {
+                        JOptionPane.showMessageDialog(SignupScreen.this, "이미 사용 중인 아이디입니다.");
+                        isIdChecked = false;
+                    } else {
+                        JOptionPane.showMessageDialog(SignupScreen.this, "사용 가능한 아이디입니다.");
+                        isIdChecked = true;
+                    }
+                }
+            });
+        });
 
         // 가입하기 버튼
         signupButton.addActionListener(e -> {
@@ -97,10 +97,26 @@ public class SignupScreen extends JFrame {
             String pass = new String(passwordField.getPassword());
             String confirmPass = new String(confirmPasswordField.getPassword());
 
-//            if (!isIdChecked) {
-//                JOptionPane.showMessageDialog(this, "아이디 중복확인을 해주세요.");
-//                return;
-//            }
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "이름을 입력해주세요.");
+                return;
+            }
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "아이디를 입력해주세요.");
+                return;
+            }
+            if (pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "비밀번호를 입력해주세요.");
+                return;
+            }
+            if (confirmPass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "비밀번호 확인을 입력해주세요.");
+                return;
+            }
+            if (!isIdChecked) {
+                JOptionPane.showMessageDialog(this, "아이디 중복확인을 해주세요.");
+                return;
+            }
             if (!pass.equals(confirmPass)) {
                 JOptionPane.showMessageDialog(this, "비밀번호가 일치하지 않습니다.");
                 return;
