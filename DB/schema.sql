@@ -22,6 +22,9 @@ CREATE TABLE IF NOT EXISTS attendance (
     FOREIGN KEY (user_id) REFERENCES `user`(user_id) ON DELETE CASCADE
 );
 
+ALTER TABLE attendance
+ADD COLUMN chatroom_id INT,
+ADD FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE SET NULL;
 
 CREATE TABLE IF NOT EXISTS AttendanceEditRequest (
      id INT AUTO_INCREMENT PRIMARY KEY,
@@ -130,3 +133,7 @@ CREATE TABLE KEYWORD (
 
      CONSTRAINT uq_keyword UNIQUE (user_id, chatroom_id, keyword)
 );
+
+ALTER TABLE attendance
+    ADD COLUMN chatroom_id INT,
+ADD FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE SET NULL;

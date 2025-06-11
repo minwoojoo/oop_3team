@@ -18,7 +18,10 @@ public class Chatroom implements Serializable {
     private boolean isPrivate;
 
     private String title;
-    private LocalDateTime created; 
+    private LocalDateTime created;
+
+    private String ownerId;
+
 
     public int getChatroomId() {
         return chatroomId;
@@ -40,7 +43,11 @@ public class Chatroom implements Serializable {
         return title;
     }
 
-    public LocalDateTime getCreated() { 
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public LocalDateTime getCreated() {
         return created;
     }
 
@@ -64,7 +71,16 @@ public class Chatroom implements Serializable {
         this.title = title;
     }
 
-    public void setCreated(LocalDateTime created) { 
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean isManager(String userId) {
+        return ownerId != null && ownerId.toLowerCase().equals(userId.toLowerCase());
+    }
+
 }

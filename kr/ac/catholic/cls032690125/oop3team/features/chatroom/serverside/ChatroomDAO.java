@@ -19,10 +19,10 @@ public class ChatroomDAO extends StandardDAO {
      * 새 대화방을 생성하고, 생성된 Chatroom 객체를 리턴합니다. 실패 시 null 리턴.
      */
     public Chatroom createChatroom(String title, String ownerId, Integer parentRoomId) throws SQLException {
-        String sql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private) " +
-                "VALUES (?, ?, FALSE, FALSE)";
+        String sql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private, leader_id) VALUES (?, ?, FALSE, FALSE, ?)";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             ps.setString(1, title);
 
             if (parentRoomId != null) {
@@ -31,17 +31,16 @@ public class ChatroomDAO extends StandardDAO {
                 ps.setNull(2, java.sql.Types.INTEGER);
             }
 
+            ps.setString(3, ownerId);  // Đảm bảo ownerId được truyền đúng vào leader_id
+
             int affected = ps.executeUpdate();
             if (affected == 0) {
                 return null;
             }
 
-            // 생성된 방 ID를 받아온다
-            int newId;
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    newId = rs.getInt(1);
-                    // 방 생성 시각은 DB의 default CURRENT_TIMESTAMP로 채워졌으니, 다시 한 번 조회해서 Chatroom 객체를 완성한다.
+                    int newId = rs.getInt(1);
                     return findById(newId);
                 } else {
                     return null;
@@ -49,6 +48,7 @@ public class ChatroomDAO extends StandardDAO {
             }
         }
     }
+
 
     /**
      * DB에서 chatroom_id로 대화방 정보를 조회하여 Chatroom 모델을 만들어 리턴합니다.
@@ -68,6 +68,7 @@ public class ChatroomDAO extends StandardDAO {
                     room.setTitle(rs.getString("title"));
                     LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
                     room.setCreated(createdDateTime);
+                    room.setOwnerId(rs.getString("leader_id"));
                     return room;
                 } else {
                     return null;
@@ -95,6 +96,7 @@ public class ChatroomDAO extends StandardDAO {
                 room.setTitle(rs.getString("title"));
                 LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
                 room.setCreated(createdDateTime);
+                room.setOwnerId(rs.getString("leader_id"));
                 list.add(room);
             }
         }
@@ -102,11 +104,11 @@ public class ChatroomDAO extends StandardDAO {
     }
 
     public Chatroom createChatroomWithParticipants(
-        String title,
-        String ownerId,
-        List<String> participants,
-        Integer parentRoomId,
-        boolean isPrivate
+            String title,
+            String ownerId,
+            List<String> participants,
+            Integer parentRoomId,
+            boolean isPrivate
     ) throws SQLException {
         String roomSql = "INSERT INTO chatroom (title, parentroom_id, closed, is_private, leader_id) VALUES (?, ?, FALSE, ?, ?)";
         try (Connection conn = database.getConnection();
@@ -243,6 +245,7 @@ public class ChatroomDAO extends StandardDAO {
                     thread.setTitle(rs.getString("title"));
                     LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
                     thread.setCreated(createdDateTime);
+                    thread.setOwnerId(rs.getString("leader_id"));
                     threads.add(thread);
                 }
             }
@@ -296,9 +299,9 @@ public class ChatroomDAO extends StandardDAO {
      */
     public Chatroom[] loadUserChatrooms(String userId, boolean isPrivate) throws SQLException {
         String sql = "SELECT c.* FROM chatroom c " +
-                     "INNER JOIN chatroom_participant cp ON c.chatroom_id = cp.chatroom_id " +
-                     "WHERE cp.user_id = ? AND c.is_private = ? AND c.parentroom_id IS NULL " +
-                     "ORDER BY c.created_at DESC";
+                "INNER JOIN chatroom_participant cp ON c.chatroom_id = cp.chatroom_id " +
+                "WHERE cp.user_id = ? AND c.is_private = ? AND c.parentroom_id IS NULL " +
+                "ORDER BY c.created_at DESC";
         List<Chatroom> list = new ArrayList<>();
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -314,6 +317,7 @@ public class ChatroomDAO extends StandardDAO {
                 room.setTitle(rs.getString("title"));
                 LocalDateTime createdDateTime = rs.getTimestamp("created_at").toLocalDateTime();
                 room.setCreated(createdDateTime);
+                room.setOwnerId(rs.getString("leader_id"));
                 list.add(room);
             }
         }
@@ -323,9 +327,9 @@ public class ChatroomDAO extends StandardDAO {
     public Chatroom findOrCreatePrivateChatroom(String userA, String userB) throws SQLException {
         // 1. 두 userId가 모두 참가자인 is_private=1 채팅방이 있는지 SELECT
         String sql = "SELECT c.* FROM chatroom c " +
-                     "JOIN chatroom_participant cp1 ON c.chatroom_id = cp1.chatroom_id " +
-                     "JOIN chatroom_participant cp2 ON c.chatroom_id = cp2.chatroom_id " +
-                     "WHERE c.is_private = 1 AND cp1.user_id = ? AND cp2.user_id = ?";
+                "JOIN chatroom_participant cp1 ON c.chatroom_id = cp1.chatroom_id " +
+                "JOIN chatroom_participant cp2 ON c.chatroom_id = cp2.chatroom_id " +
+                "WHERE c.is_private = 1 AND cp1.user_id = ? AND cp2.user_id = ?";
         try (Connection conn = database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userA);

@@ -44,11 +44,24 @@ public class AttendanceScreen extends JFrame {
         JButton checkOutButton = new JButton("퇴근");
         JButton editRequestButton = new JButton("기록 수정 요청");
 
+        String currentUserId = client.getCurrentSession().getUserId();
+//        String ownerId = chatroom.getOwnerId();
+//        boolean isManager = currentUserId.equals(ownerId);
+
+        boolean isOwner = chatroom.isManager(currentUserId);
+        JButton viewEditRequestsButton = new JButton("수정 요청 목록 보기");
+        if (isOwner) {
+            bottomPanel.add(viewEditRequestsButton);
+            viewEditRequestsButton.addActionListener(e -> {
+                new AttendanceEditRequestManageScreen(this, client).setVisible(true);
+            });
+        }
+
         // 출근 버튼 클릭 처리
         checkInButton.addActionListener(e -> {
-            String userId = client.getCurrentSession().getUserId();
+//            String userId = client.getCurrentSession().getUserId();
             int chatroomId = chatroom.getChatroomId();
-            CCheckInRequest packet = new CCheckInRequest(userId, chatroomId);
+            CCheckInRequest packet = new CCheckInRequest(currentUserId, chatroomId);
 
             client.request(packet, response -> {
                 if (response instanceof SCheckInResponse checkInResponse) {
@@ -69,7 +82,7 @@ public class AttendanceScreen extends JFrame {
         checkOutButton.addActionListener(e -> {
             String userId = client.getCurrentSession().getUserId();
             int chatroomId = chatroom.getChatroomId();
-            CCheckOutRequest packet = new CCheckOutRequest(userId, chatroomId);
+            CCheckOutRequest packet = new CCheckOutRequest(currentUserId, chatroomId);
 
             client.request(packet, response -> {
                 if (response instanceof SCheckOutResponse checkOutResponse) {
@@ -100,6 +113,11 @@ public class AttendanceScreen extends JFrame {
 
         // 최초 로딩 시 기록 불러오기
         updateRecordList();
+
+        System.out.println("현재 로그인한 유저 ID: " + client.getCurrentSession().getUserId());
+        System.out.println("채팅방 ownerId: " + chatroom.getOwnerId());
+        System.out.println("isManager: " + chatroom.isManager(client.getCurrentSession().getUserId()));
+
     }
 
     // 출퇴근 기록 목록을 서버에서 받아와서 갱신
