@@ -55,6 +55,8 @@ public class AttendanceDAO extends StandardDAO {
             stmt.setString(1, userId);
             stmt.setInt(2, chatroomId);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
 
@@ -84,6 +86,8 @@ public class AttendanceDAO extends StandardDAO {
                 );
                 attendanceList.add(attendance);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return attendanceList;
     }
@@ -110,6 +114,8 @@ public class AttendanceDAO extends StandardDAO {
             if (rs.next()) {
                 return rs.getInt(1) > 0;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -130,6 +136,8 @@ public class AttendanceDAO extends StandardDAO {
             stmt.setTime(4, java.sql.Time.valueOf(checkOut + ":00"));
             stmt.setString(5, reason);
             stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

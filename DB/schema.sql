@@ -130,3 +130,7 @@ CREATE TABLE KEYWORD (
 
      CONSTRAINT uq_keyword UNIQUE (user_id, chatroom_id, keyword)
 );
+
+ALTER TABLE attendance
+    ADD COLUMN chatroom_id INT,
+ADD FOREIGN KEY (chatroom_id) REFERENCES CHATROOM(chatroom_id) ON DELETE SET NULL;
